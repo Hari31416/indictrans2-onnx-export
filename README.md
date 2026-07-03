@@ -155,11 +155,14 @@ Compared against the FP32 ONNX oracle on the same 264 golden fixtures.
 | indic-indic | INT8 | 78.41% | 79.17% | 497.1 MB | 65.0ms | 40.3ms | 1.612x |
 | indic-indic | Q4F16 | 56.06% | 57.58% | 711.6 MB | 64.1ms | 65.3ms | 0.983x |
 
-### Performance Visualizations
+### Detailed Benchmarks & Visualizations
 
-![Token Pass Rate Comparison](./fixtures/pass_rate_comparison.png)
+Detailed language-level and category-level charts and tables for all quantization tiers are available in **[BENCHMARKS.md](./BENCHMARKS.md)**.
 
-![Model Size Comparison](./fixtures/model_size_comparison.png)
+For direction-specific visualizations, see:
+- **[EN-INDIC Benchmarks](./BENCHMARKS.md#en-indic-model-performance)** (Plots: [Overall](./fixtures/en_indic_overall.png), [Languages](./fixtures/en_indic_languages.png), [Categories](./fixtures/en_indic_categories.png))
+- **[INDIC-EN Benchmarks](./BENCHMARKS.md#indic-en-model-performance)** (Plots: [Overall](./fixtures/indic_en_overall.png), [Languages](./fixtures/indic_en_languages.png), [Categories](./fixtures/indic_en_categories.png))
+- **[INDIC-INDIC Benchmarks](./BENCHMARKS.md#indic-indic-model-performance)** (Plots: [Overall](./fixtures/indic_indic_overall.png), [Languages](./fixtures/indic_indic_languages.png), [Categories](./fixtures/indic_indic_categories.png))
 
 ## Known issues (fp32)
 

@@ -52,7 +52,7 @@ INDIC_INDIC_BENCH_INT8  := fixtures/benchmark-indic-indic-int8.json
 INDIC_INDIC_BENCH_FP16  := fixtures/benchmark-indic-indic-fp16.json
 INDIC_INDIC_BENCH_Q4F16 := fixtures/benchmark-indic-indic-q4f16.json
 
-.PHONY: help setup install clean clean-all preview \
+.PHONY: help setup install clean clean-all preview reports \
 	export-en-indic tokenizers-en-indic validate-en-indic quantize-en-indic \
 	convert-fp16-en-indic quantize-q4f16-en-indic \
 	benchmark-int8-en-indic benchmark-fp16-en-indic benchmark-q4f16-en-indic \
@@ -72,10 +72,11 @@ help: ## Show available targets
 	@echo "IndicTrans2 ONNX export — make targets"
 	@echo ""
 	@echo "Setup & Batch Operations:"
-	@echo "  make setup                  Create .venv and install requirements"
+	@echo "  make setup                  Create venv + install deps"
 	@echo "  make clean                  Remove scratch ONNX artifacts"
 	@echo "  make clean-all              Remove scratch + .venv"
 	@echo "  make preview                Local preview of the ONNX components guide"
+	@echo "  make reports                Generate benchmark reports and plots (overall, language, and category levels)"
 	@echo "  make quantize-all           Quantize all 3 models to both INT8 & Q4F16 (incl. FP16)"
 	@echo "  make benchmark-all          Evaluate/benchmark all variants (INT8, FP16, Q4F16)"
 	@echo ""
@@ -457,3 +458,6 @@ clean-all: clean ## Remove scratch artifacts and Python venv
 preview: ## Serve onnx-components.html locally
 	@echo "Starting local preview server on http://localhost:8000/onnx-components.html..."
 	python3 -m http.server 8000
+
+reports: setup ## Generate benchmark reports and plots (overall, language, and category levels)
+	$(PYTHON) src/generate_visual_reports.py
