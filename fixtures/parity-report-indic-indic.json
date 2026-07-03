@@ -1,0 +1,9 @@
+{
+  "total": 12,
+  "pass_tokens": 12,
+  "pass_text": 12,
+  "token_pass_rate": 100.0,
+  "text_pass_rate": 100.0,
+  "mismatches_sample": [],
+  "elapsed_seconds": 20.74
+}

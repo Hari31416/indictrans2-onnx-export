@@ -1,0 +1,8 @@
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "politics"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "lexicon"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "generic"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "lexicon"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "generic"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "generic"}

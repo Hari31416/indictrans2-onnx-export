@@ -1,0 +1,15 @@
+# Phase 1 — IndicTrans2 ONNX export tooling (dev/CI only, not shipped to browser)
+torch>=2.1.0
+transformers>=4.40.0
+optimum[onnxruntime]>=1.20.0
+onnxruntime>=1.19.0
+onnx>=1.16.0
+onnxscript>=0.1.0
+huggingface_hub>=0.23.0
+tokenizers>=0.19.0
+sentencepiece>=0.2.0
+IndicTransToolkit>=1.1.0
+indic-nlp-library>=0.92
+sacremoses>=0.1.1
+tqdm>=4.66.0
+numpy>=1.26.0
