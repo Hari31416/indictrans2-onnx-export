@@ -168,8 +168,6 @@ make upload-indic-en HF_ORG=your-org
 make upload-indic-indic HF_ORG=your-org
 ```
 
-Update `IT2_ONNX_ORG` and set `available: true` in `src/lib/translation-models.ts`.
-
 ## 14. Wrong slow tokenizer loaded during ONNX text decode
 
 **Symptom:** 100% token parity but 0% text parity on en→indic. ONNX decoded output looked like English gibberish (`"do Be was [that 420..."`) despite identical token IDs.
