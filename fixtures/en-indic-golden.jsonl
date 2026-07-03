@@ -1,8 +1,264 @@
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "asm_Beng", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "brx_Deva", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "doi_Deva", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "guj_Gujr", "category": "lexicon"}
 {"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "generic"}
 {"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "politics"}
-{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "numerals"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "numerals"}
 {"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "lexicon"}
-{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "generic"}
-{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "ben_Beng", "category": "lexicon"}
-{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "generic"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "hin_Deva", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "kan_Knda", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "kas_Arab", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "gom_Deva", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "mai_Deva", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "mal_Mlym", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "lexicon"}
 {"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "mar_Deva", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "mni_Beng", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "npi_Deva", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "ory_Orya", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "pan_Guru", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "san_Deva", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "sat_Olck", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "snd_Arab", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "tam_Taml", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu", "category": "lexicon"}
+{"text": "This is a test sentence.", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "generic"}
+{"text": "Who will win the election?", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "politics"}
+{"text": "The weather is nice today.", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "numerals"}
+{"text": "Please send an SMS to 9876543210.", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "lexicon"}
+{"text": "Contact us at newemail123@xyz.com by 15th October, 2023.", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "generic"}
+{"text": "The GDP grew by 7.5% last quarter.", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "politics"}
+{"text": "Education is the key to progress.", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "numerals"}
+{"text": "The parliament passed a new bill.", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "lexicon"}
+{"text": "Water is essential for life.", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "generic"}
+{"text": "Technology is changing the world.", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "politics"}
+{"text": "Health care must be accessible to all.", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "numerals"}
+{"text": "The festival was celebrated with joy.", "src_lang": "eng_Latn", "tgt_lang": "urd_Arab", "category": "lexicon"}

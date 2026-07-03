@@ -1,0 +1,64 @@
+{
+  "label": "fp16",
+  "oracle": "scratch/indic-en-onnx",
+  "cmp_dir": "scratch/indic-en-onnx-fp16",
+  "total_fixtures": 264,
+  "token_exact_rate": 99.62,
+  "text_exact_rate": 99.62,
+  "token_exact_count": 263,
+  "text_exact_count": 263,
+  "fp32_avg_latency_ms": 37.6,
+  "cmp_avg_latency_ms": 44.1,
+  "speedup_vs_fp32": 0.853,
+  "fp32_tokens_per_sec": 283.8,
+  "cmp_tokens_per_sec": 241.9,
+  "mismatches": [
+    {
+      "index": 171,
+      "fixture": {
+        "text": "ଦଯ଼ାକରି 9876543210 ନମ୍ବରକୁ ଏକ ଏସ୍. ଏମ୍. ଏସ୍. ପଠାନ୍ତୁ।",
+        "src_lang": "ory_Orya",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        1843,
+        1880,
+        51,
+        5164,
+        8,
+        5,
+        183,
+        7559,
+        1113,
+        12045,
+        910,
+        9115,
+        3057,
+        4,
+        2
+      ],
+      "fp16_tokens": [
+        2,
+        1843,
+        1880,
+        51,
+        5164,
+        8,
+        7559,
+        1113,
+        12045,
+        910,
+        9115,
+        3057,
+        4,
+        2
+      ],
+      "fp32_text": "Please send an SMS to the number 9876543210.",
+      "fp16_text": "Please send an SMS to 9876543210.",
+      "tokens_match": false,
+      "text_match": false
+    }
+  ]
+}

@@ -88,10 +88,18 @@ def _align_vocab_with_dict(fast_json_path: Path, dict_json_path: Path) -> None:
     fast = json.loads(fast_json_path.read_text(encoding="utf-8"))
     vocab_dict = json.loads(dict_json_path.read_text(encoding="utf-8"))
 
-    remapped: dict[str, int] = {
-        token: vocab_dict.get(token, UNK_ID)
-        for token in fast["model"]["vocab"]
-    }
+    # We map tokens in vocab_dict to their correct Fairseq IDs.
+    # To keep the vocabulary vector in HuggingFace valid and avoid collisions
+    # (which break BPE merges), we map all other tokens to unique IDs starting from len(vocab_dict).
+    next_id = len(vocab_dict)
+    remapped: dict[str, int] = {}
+    for token in fast["model"]["vocab"]:
+        if token in vocab_dict:
+            remapped[token] = vocab_dict[token]
+        else:
+            remapped[token] = next_id
+            next_id += 1
+
     for token, token_id in vocab_dict.items():
         if token not in remapped:
             remapped[token] = token_id

@@ -1,0 +1,16 @@
+{
+  "label": "fp16",
+  "oracle": "scratch/indic-indic-onnx",
+  "cmp_dir": "scratch/indic-indic-onnx-fp16",
+  "total_fixtures": 264,
+  "token_exact_rate": 100.0,
+  "text_exact_rate": 100.0,
+  "token_exact_count": 264,
+  "text_exact_count": 264,
+  "fp32_avg_latency_ms": 64.7,
+  "cmp_avg_latency_ms": 70.5,
+  "speedup_vs_fp32": 0.918,
+  "fp32_tokens_per_sec": 193.0,
+  "cmp_tokens_per_sec": 177.2,
+  "mismatches": []
+}

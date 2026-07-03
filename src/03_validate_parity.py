@@ -49,7 +49,7 @@ def load_fixtures(path: Path) -> list[Fixture]:
 def capture_fixtures(
     model_id: str,
     output_path: Path,
-    languages: list[tuple[str, str]],
+    languages: list[tuple[str, str]] | None = None,
     sentences_per_lang: int = 12,
 ) -> None:
     """Generate golden fixtures from PyTorch model (one-time capture)."""
@@ -57,10 +57,12 @@ def capture_fixtures(
     from IndicTransToolkit import IndicProcessor
     from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_id, trust_remote_code=True).to(device)
-    ip = IndicProcessor(inference=True)
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        device = "mps"
+    else:
+        device = "cpu"
 
     seed_sentences = [
         "This is a test sentence.",
@@ -77,18 +79,74 @@ def capture_fixtures(
         "The festival was celebrated with joy.",
     ]
 
+    official_indic_langs = [
+        "asm_Beng", "ben_Beng", "brx_Deva", "doi_Deva", "guj_Gujr", "hin_Deva",
+        "kan_Knda", "kas_Arab", "gom_Deva", "mai_Deva", "mal_Mlym", "mar_Deva",
+        "mni_Beng", "npi_Deva", "ory_Orya", "pan_Guru", "san_Deva", "sat_Olck",
+        "snd_Arab", "tam_Taml", "tel_Telu", "urd_Arab"
+    ]
+
+    repo_lower = model_id.lower()
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as f:
-        for src_lang, tgt_lang in languages:
+
+    if "en-indic" in repo_lower:
+        logger.info("Generating en-indic fixtures...")
+        with open(output_path, "w", encoding="utf-8") as f:
+            for lang in official_indic_langs:
+                for i, sent in enumerate(seed_sentences[:sentences_per_lang]):
+                    row = {
+                        "text": sent,
+                        "src_lang": "eng_Latn",
+                        "tgt_lang": lang,
+                        "category": ["generic", "politics", "numerals", "lexicon"][i % 4],
+                    }
+                    f.write(json.dumps(row, ensure_ascii=False) + "\n")
+        logger.info("Wrote %d fixture rows to %s", len(official_indic_langs) * min(sentences_per_lang, len(seed_sentences)), output_path)
+
+    elif "indic-en" in repo_lower or "indic-indic" in repo_lower:
+        en_indic_model_id = "ai4bharat/indictrans2-en-indic-dist-200M"
+        logger.info("Loading translation model %s to generate Indic source sentences...", en_indic_model_id)
+
+        # Generate a list of temporary Fixture objects to decode
+        temp_fixtures = []
+        for lang in official_indic_langs:
             for i, sent in enumerate(seed_sentences[:sentences_per_lang]):
-                row = {
-                    "text": sent,
-                    "src_lang": src_lang,
-                    "tgt_lang": tgt_lang,
-                    "category": ["generic", "politics", "numerals", "lexicon"][i % 4],
-                }
-                f.write(json.dumps(row, ensure_ascii=False) + "\n")
-    logger.info("Wrote %d fixture rows to %s", len(languages) * sentences_per_lang, output_path)
+                temp_fixtures.append(Fixture(
+                    text=sent,
+                    src_lang="eng_Latn",
+                    tgt_lang=lang,
+                    category=["generic", "politics", "numerals", "lexicon"][i % 4]
+                ))
+
+        logger.info("Translating seed sentences to Indic languages...")
+        decoded_results = pytorch_greedy_decode(en_indic_model_id, temp_fixtures, device=device)
+
+        logger.info("Writing fixtures to %s...", output_path)
+        with open(output_path, "w", encoding="utf-8") as f:
+            idx = 0
+            for lang in official_indic_langs:
+                for i in range(min(sentences_per_lang, len(seed_sentences))):
+                    res = decoded_results[idx]
+                    idx += 1
+                    if "indic-en" in repo_lower:
+                        row = {
+                            "text": res["text"],
+                            "src_lang": lang,
+                            "tgt_lang": "eng_Latn",
+                            "category": ["generic", "politics", "numerals", "lexicon"][i % 4],
+                        }
+                    else:  # indic-indic
+                        l_idx = official_indic_langs.index(lang)
+                        next_lang = official_indic_langs[(l_idx + 1) % len(official_indic_langs)]
+                        row = {
+                            "text": res["text"],
+                            "src_lang": lang,
+                            "tgt_lang": next_lang,
+                            "category": ["generic", "politics", "numerals", "lexicon"][i % 4],
+                        }
+                    f.write(json.dumps(row, ensure_ascii=False) + "\n")
+        logger.info("Wrote %d fixture rows to %s", len(official_indic_langs) * min(sentences_per_lang, len(seed_sentences)), output_path)
+
 
 
 def pytorch_greedy_decode(
@@ -362,7 +420,6 @@ def main() -> None:
         capture_fixtures(
             args.pytorch_model,
             args.capture_fixtures,
-            languages=[("eng_Latn", "hin_Deva")],
         )
         return
 

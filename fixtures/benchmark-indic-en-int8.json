@@ -1,0 +1,1993 @@
+{
+  "label": "int8",
+  "oracle": "scratch/indic-en-onnx",
+  "cmp_dir": "scratch/indic-en-onnx-int8",
+  "total_fixtures": 264,
+  "token_exact_rate": 81.44,
+  "text_exact_rate": 81.44,
+  "token_exact_count": 215,
+  "text_exact_count": 215,
+  "fp32_avg_latency_ms": 39.2,
+  "cmp_avg_latency_ms": 33.0,
+  "speedup_vs_fp32": 1.187,
+  "fp32_tokens_per_sec": 272.5,
+  "cmp_tokens_per_sec": 324.5,
+  "mismatches": [
+    {
+      "index": 4,
+      "fixture": {
+        "text": "2023 চনৰ 15 অক্টোবৰৰ ভিতৰত newemail123@xyz.com ত আমাৰ সৈতে যোগাযোগ কৰক।",
+        "src_lang": "asm_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        440,
+        1270,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "fp32_text": "Contact us by 15 October 2023 at newemail123@xyz.com.",
+      "int8_text": "Contact us by October 15, 2023 at newemail123@xyz.com.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 10,
+      "fixture": {
+        "text": "স্বাস্থ্যসেৱা সকলোৰে বাবে সুলভ হ \"ব লাগিব।",
+        "src_lang": "asm_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        771,
+        604,
+        100,
+        23,
+        5621,
+        8,
+        50,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        14564,
+        100,
+        23,
+        5621,
+        8,
+        50,
+        4,
+        2
+      ],
+      "fp32_text": "Health care should be accessible to all.",
+      "int8_text": "Healthcare should be accessible to all.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 17,
+      "fixture": {
+        "text": "গত ত্রৈমাসিকে জিডিপি 7.5 শতাংশ বৃদ্ধি পেয়েছে।",
+        "src_lang": "ben_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        5276,
+        3950,
+        39,
+        502,
+        13341,
+        432,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        5276,
+        3950,
+        39,
+        502,
+        4,
+        265,
+        201,
+        565,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "fp32_text": "GDP grew by 7.50% in the last quarter.",
+      "int8_text": "The GDP grew by 7. 5 per cent in the last quarter.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 19,
+      "fixture": {
+        "text": "সংসদ একটি নতুন বিল পাস করেছে।",
+        "src_lang": "ben_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        1430,
+        32,
+        1228,
+        13,
+        104,
+        2341,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        3899,
+        32,
+        1228,
+        13,
+        104,
+        2341,
+        4,
+        2
+      ],
+      "fp32_text": "Parliament has passed a new bill.",
+      "int8_text": "The parliament has passed a new bill.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 22,
+      "fixture": {
+        "text": "স্বাস্থ্যসেবা অবশ্যই সকলের জন্য সহজলভ্য হতে হবে।",
+        "src_lang": "ben_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        771,
+        604,
+        205,
+        23,
+        5621,
+        8,
+        50,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        14564,
+        205,
+        23,
+        5621,
+        8,
+        50,
+        4,
+        2
+      ],
+      "fp32_text": "Health care must be accessible to all.",
+      "int8_text": "Healthcare must be accessible to all.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 26,
+      "fixture": {
+        "text": "दिनै बोथोरा मोजां।",
+        "src_lang": "brx_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        1911,
+        12,
+        114,
+        351,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        1028,
+        5,
+        1911,
+        12,
+        114,
+        4,
+        2
+      ],
+      "fp32_text": "The weather is good today.",
+      "int8_text": "Today the weather is good.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 29,
+      "fixture": {
+        "text": "थांनाय क्वार्टराव जि. डि. पि. आ 7.5 जौखोन्दो बांदों।",
+        "src_lang": "brx_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        5276,
+        3950,
+        39,
+        502,
+        4,
+        265,
+        201,
+        565,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        5276,
+        3950,
+        39,
+        502,
+        4,
+        265,
+        432,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "fp32_text": "The GDP grew by 7. 5 per cent in the last quarter.",
+      "int8_text": "The GDP grew by 7. 5% in the last quarter.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 31,
+      "fixture": {
+        "text": "संसदआ मोनसे गोदान बिलखौ गनायथि होदोंमोन।",
+        "src_lang": "brx_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        3899,
+        1933,
+        13,
+        104,
+        2341,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        1430,
+        1933,
+        13,
+        104,
+        2341,
+        4,
+        2
+      ],
+      "fp32_text": "The parliament approved a new bill.",
+      "int8_text": "The Parliament approved a new bill.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 32,
+      "fixture": {
+        "text": "दैनि गोनांथिआ जिउनि थाखाय गोनांथार।",
+        "src_lang": "brx_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        1958,
+        12,
+        1312,
+        16,
+        134,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        113,
+        16,
+        146,
+        12,
+        1312,
+        16,
+        134,
+        4,
+        2
+      ],
+      "fp32_text": "Water is essential for life.",
+      "int8_text": "The need for water is essential for life.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 37,
+      "fixture": {
+        "text": "चुनाऽ कुस गी जित्तेगा?",
+        "src_lang": "doi_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        578,
+        33,
+        709,
+        5,
+        800,
+        26,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        397,
+        33,
+        5,
+        800,
+        23,
+        262,
+        26,
+        2
+      ],
+      "fp32_text": "Who will win the election?",
+      "int8_text": "When will the election be won?",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 47,
+      "fixture": {
+        "text": "एह् तेहार बड़े हर्षोल्लास कन्नै मनाया गेआ।",
+        "src_lang": "doi_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        1970,
+        24,
+        1701,
+        31,
+        231,
+        16737,
+        2011,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        1970,
+        24,
+        1701,
+        31,
+        167,
+        828,
+        1715,
+        9571,
+        4,
+        2
+      ],
+      "fp32_text": "The festival was celebrated with great fervour.",
+      "int8_text": "The festival was celebrated with much gaiety.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 48,
+      "fixture": {
+        "text": "આ એક પરીક્ષણ વાક્ય છે.",
+        "src_lang": "guj_Gujr",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        57,
+        12,
+        13,
+        760,
+        4510,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        57,
+        12,
+        13,
+        760,
+        1220,
+        4,
+        2
+      ],
+      "fp32_text": "This is a test sentence.",
+      "int8_text": "This is a test line.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 53,
+      "fixture": {
+        "text": "છેલ્લા ત્રિમાસિક ગાળામાં જીડીપી 7.5 ટકા વધ્યો હતો.",
+        "src_lang": "guj_Gujr",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        5276,
+        3950,
+        39,
+        502,
+        14021,
+        432,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        5276,
+        3950,
+        39,
+        502,
+        13341,
+        432,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "fp32_text": "GDP grew by 7.75% in the last quarter.",
+      "int8_text": "GDP grew by 7.50% in the last quarter.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 64,
+      "fixture": {
+        "text": "15 अक्टूबर, 2023 तक newemail123@xyz.com पर हमसे संपर्क करें।",
+        "src_lang": "hin_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        3012,
+        162,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        4,
+        2
+      ],
+      "fp32_text": "Contact us by October 15, 2023 at newemail123@xyz.com.",
+      "int8_text": "Contact us at newemail123@xyz.com by October 15, 2023.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 65,
+      "fixture": {
+        "text": "पिछली तिमाही में सकल घरेलू उत्पाद में 7.5 प्रतिशत की वृद्धि हुई।",
+        "src_lang": "hin_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        5276,
+        3950,
+        39,
+        502,
+        4,
+        265,
+        201,
+        565,
+        10,
+        5,
+        1837,
+        4315,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        5276,
+        3950,
+        39,
+        502,
+        4,
+        265,
+        201,
+        565,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "fp32_text": "The GDP grew by 7. 5 per cent in the previous quarter.",
+      "int8_text": "The GDP grew by 7. 5 per cent in the last quarter.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 67,
+      "fixture": {
+        "text": "संसद ने एक नया विधेयक पारित किया।",
+        "src_lang": "hin_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        1430,
+        1228,
+        13,
+        104,
+        2341,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        1430,
+        1228,
+        13,
+        104,
+        2341,
+        4,
+        2
+      ],
+      "fp32_text": "Parliament passed a new bill.",
+      "int8_text": "The Parliament passed a new bill.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 76,
+      "fixture": {
+        "text": "2023ರ ಅಕ್ಟೋಬರ್ 15ರೊಳಗೆ newemail123@xyz.com ನಲ್ಲಿ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ.",
+        "src_lang": "kan_Knda",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        440,
+        1270,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "fp32_text": "Contact us by October 15, 2023 at newemail123@xyz.com.",
+      "int8_text": "Contact us by 15 October 2023 at newemail123@xyz.com.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 86,
+      "fixture": {
+        "text": "آز چھ موسم اصل۔",
+        "src_lang": "kas_Arab",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        1911,
+        12,
+        114,
+        351,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        1028,
+        5,
+        1911,
+        12,
+        114,
+        4,
+        2
+      ],
+      "fp32_text": "The weather is good today.",
+      "int8_text": "Today the weather is good.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 88,
+      "fixture": {
+        "text": "15 اکتوبر 2023 ہس تام کٔرو اسہ newemail123@xyz.com پؠٹھ رٲبطہٕ۔",
+        "src_lang": "kas_Arab",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        31,
+        5,
+        8819,
+        3683,
+        898,
+        5679,
+        2172,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        31,
+        5,
+        8819,
+        3683,
+        898,
+        5679,
+        183,
+        4,
+        2
+      ],
+      "fp32_text": "Contact us by October 15, 2023 with the newemail123@xyz.com code.",
+      "int8_text": "Contact us by October 15, 2023 with the newemail123@xyz.com number.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 89,
+      "fixture": {
+        "text": "یمہ کہ وجہ سٕتۍ چھ موسم ترنمولک (GDP)% 7. 5، تہٕ 2. 5. 5، تہٕ 2. 5، 5، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6، 6 تہٕ 6، 6، 6، 6، 6، 6، 6، 6، 6، 6،",
+        "src_lang": "kas_Arab",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        57,
+        12,
+        395,
+        8,
+        5,
+        5178,
+        7,
+        2395,
+        306,
+        43,
+        5276,
+        42,
+        174,
+        13659,
+        9,
+        6013,
+        6,
+        9,
+        6013
+      ],
+      "int8_tokens": [
+        2,
+        57,
+        12,
+        395,
+        8,
+        5,
+        5178,
+        7,
+        2395,
+        306,
+        43,
+        5276,
+        42,
+        174,
+        13659,
+        9,
+        6013,
+        6,
+        9,
+        6013
+      ],
+      "fp32_text": "This is due to the percentage of climate change (GDP) between 7.5 and 2.5, and 2.5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,",
+      "int8_text": "This is due to the percentage of climate change (GDP) between 7.5 and 2.5, and 2.5, and 2.5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 95,
+      "fixture": {
+        "text": "یہ تہوار اوس مزٕ سان مناونہٕ یوان۔",
+        "src_lang": "kas_Arab",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        1970,
+        24,
+        1701,
+        31,
+        828,
+        1715,
+        9571,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        1970,
+        24,
+        1701,
+        31,
+        167,
+        1072,
+        4,
+        2
+      ],
+      "fp32_text": "The festival was celebrated with gaiety.",
+      "int8_text": "The festival was celebrated with much fun.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 101,
+      "fixture": {
+        "text": "फाटल्या तिमाहीत जीडीपी 7.5% वाडली.",
+        "src_lang": "gom_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        5276,
+        3950,
+        39,
+        13659,
+        432,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        5276,
+        3950,
+        39,
+        13659,
+        432,
+        10,
+        5,
+        1837,
+        4315,
+        4,
+        2
+      ],
+      "fp32_text": "GDP grew by 7.5% in the last quarter.",
+      "int8_text": "GDP grew by 7.5% in the previous quarter.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 102,
+      "fixture": {
+        "text": "शिक्षण ही प्रगतीची कुशीक.",
+        "src_lang": "gom_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        1307,
+        12,
+        5,
+        4902,
+        10871,
+        7,
+        1644,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        1307,
+        12,
+        5,
+        7176,
+        7,
+        1644,
+        4,
+        2
+      ],
+      "fp32_text": "Education is the cornerstone of progress.",
+      "int8_text": "Education is the edge of progress.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 103,
+      "fixture": {
+        "text": "संसदेन एक नवें विधेयक मंजूर केलें.",
+        "src_lang": "gom_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        1430,
+        1228,
+        13,
+        104,
+        2341,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        45,
+        104,
+        2341,
+        24,
+        1228,
+        39,
+        5,
+        3899,
+        4,
+        2
+      ],
+      "fp32_text": "Parliament passed a new bill.",
+      "int8_text": "A new bill was passed by the parliament.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 113,
+      "fixture": {
+        "text": "गत तिमाहीमे सकल घरेलू उत्पादमे 7.5 प्रतिशतक वृद्धि भेल।",
+        "src_lang": "mai_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        5276,
+        3950,
+        39,
+        502,
+        4,
+        265,
+        201,
+        565,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        5276,
+        3950,
+        39,
+        13659,
+        432,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "fp32_text": "The GDP grew by 7. 5 per cent in the last quarter.",
+      "int8_text": "The GDP grew by 7.5% in the last quarter.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 115,
+      "fixture": {
+        "text": "संसद एकटा नव विधेयक पारित कयलक।",
+        "src_lang": "mai_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        1430,
+        1228,
+        13,
+        104,
+        2341,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        3899,
+        1228,
+        13,
+        104,
+        2341,
+        4,
+        2
+      ],
+      "fp32_text": "Parliament passed a new bill.",
+      "int8_text": "The parliament passed a new bill.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 118,
+      "fixture": {
+        "text": "स्वास्थ्य सेवा सभ लेल सुलभ होबाक चाही।",
+        "src_lang": "mai_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        14564,
+        100,
+        23,
+        5621,
+        8,
+        50,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        14564,
+        510,
+        100,
+        23,
+        5621,
+        4,
+        2
+      ],
+      "fp32_text": "Healthcare should be accessible to all.",
+      "int8_text": "Healthcare services should be accessible.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 124,
+      "fixture": {
+        "text": "2023 ഒക്ടോബർ 15 നകം newemail123@xyz.com എന്ന നമ്പറിൽ ഞങ്ങളെ ബന്ധപ്പെടുക.",
+        "src_lang": "mal_Mlym",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        440,
+        1270,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "fp32_text": "Contact us by October 15, 2023 at newemail123@xyz.com.",
+      "int8_text": "Contact us by 15 October 2023 at newemail123@xyz.com.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 139,
+      "fixture": {
+        "text": "संसदेने एक नवीन विधेयक मंजूर केले.",
+        "src_lang": "mar_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        1430,
+        1228,
+        13,
+        104,
+        2341,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        45,
+        104,
+        2341,
+        24,
+        1228,
+        39,
+        5,
+        3899,
+        4,
+        2
+      ],
+      "fp32_text": "Parliament passed a new bill.",
+      "int8_text": "A new bill was passed by the parliament.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 146,
+      "fixture": {
+        "text": "ঙসি ঐখোয়না শনগারকপা হায়বা য়াই।",
+        "src_lang": "mni_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        1028,
+        59,
+        41,
+        237,
+        20,
+        59,
+        21,
+        423,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        1028,
+        59,
+        41,
+        23,
+        423,
+        4,
+        2
+      ],
+      "fp32_text": "Today we can say that we are together.",
+      "int8_text": "Today we can be together.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 147,
+      "fixture": {
+        "text": "9876543210 দা এস. এম. এস. অমা থাংগৎলু।",
+        "src_lang": "mni_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        8811,
+        51,
+        5164,
+        38,
+        7559,
+        1113,
+        12045,
+        910,
+        9115,
+        3057,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        242,
+        2837,
+        51,
+        5164,
+        8,
+        7559,
+        1113,
+        12045,
+        910,
+        9115,
+        3057,
+        4,
+        2
+      ],
+      "fp32_text": "Leave an SMS at 9876543210.",
+      "int8_text": "Send an SMS to 9876543210.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 149,
+      "fixture": {
+        "text": "হৌখিবা পুং 24দা অপুনবা ফগৎলকপগী চাং 7.88% দা হেনগৎলকখ্রে।",
+        "src_lang": "mni_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        17628,
+        3195,
+        854,
+        32,
+        1005,
+        8,
+        8819,
+        3683,
+        898,
+        5679,
+        10,
+        5,
+        214,
+        810,
+        765,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        598,
+        3195,
+        854,
+        32,
+        1005,
+        8,
+        8819,
+        3683,
+        898,
+        5679,
+        10,
+        5,
+        214,
+        810,
+        765,
+        4,
+        2
+      ],
+      "fp32_text": "The cumulative recovery rate has increased to 7.88% in the last 24 hours.",
+      "int8_text": "The total recovery rate has increased to 7.88% in the last 24 hours.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 150,
+      "fixture": {
+        "text": "মহৈ তম্ফমশিং অসি চাওখৎলকপগী মরু ওইবা মরম অমনি।",
+        "src_lang": "mni_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        1307,
+        12,
+        13,
+        647,
+        3210,
+        10,
+        466,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        1307,
+        12,
+        13,
+        647,
+        3210,
+        10,
+        1079,
+        4,
+        2
+      ],
+      "fp32_text": "Education is a major factor in development.",
+      "int8_text": "Education is a major factor in growth.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 153,
+      "fixture": {
+        "text": "তেক্নোলোজিনা পৃথীবিবুবু কিবদগী হেন্না কিনিংঙাই ওইবা মওংদা অহোংবা কয়া লাকই।",
+        "src_lang": "mni_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        2077,
+        12,
+        2246,
+        5,
+        130,
+        10,
+        76,
+        1926,
+        863,
+        116,
+        19,
+        12,
+        2246,
+        5,
+        130,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        2077,
+        12,
+        2246,
+        5,
+        130,
+        10,
+        76,
+        1926,
+        863,
+        116,
+        19,
+        12,
+        6503,
+        19,
+        4,
+        2
+      ],
+      "fp32_text": "Technology is changing the world in more dangerous ways than it is changing the world.",
+      "int8_text": "Technology is changing the world in more dangerous ways than it is saving it.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 156,
+      "fixture": {
+        "text": "यो एउटा परीक्षण वाक्य हो।",
+        "src_lang": "npi_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        57,
+        12,
+        13,
+        760,
+        4510,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        48,
+        12,
+        13,
+        760,
+        4510,
+        4,
+        2
+      ],
+      "fp32_text": "This is a test sentence.",
+      "int8_text": "It is a test sentence.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 161,
+      "fixture": {
+        "text": "गत त्रैमासिकमा जीडीपी 7.5 प्रतिशतले बढेको छ।",
+        "src_lang": "npi_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        5276,
+        3950,
+        39,
+        502,
+        14021,
+        432,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        5276,
+        3950,
+        39,
+        502,
+        4,
+        265,
+        432,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "fp32_text": "GDP grew by 7.75% in the last quarter.",
+      "int8_text": "The GDP grew by 7. 5% in the last quarter.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 164,
+      "fixture": {
+        "text": "जीवनका लागि पानी आवश्यक छ।",
+        "src_lang": "npi_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        1958,
+        12,
+        1312,
+        16,
+        134,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        1958,
+        12,
+        540,
+        16,
+        134,
+        4,
+        2
+      ],
+      "fp32_text": "Water is essential for life.",
+      "int8_text": "Water is necessary for life.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 166,
+      "fixture": {
+        "text": "स्वास्थ्य सेवा सबैका लागि पहुँचयोग्य हुनुपर्छ।",
+        "src_lang": "npi_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        14564,
+        100,
+        23,
+        5621,
+        8,
+        50,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        771,
+        604,
+        100,
+        23,
+        5621,
+        8,
+        50,
+        4,
+        2
+      ],
+      "fp32_text": "Healthcare should be accessible to all.",
+      "int8_text": "Health care should be accessible to all.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 172,
+      "fixture": {
+        "text": "2023 ମସିହା ଅକ୍ଟୋବର 15 ତାରିଖ ସୁଦ୍ଧା newemail123@xyz.com ରେ ଆମ ସହିତ ଯୋଗାଯୋଗ କରନ୍ତୁ।",
+        "src_lang": "ory_Orya",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        6,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        440,
+        1270,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "fp32_text": "Contact us by October 15, 2023, at newemail123@xyz.com.",
+      "int8_text": "Contact us by 15 October 2023 at newemail123@xyz.com.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 191,
+      "fixture": {
+        "text": "ਇਹ ਤਿਉਹਾਰ ਖੁਸ਼ੀਆਂ ਨਾਲ ਮਨਾਇਆ ਗਿਆ।",
+        "src_lang": "pan_Guru",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        1970,
+        24,
+        1701,
+        31,
+        167,
+        2757,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        1970,
+        24,
+        1701,
+        31,
+        828,
+        1715,
+        9571,
+        4,
+        2
+      ],
+      "fp32_text": "The festival was celebrated with much joy.",
+      "int8_text": "The festival was celebrated with gaiety.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 193,
+      "fixture": {
+        "text": "निर्वाचने कः विजयति?",
+        "src_lang": "san_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        578,
+        33,
+        709,
+        5,
+        800,
+        26,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        578,
+        4472,
+        5,
+        800,
+        26,
+        2
+      ],
+      "fp32_text": "Who will win the election?",
+      "int8_text": "Who wins the election?",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 196,
+      "fixture": {
+        "text": "2023 अक्टोबर् 15 दिनाङ्कपर्यन्तं newemail123@xyz.com इत्यत्र अस्मान् सम्पर्कयतु।",
+        "src_lang": "san_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        1843,
+        1382,
+        162,
+        39,
+        440,
+        1270,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "fp32_text": "Please contact us by 15 October 2023 at newemail123@xyz.com.",
+      "int8_text": "Contact us by October 15, 2023 at newemail123@xyz.com.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 206,
+      "fixture": {
+        "text": "ᱛᱮᱦᱮᱧ ᱦᱚᱭᱦᱩᱫᱥᱤᱫ ᱱᱟᱯᱟᱭ ᱾",
+        "src_lang": "sat_Olck",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        1911,
+        12,
+        114,
+        351,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        1028,
+        5,
+        1911,
+        12,
+        114,
+        4,
+        2
+      ],
+      "fp32_text": "The weather is good today.",
+      "int8_text": "Today the weather is good.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 214,
+      "fixture": {
+        "text": "ᱥᱟᱱᱟᱢ ᱦᱚᱲ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱥᱟᱧᱪᱟᱣ ᱨᱮᱭᱟᱜ ᱩᱯᱟᱹᱭ ᱦᱳᱭᱳᱜᱼᱟ ᱾",
+        "src_lang": "sat_Olck",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        82,
+        21,
+        6974,
+        1093,
+        16,
+        526,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        82,
+        12,
+        13,
+        177,
+        8,
+        1443,
+        16,
+        526,
+        4,
+        2
+      ],
+      "fp32_text": "There are savings options for everyone.",
+      "int8_text": "There is a way to save for everyone.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 220,
+      "fixture": {
+        "text": "15 آڪٽوبر 2023 تائین newemail123@xyz.com تی اسان سان رابطو ڪریو",
+        "src_lang": "snd_Arab",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        3012,
+        162,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        4,
+        2
+      ],
+      "fp32_text": "Contact us by October 15, 2023 at newemail123@xyz.com.",
+      "int8_text": "Contact us at newemail123@xyz.com by October 15, 2023.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 221,
+      "fixture": {
+        "text": "گذریل چوٿین ۾ جی ڊی پی 7. 5 سیڪڙو وڌی",
+        "src_lang": "snd_Arab",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        5276,
+        3950,
+        39,
+        13659,
+        432,
+        10,
+        5,
+        214,
+        4315,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        5276,
+        3950,
+        39,
+        13659,
+        432,
+        10,
+        5,
+        214,
+        4315,
+        4,
+        2
+      ],
+      "fp32_text": "GDP grew by 7.5% in the last quarter",
+      "int8_text": "GDP grew by 7.5% in the last quarter.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 229,
+      "fixture": {
+        "text": "தேர்தலில் யார் வெற்றி பெறுவார்கள்?",
+        "src_lang": "tam_Taml",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        578,
+        33,
+        709,
+        5,
+        701,
+        26,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        578,
+        33,
+        709,
+        5,
+        800,
+        26,
+        2
+      ],
+      "fp32_text": "Who will win the elections?",
+      "int8_text": "Who will win the election?",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 232,
+      "fixture": {
+        "text": "அக்டோபர் 15,2023க்குள் newemail123@xyz.com என்ற முகவரியில் எங்களைத் தொடர்பு கொள்ளுங்கள்.",
+        "src_lang": "tam_Taml",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        1843,
+        1382,
+        162,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        3012,
+        162,
+        39,
+        1270,
+        440,
+        6,
+        12911,
+        38,
+        8819,
+        3683,
+        898,
+        5679,
+        4,
+        2
+      ],
+      "fp32_text": "Please contact us by October 15, 2023 at newemail123@xyz.com.",
+      "int8_text": "Contact us by October 15, 2023 at newemail123@xyz.com.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 235,
+      "fixture": {
+        "text": "நாடாளுமன்றம் புதிய மசோதாவை நிறைவேற்றியது.",
+        "src_lang": "tam_Taml",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        1430,
+        1228,
+        5,
+        104,
+        2341,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        104,
+        2341,
+        24,
+        1228,
+        39,
+        5,
+        3899,
+        4,
+        2
+      ],
+      "fp32_text": "The Parliament passed the new bill.",
+      "int8_text": "The new bill was passed by the parliament.",
+      "tokens_match": false,
+      "text_match": false
+    }
+  ]
+}

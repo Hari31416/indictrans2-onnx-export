@@ -159,11 +159,33 @@ capture-fixtures-en-indic: setup ## Capture golden fixtures (en→indic)
 		--pytorch-model $(EN_INDIC_MODEL) \
 		--capture-fixtures $(EN_INDIC_FIXTURES)
 
-upload-en-indic: setup ## Upload fp32 bundle to Hugging Face
+upload-en-indic: upload-en-indic-fp32 ## Alias for upload-en-indic-fp32
+
+upload-en-indic-fp32: setup ## Upload fp32 bundle to Hugging Face (en→indic)
 	$(PYTHON) src/05_upload_hf.py \
 		--model-dir $(EN_INDIC_OUT) \
 		--repo-id $(HF_ORG)/indictrans2-en-indic-dist-200M-ONNX \
 		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-en-indic-int8: setup ## Upload int8 bundle (en→indic)
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(EN_INDIC_INT8_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-en-indic-dist-200M-ONNX-int8 \
+		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-en-indic-fp16: setup ## Upload fp16 bundle (en→indic)
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(EN_INDIC_FP16_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-en-indic-dist-200M-ONNX-fp16 \
+		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-en-indic-q4f16: setup ## Upload q4f16 bundle (en→indic)
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(EN_INDIC_Q4F16_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-en-indic-dist-200M-ONNX-q4f16 \
+		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-en-indic-all: upload-en-indic-fp32 upload-en-indic-int8 upload-en-indic-fp16 upload-en-indic-q4f16 ## Upload all precision variants (en→indic)
 
 convert-fp16-en-indic: setup ## Convert fp32 → fp16 (en→indic)
 	$(PYTHON) src/05_convert_fp16.py \
@@ -235,11 +257,33 @@ capture-fixtures-indic-en: setup ## Capture golden fixtures (indic→en)
 		--pytorch-model $(INDIC_EN_MODEL) \
 		--capture-fixtures $(INDIC_EN_FIXTURES)
 
-upload-indic-en: setup ## Upload fp32 bundle to Hugging Face
+upload-indic-en: upload-indic-en-fp32 ## Alias for upload-indic-en-fp32
+
+upload-indic-en-fp32: setup ## Upload fp32 bundle to Hugging Face (indic→en)
 	$(PYTHON) src/05_upload_hf.py \
 		--model-dir $(INDIC_EN_OUT) \
 		--repo-id $(HF_ORG)/indictrans2-indic-en-dist-200M-ONNX \
 		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-indic-en-int8: setup ## Upload int8 bundle (indic→en)
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(INDIC_EN_INT8_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-indic-en-dist-200M-ONNX-int8 \
+		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-indic-en-fp16: setup ## Upload fp16 bundle (indic→en)
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(INDIC_EN_FP16_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-indic-en-dist-200M-ONNX-fp16 \
+		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-indic-en-q4f16: setup ## Upload q4f16 bundle (indic→en)
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(INDIC_EN_Q4F16_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-indic-en-dist-200M-ONNX-q4f16 \
+		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-indic-en-all: upload-indic-en-fp32 upload-indic-en-int8 upload-indic-en-fp16 upload-indic-en-q4f16 ## Upload all precision variants (indic→en)
 
 convert-fp16-indic-en: setup ## Convert fp32 → fp16 (indic→en)
 	$(PYTHON) src/05_convert_fp16.py \
@@ -311,11 +355,33 @@ capture-fixtures-indic-indic: setup ## Capture golden fixtures (indic→indic)
 		--pytorch-model $(INDIC_INDIC_MODEL) \
 		--capture-fixtures $(INDIC_INDIC_FIXTURES)
 
-upload-indic-indic: setup ## Upload fp32 bundle to Hugging Face
+upload-indic-indic: upload-indic-indic-fp32 ## Alias for upload-indic-indic-fp32
+
+upload-indic-indic-fp32: setup ## Upload fp32 bundle to Hugging Face (indic→indic)
 	$(PYTHON) src/05_upload_hf.py \
 		--model-dir $(INDIC_INDIC_OUT) \
 		--repo-id $(HF_ORG)/indictrans2-indic-indic-dist-320M-ONNX \
 		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-indic-indic-int8: setup ## Upload int8 bundle (indic→indic)
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(INDIC_INDIC_INT8_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-indic-indic-dist-320M-ONNX-int8 \
+		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-indic-indic-fp16: setup ## Upload fp16 bundle (indic→indic)
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(INDIC_INDIC_FP16_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-indic-indic-dist-320M-ONNX-fp16 \
+		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-indic-indic-q4f16: setup ## Upload q4f16 bundle (indic→indic)
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(INDIC_INDIC_Q4F16_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-indic-indic-dist-320M-ONNX-q4f16 \
+		--commit-message "$(COMMIT_MESSAGE)"
+
+upload-indic-indic-all: upload-indic-indic-fp32 upload-indic-indic-int8 upload-indic-indic-fp16 upload-indic-indic-q4f16 ## Upload all precision variants (indic→indic)
 
 convert-fp16-indic-indic: setup ## Convert fp32 → fp16 (indic→indic)
 	$(PYTHON) src/05_convert_fp16.py \
@@ -374,6 +440,8 @@ benchmark-int8-all: benchmark-int8-en-indic benchmark-int8-indic-en benchmark-in
 benchmark-fp16-all: benchmark-fp16-en-indic benchmark-fp16-indic-en benchmark-fp16-indic-indic ## Run FP16 benchmarks for all directions
 
 benchmark-q4f16-all: benchmark-q4f16-en-indic benchmark-q4f16-indic-en benchmark-q4f16-indic-indic ## Run Q4F16 benchmarks for all directions
+
+upload-all: upload-en-indic-all upload-indic-en-all upload-indic-indic-all ## Upload all 12 model bundles (3 directions x 4 precision variants)
 
 # ── Cleanup ──────────────────────────────────────────────────────────────────
 
