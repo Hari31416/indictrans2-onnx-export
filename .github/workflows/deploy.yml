@@ -1,19 +1,22 @@
-name: Deploy to GitHub Pages
+name: Deploy Notes to GitHub Pages
 
 on:
+  # Trigger deployment on push to the main publishing branch
   push:
-    branches:
-      - main
+    branches: ["main"]
+  # Allow manual trigger from the GitHub Actions tab
   workflow_dispatch:
 
+# Set directory permissions required for secure OpenID Connect token authentication
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Prevent simultaneous redundant deployment executions
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   deploy:
@@ -22,24 +25,22 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Build site
+      - name: Create index.html
         run: |
-          mkdir -p dist
-          touch dist/.nojekyll
-          cp onnx-components.html dist/index.html
-          cp onnx-components.html dist/onnx-components.html
+          cp onnx-components.html index.html
+          touch .nojekyll
 
-      - name: Upload artifact
+      - name: Configure GitHub Pages Hosting Environment
+        uses: actions/configure-pages@v5
+
+      - name: Upload Static Portal Files Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: '.'
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy Live Artifact Payload to Target Environment
         id: deployment
         uses: actions/deploy-pages@v4
