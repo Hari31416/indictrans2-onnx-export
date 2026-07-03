@@ -41,11 +41,6 @@ def quantize_int8(input_dir: Path, output_dir: Path) -> None:
             per_channel=True,
         )
 
-        # Copy external data sidecar if present
-        data_src = input_dir / f"{name}.data"
-        if data_src.exists():
-            shutil.copy2(data_src, output_dir / f"{name}.data")
-
     # Tokenizer and config files are byte-identical to fp32
     for pattern in (
         "tokenizer_*.json", "config.json", "generation_config.json",

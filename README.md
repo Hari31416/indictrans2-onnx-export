@@ -129,13 +129,37 @@ To verify that the exported ONNX models translate correctly across target langua
 
 Input sentences are loaded from `fixtures/smoke-test/test_sentences_<lang>.json`, and the resulting matrices are saved to `fixtures/smoke-test/translation_matrix_<direction>.json`.
 
-## fp32 parity summary
+## Parity and Benchmark Reports
 
-| Direction   | Fixtures | Token | Text |
-| ----------- | -------- | ----- | ---- |
-| en→indic    | 8        | 100%  | 100% |
-| indic→en    | 8        | 100%  | 100% |
-| indic→indic | 12       | 100%  | 100% |
+### FP32 Parity Summary
+
+| Direction | Fixtures | Token Pass Rate | Text Pass Rate | Model Size | Validation Time |
+| - | - | - | - | - | - |
+| en-indic | 264 | 100.0% | 100.0% | 1.74 GB | 48.03s |
+| indic-en | 264 | 100.0% | 100.0% | 1.22 GB | 37.85s |
+| indic-indic | 264 | 100.0% | 100.0% | 1.91 GB | 52.34s |
+
+### Quantization Benchmarks
+
+Compared against the FP32 ONNX oracle on the same 264 golden fixtures.
+
+| Direction | Format | Token Match | Text Match | Model Size | FP32 Latency | Quant Latency | Speedup |
+| - | - | - | - | - | - | - | - |
+| en-indic | FP16 | 100.0% | 100.0% | 892.0 MB | 61.5ms | 66.6ms | 0.923x |
+| en-indic | INT8 | 79.55% | 79.92% | 452.9 MB | 63.1ms | 37.7ms | 1.674x |
+| en-indic | Q4F16 | 63.64% | 64.39% | 623.3 MB | 62.7ms | 59.4ms | 1.055x |
+| indic-en | FP16 | 99.62% | 99.62% | 627.2 MB | 37.6ms | 44.1ms | 0.853x |
+| indic-en | INT8 | 81.44% | 81.44% | 319.7 MB | 39.2ms | 33.0ms | 1.187x |
+| indic-en | Q4F16 | 65.91% | 65.91% | 358.6 MB | 39.7ms | 43.1ms | 0.922x |
+| indic-indic | FP16 | 100.0% | 100.0% | 980.2 MB | 64.7ms | 70.5ms | 0.918x |
+| indic-indic | INT8 | 78.41% | 79.17% | 497.1 MB | 65.0ms | 40.3ms | 1.612x |
+| indic-indic | Q4F16 | 56.06% | 57.58% | 711.6 MB | 64.1ms | 65.3ms | 0.983x |
+
+### Performance Visualizations
+
+![Token Pass Rate Comparison](./fixtures/pass_rate_comparison.png)
+
+![Model Size Comparison](./fixtures/model_size_comparison.png)
 
 ## Known issues (fp32)
 
@@ -181,4 +205,3 @@ To enable the deployment:
 - Under **Build and deployment** -> **Source**, select **GitHub Actions** (instead of "Deploy from a branch").
 
 Once enabled, the deployment workflow will run, and the documentation will be live at `https://hari31416.github.io/indictrans2-onnx-export/`.
-
