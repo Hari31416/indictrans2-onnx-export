@@ -1,0 +1,84 @@
+{
+  "label": "q4f16",
+  "oracle": "scratch/en-indic-onnx",
+  "cmp_dir": "scratch/en-indic-onnx-q4f16",
+  "total_fixtures": 8,
+  "token_exact_rate": 75.0,
+  "text_exact_rate": 75.0,
+  "token_exact_count": 6,
+  "text_exact_count": 6,
+  "fp32_avg_latency_ms": 55.6,
+  "cmp_avg_latency_ms": 64.1,
+  "speedup_vs_fp32": 0.866,
+  "fp32_tokens_per_sec": 184.5,
+  "cmp_tokens_per_sec": 157.9,
+  "mismatches": [
+    {
+      "index": 1,
+      "fixture": {
+        "text": "Who will win the election?",
+        "src_lang": "eng_Latn",
+        "tgt_lang": "hin_Deva",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        1362,
+        2947,
+        19028,
+        170,
+        11,
+        2
+      ],
+      "q4f16_tokens": [
+        2,
+        1362,
+        10,
+        2947,
+        19028,
+        170,
+        11,
+        2
+      ],
+      "fp32_text": "चुनाव कौन जीतेगा?",
+      "q4f16_text": "चुनाव में कौन जीतेगा?",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 6,
+      "fixture": {
+        "text": "Technology is changing the world.",
+        "src_lang": "eng_Latn",
+        "tgt_lang": "tel_Telu",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        7018,
+        2190,
+        33294,
+        1458,
+        370,
+        32482,
+        15638,
+        4,
+        2
+      ],
+      "q4f16_tokens": [
+        2,
+        12044,
+        1458,
+        370,
+        32482,
+        15638,
+        4,
+        2
+      ],
+      "fp32_text": "సాంకేతిక పరిజ్ఞానం ప్రపంచాన్ని మార్చేస్తోంది.",
+      "q4f16_text": "టెక్నాలజీ ప్రపంచాన్ని మార్చేస్తోంది.",
+      "tokens_match": false,
+      "text_match": false
+    }
+  ]
+}

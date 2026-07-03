@@ -30,10 +30,10 @@ fp16 is the best quality/size tradeoff to try first. INT8 is a separate “previ
 
 ### How to proceed
 
-1. **Post-convert fp32 → fp16** (lowest risk first)
-   - Cast weights in existing ONNX graphs with `onnxruntime` or `onnxconverter-common`
+1. **Post-convert fp32 → fp16** ✅
+   - `src/05_convert_fp16.py` + `make convert-fp16-*` targets implemented
+   - Uses `onnxconverter-common.convert_float_to_float16` with `keep_io_types=True`
    - Start with **encoder only**, run parity, then decoder, then `decoder_with_past`
-   - Add `src/05_convert_fp16.py` + `make convert-fp16-*` targets
 
 2. **Export-time fp16** (if post-convert fails parity)
    - Load PyTorch model as `torch.float16`, trace with same wrappers in `src/it2_onnx_wrappers.py`
@@ -123,12 +123,13 @@ Optional `*-ONNX-bf16` for server use only; out of scope for [local-voice-chat](
 ### How to proceed
 
 1. Start from **fp16** graphs (or fp32 if fp16 blocked)
-2. Use Transformers.js conversion tooling or ORT quantization:
-   - `onnxruntime.transformers.optimizer`
-   - [Transformers.js `convert.py`](https://github.com/huggingface/transformers.js) with `dtype: 'q4'`
-3. naklitechie's target size class for browser; en→indic reference used fp32 + separate int8, not q4f16 yet
-4. Validate with same greedy loop + expanded fixtures
-5. May require different runtime path than custom 3-graph ORT loop (Transformers.js vs raw onnxruntime-web)
+2. Use ORT-native `MatMul4BitsQuantizer` (Path A) ✅
+   - `src/06_quantize_q4f16.py` + `make quantize-q4f16-*` targets implemented
+   - `accuracy_level=2` (fp16 scales + fp16 input A = true q4f16)
+   - `block_size=32` default (tunable via `Q4F16_BLOCK_SIZE=`)
+   - embed_tokens / lm_head excluded by default to protect translation quality
+3. Validate with same greedy loop + expanded fixtures
+4. May require different runtime path than custom 3-graph ORT loop (Transformers.js vs raw onnxruntime-web)
 
 ### Expected issues
 
@@ -168,7 +169,8 @@ indictrans2-onnx-export/
 │   ├── 02_build_fast_tokenizers.py
 │   ├── 03_validate_parity.py
 │   ├── 04_quantize_int8.py
-│   ├── 05_convert_fp16.py      # TODO
+│   ├── 05_convert_fp16.py      # fp32 → fp16 (onnxconverter-common)
+│   ├── 06_quantize_q4f16.py   # fp16 → q4f16 (MatMul4BitsQuantizer)
 │   └── it2_onnx_wrappers.py
 ├── fixtures/               # golden inputs + parity reports (in git)
 ├── scratch/                # fp32/int8/fp16 bundles (gitignored → HF)

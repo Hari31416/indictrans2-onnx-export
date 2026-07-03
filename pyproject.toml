@@ -10,6 +10,7 @@ dependencies = [
     "indictranstoolkit==1.1.1",
     "numpy==2.4.6",
     "onnx==1.22.0",
+    "onnxconverter-common==1.16.0",
     "onnxruntime==1.27.0",
     "onnxscript==0.7.1",
     "optimum[onnxruntime]==2.1.0",

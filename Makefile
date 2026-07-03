@@ -18,12 +18,20 @@ EN_INDIC_MODEL    := ai4bharat/indictrans2-en-indic-dist-200M
 INDIC_EN_MODEL    := ai4bharat/indictrans2-indic-en-dist-200M
 INDIC_INDIC_MODEL := ai4bharat/indictrans2-indic-indic-dist-320M
 
-EN_INDIC_OUT      := $(SCRATCH)/en-indic-onnx
-EN_INDIC_INT8_OUT := $(SCRATCH)/en-indic-onnx-int8
-INDIC_EN_OUT      := $(SCRATCH)/indic-en-onnx
-INDIC_EN_INT8_OUT := $(SCRATCH)/indic-en-onnx-int8
-INDIC_INDIC_OUT   := $(SCRATCH)/indic-indic-onnx
-INDIC_INDIC_INT8_OUT := $(SCRATCH)/indic-indic-onnx-int8
+EN_INDIC_OUT          := $(SCRATCH)/en-indic-onnx
+EN_INDIC_INT8_OUT     := $(SCRATCH)/en-indic-onnx-int8
+EN_INDIC_FP16_OUT     := $(SCRATCH)/en-indic-onnx-fp16
+EN_INDIC_Q4F16_OUT    := $(SCRATCH)/en-indic-onnx-q4f16
+INDIC_EN_OUT          := $(SCRATCH)/indic-en-onnx
+INDIC_EN_INT8_OUT     := $(SCRATCH)/indic-en-onnx-int8
+INDIC_EN_FP16_OUT     := $(SCRATCH)/indic-en-onnx-fp16
+INDIC_EN_Q4F16_OUT    := $(SCRATCH)/indic-en-onnx-q4f16
+INDIC_INDIC_OUT       := $(SCRATCH)/indic-indic-onnx
+INDIC_INDIC_INT8_OUT  := $(SCRATCH)/indic-indic-onnx-int8
+INDIC_INDIC_FP16_OUT  := $(SCRATCH)/indic-indic-onnx-fp16
+INDIC_INDIC_Q4F16_OUT := $(SCRATCH)/indic-indic-onnx-q4f16
+
+Q4F16_BLOCK_SIZE ?= 32
 
 EN_INDIC_FIXTURES    := fixtures/en-indic-golden.jsonl
 INDIC_EN_FIXTURES    := fixtures/indic-en-golden.jsonl
@@ -33,28 +41,53 @@ EN_INDIC_REPORT    := fixtures/parity-report-en-indic.json
 INDIC_EN_REPORT    := fixtures/parity-report-indic-en.json
 INDIC_INDIC_REPORT := fixtures/parity-report-indic-indic.json
 
+# Benchmark reports (fp32 ONNX oracle vs quantized tiers)
+EN_INDIC_BENCH_INT8    := fixtures/benchmark-en-indic-int8.json
+EN_INDIC_BENCH_FP16    := fixtures/benchmark-en-indic-fp16.json
+EN_INDIC_BENCH_Q4F16   := fixtures/benchmark-en-indic-q4f16.json
+INDIC_EN_BENCH_INT8    := fixtures/benchmark-indic-en-int8.json
+INDIC_EN_BENCH_FP16    := fixtures/benchmark-indic-en-fp16.json
+INDIC_EN_BENCH_Q4F16   := fixtures/benchmark-indic-en-q4f16.json
+INDIC_INDIC_BENCH_INT8  := fixtures/benchmark-indic-indic-int8.json
+INDIC_INDIC_BENCH_FP16  := fixtures/benchmark-indic-indic-fp16.json
+INDIC_INDIC_BENCH_Q4F16 := fixtures/benchmark-indic-indic-q4f16.json
+
 .PHONY: help setup install clean clean-all preview \
 	export-en-indic tokenizers-en-indic validate-en-indic quantize-en-indic \
+	convert-fp16-en-indic quantize-q4f16-en-indic \
+	benchmark-int8-en-indic benchmark-fp16-en-indic benchmark-q4f16-en-indic \
 	capture-fixtures-en-indic upload-en-indic en-indic \
 	export-indic-en tokenizers-indic-en validate-indic-en quantize-indic-en \
+	convert-fp16-indic-en quantize-q4f16-indic-en \
+	benchmark-int8-indic-en benchmark-fp16-indic-en benchmark-q4f16-indic-en \
 	capture-fixtures-indic-en upload-indic-en indic-en \
 	export-indic-indic tokenizers-indic-indic validate-indic-indic quantize-indic-indic \
-	capture-fixtures-indic-indic upload-indic-indic indic-indic
+	convert-fp16-indic-indic quantize-q4f16-indic-indic \
+	benchmark-int8-indic-indic benchmark-fp16-indic-indic benchmark-q4f16-indic-indic \
+	capture-fixtures-indic-indic upload-indic-indic indic-indic \
+	quantize-all quantize-int8-all convert-fp16-all quantize-q4f16-all \
+	benchmark-all benchmark-int8-all benchmark-fp16-all benchmark-q4f16-all
 
 help: ## Show available targets
 	@echo "IndicTrans2 ONNX export — make targets"
 	@echo ""
-	@echo "Setup:"
+	@echo "Setup & Batch Operations:"
 	@echo "  make setup                  Create .venv and install requirements"
 	@echo "  make clean                  Remove scratch ONNX artifacts"
 	@echo "  make clean-all              Remove scratch + .venv"
 	@echo "  make preview                Local preview of the ONNX components guide"
+	@echo "  make quantize-all           Quantize all 3 models to both INT8 & Q4F16 (incl. FP16)"
+	@echo "  make benchmark-all          Evaluate/benchmark all variants (INT8, FP16, Q4F16)"
 	@echo ""
 	@echo "en→indic (200M):"
 	@echo "  make export-en-indic"
 	@echo "  make tokenizers-en-indic"
 	@echo "  make validate-en-indic"
 	@echo "  make quantize-en-indic"
+	@echo "  make convert-fp16-en-indic   fp32 → fp16  (src/05_convert_fp16.py)"
+	@echo "  make quantize-q4f16-en-indic fp16 → q4f16 (src/06_quantize_q4f16.py)"
+	@echo "  make benchmark-fp16-en-indic  fp16 vs fp32 quality + speed"
+	@echo "  make benchmark-q4f16-en-indic q4f16 vs fp32 quality + speed"
 	@echo "  make capture-fixtures-en-indic"
 	@echo "  make upload-en-indic"
 	@echo "  make en-indic               Steps 1–3"
@@ -64,6 +97,10 @@ help: ## Show available targets
 	@echo "  make tokenizers-indic-en    Step 2 — fast tokenizers"
 	@echo "  make validate-indic-en      Step 3 — parity vs PyTorch"
 	@echo "  make quantize-indic-en      Step 4 — INT8 (after fp32 passes)"
+	@echo "  make convert-fp16-indic-en   fp32 → fp16  (src/05_convert_fp16.py)"
+	@echo "  make quantize-q4f16-indic-en fp16 → q4f16 (src/06_quantize_q4f16.py)"
+	@echo "  make benchmark-fp16-indic-en  fp16 vs fp32 quality + speed"
+	@echo "  make benchmark-q4f16-indic-en q4f16 vs fp32 quality + speed"
 	@echo "  make capture-fixtures-indic-en  Generate golden fixtures"
 	@echo "  make upload-indic-en        Upload bundle to HF (HF_ORG=$(HF_ORG))"
 	@echo "  make indic-en               Steps 1–3"
@@ -73,11 +110,15 @@ help: ## Show available targets
 	@echo "  make tokenizers-indic-indic"
 	@echo "  make validate-indic-indic"
 	@echo "  make quantize-indic-indic"
+	@echo "  make convert-fp16-indic-indic   fp32 → fp16  (src/05_convert_fp16.py)"
+	@echo "  make quantize-q4f16-indic-indic fp16 → q4f16 (src/06_quantize_q4f16.py)"
+	@echo "  make benchmark-fp16-indic-indic  fp16 vs fp32 quality + speed"
+	@echo "  make benchmark-q4f16-indic-indic q4f16 vs fp32 quality + speed"
 	@echo "  make capture-fixtures-indic-indic"
 	@echo "  make upload-indic-indic"
 	@echo "  make indic-indic            Steps 1–3"
 	@echo ""
-	@echo "Variables: HF_ORG=$(HF_ORG)  SCRATCH=$(SCRATCH)  ONNX_OPSET=$(ONNX_OPSET)"
+	@echo "Variables: HF_ORG=$(HF_ORG)  SCRATCH=$(SCRATCH)  ONNX_OPSET=$(ONNX_OPSET)  Q4F16_BLOCK_SIZE=$(Q4F16_BLOCK_SIZE)"
 
 # ── Setup ────────────────────────────────────────────────────────────────────
 
@@ -124,6 +165,44 @@ upload-en-indic: setup ## Upload fp32 bundle to Hugging Face
 		--repo-id $(HF_ORG)/indictrans2-en-indic-dist-200M-ONNX \
 		--commit-message "$(COMMIT_MESSAGE)"
 
+convert-fp16-en-indic: setup ## Convert fp32 → fp16 (en→indic)
+	$(PYTHON) src/05_convert_fp16.py \
+		--input $(EN_INDIC_OUT) \
+		--output $(EN_INDIC_FP16_OUT)
+
+quantize-q4f16-en-indic: setup ## q4f16 quantize fp16 bundle (en→indic)
+	$(PYTHON) src/06_quantize_q4f16.py \
+		--input $(EN_INDIC_FP16_OUT) \
+		--output $(EN_INDIC_Q4F16_OUT) \
+		--block-size $(Q4F16_BLOCK_SIZE)
+
+benchmark-int8-en-indic: setup ## Benchmark INT8 vs fp32 oracle (en→indic)
+	$(PYTHON) src/07_benchmark_precision.py \
+		--fp32-dir  $(EN_INDIC_OUT) \
+		--cmp-dir   $(EN_INDIC_INT8_OUT) \
+		--fixtures  $(EN_INDIC_FIXTURES) \
+		--pytorch-model $(EN_INDIC_MODEL) \
+		--label int8 \
+		--report $(EN_INDIC_BENCH_INT8)
+
+benchmark-fp16-en-indic: setup ## Benchmark fp16 vs fp32 oracle (en→indic)
+	$(PYTHON) src/07_benchmark_precision.py \
+		--fp32-dir  $(EN_INDIC_OUT) \
+		--cmp-dir   $(EN_INDIC_FP16_OUT) \
+		--fixtures  $(EN_INDIC_FIXTURES) \
+		--pytorch-model $(EN_INDIC_MODEL) \
+		--label fp16 \
+		--report $(EN_INDIC_BENCH_FP16)
+
+benchmark-q4f16-en-indic: setup ## Benchmark q4f16 vs fp32 oracle (en→indic)
+	$(PYTHON) src/07_benchmark_precision.py \
+		--fp32-dir  $(EN_INDIC_OUT) \
+		--cmp-dir   $(EN_INDIC_Q4F16_OUT) \
+		--fixtures  $(EN_INDIC_FIXTURES) \
+		--pytorch-model $(EN_INDIC_MODEL) \
+		--label q4f16 \
+		--report $(EN_INDIC_BENCH_Q4F16)
+
 en-indic: export-en-indic tokenizers-en-indic validate-en-indic ## Full en→indic pipeline (steps 1–3)
 
 # ── indic→en ─────────────────────────────────────────────────────────────────
@@ -161,6 +240,44 @@ upload-indic-en: setup ## Upload fp32 bundle to Hugging Face
 		--model-dir $(INDIC_EN_OUT) \
 		--repo-id $(HF_ORG)/indictrans2-indic-en-dist-200M-ONNX \
 		--commit-message "$(COMMIT_MESSAGE)"
+
+convert-fp16-indic-en: setup ## Convert fp32 → fp16 (indic→en)
+	$(PYTHON) src/05_convert_fp16.py \
+		--input $(INDIC_EN_OUT) \
+		--output $(INDIC_EN_FP16_OUT)
+
+quantize-q4f16-indic-en: setup ## q4f16 quantize fp16 bundle (indic→en)
+	$(PYTHON) src/06_quantize_q4f16.py \
+		--input $(INDIC_EN_FP16_OUT) \
+		--output $(INDIC_EN_Q4F16_OUT) \
+		--block-size $(Q4F16_BLOCK_SIZE)
+
+benchmark-int8-indic-en: setup ## Benchmark INT8 vs fp32 oracle (indic→en)
+	$(PYTHON) src/07_benchmark_precision.py \
+		--fp32-dir  $(INDIC_EN_OUT) \
+		--cmp-dir   $(INDIC_EN_INT8_OUT) \
+		--fixtures  $(INDIC_EN_FIXTURES) \
+		--pytorch-model $(INDIC_EN_MODEL) \
+		--label int8 \
+		--report $(INDIC_EN_BENCH_INT8)
+
+benchmark-fp16-indic-en: setup ## Benchmark fp16 vs fp32 oracle (indic→en)
+	$(PYTHON) src/07_benchmark_precision.py \
+		--fp32-dir  $(INDIC_EN_OUT) \
+		--cmp-dir   $(INDIC_EN_FP16_OUT) \
+		--fixtures  $(INDIC_EN_FIXTURES) \
+		--pytorch-model $(INDIC_EN_MODEL) \
+		--label fp16 \
+		--report $(INDIC_EN_BENCH_FP16)
+
+benchmark-q4f16-indic-en: setup ## Benchmark q4f16 vs fp32 oracle (indic→en)
+	$(PYTHON) src/07_benchmark_precision.py \
+		--fp32-dir  $(INDIC_EN_OUT) \
+		--cmp-dir   $(INDIC_EN_Q4F16_OUT) \
+		--fixtures  $(INDIC_EN_FIXTURES) \
+		--pytorch-model $(INDIC_EN_MODEL) \
+		--label q4f16 \
+		--report $(INDIC_EN_BENCH_Q4F16)
 
 indic-en: export-indic-en tokenizers-indic-en validate-indic-en ## Full indic→en pipeline (steps 1–3)
 
@@ -200,12 +317,71 @@ upload-indic-indic: setup ## Upload fp32 bundle to Hugging Face
 		--repo-id $(HF_ORG)/indictrans2-indic-indic-dist-320M-ONNX \
 		--commit-message "$(COMMIT_MESSAGE)"
 
+convert-fp16-indic-indic: setup ## Convert fp32 → fp16 (indic→indic)
+	$(PYTHON) src/05_convert_fp16.py \
+		--input $(INDIC_INDIC_OUT) \
+		--output $(INDIC_INDIC_FP16_OUT)
+
+quantize-q4f16-indic-indic: setup ## q4f16 quantize fp16 bundle (indic→indic)
+	$(PYTHON) src/06_quantize_q4f16.py \
+		--input $(INDIC_INDIC_FP16_OUT) \
+		--output $(INDIC_INDIC_Q4F16_OUT) \
+		--block-size $(Q4F16_BLOCK_SIZE)
+
+benchmark-int8-indic-indic: setup ## Benchmark INT8 vs fp32 oracle (indic→indic)
+	$(PYTHON) src/07_benchmark_precision.py \
+		--fp32-dir  $(INDIC_INDIC_OUT) \
+		--cmp-dir   $(INDIC_INDIC_INT8_OUT) \
+		--fixtures  $(INDIC_INDIC_FIXTURES) \
+		--pytorch-model $(INDIC_INDIC_MODEL) \
+		--label int8 \
+		--report $(INDIC_INDIC_BENCH_INT8)
+
+benchmark-fp16-indic-indic: setup ## Benchmark fp16 vs fp32 oracle (indic→indic)
+	$(PYTHON) src/07_benchmark_precision.py \
+		--fp32-dir  $(INDIC_INDIC_OUT) \
+		--cmp-dir   $(INDIC_INDIC_FP16_OUT) \
+		--fixtures  $(INDIC_INDIC_FIXTURES) \
+		--pytorch-model $(INDIC_INDIC_MODEL) \
+		--label fp16 \
+		--report $(INDIC_INDIC_BENCH_FP16)
+
+benchmark-q4f16-indic-indic: setup ## Benchmark q4f16 vs fp32 oracle (indic→indic)
+	$(PYTHON) src/07_benchmark_precision.py \
+		--fp32-dir  $(INDIC_INDIC_OUT) \
+		--cmp-dir   $(INDIC_INDIC_Q4F16_OUT) \
+		--fixtures  $(INDIC_INDIC_FIXTURES) \
+		--pytorch-model $(INDIC_INDIC_MODEL) \
+		--label q4f16 \
+		--report $(INDIC_INDIC_BENCH_Q4F16)
+
 indic-indic: export-indic-indic tokenizers-indic-indic validate-indic-indic ## Full indic→indic pipeline (steps 1–3)
+
+# ── Batch Operations ──────────────────────────────────────────────────────────
+
+quantize-all: quantize-int8-all convert-fp16-all quantize-q4f16-all ## Run all quantization/conversion variants for all directions
+
+quantize-int8-all: quantize-en-indic quantize-indic-en quantize-indic-indic ## Run INT8 quantization for all directions
+
+convert-fp16-all: convert-fp16-en-indic convert-fp16-indic-en convert-fp16-indic-indic ## Run FP16 conversion for all directions
+
+quantize-q4f16-all: quantize-q4f16-en-indic quantize-q4f16-indic-en quantize-q4f16-indic-indic ## Run Q4F16 quantization for all directions
+
+benchmark-all: benchmark-int8-all benchmark-fp16-all benchmark-q4f16-all ## Benchmark all directions for INT8, FP16, and Q4F16
+
+benchmark-int8-all: benchmark-int8-en-indic benchmark-int8-indic-en benchmark-int8-indic-indic ## Run INT8 benchmarks for all directions
+
+benchmark-fp16-all: benchmark-fp16-en-indic benchmark-fp16-indic-en benchmark-fp16-indic-indic ## Run FP16 benchmarks for all directions
+
+benchmark-q4f16-all: benchmark-q4f16-en-indic benchmark-q4f16-indic-en benchmark-q4f16-indic-indic ## Run Q4F16 benchmarks for all directions
 
 # ── Cleanup ──────────────────────────────────────────────────────────────────
 
 clean: ## Remove scratch ONNX artifacts
-	rm -rf $(EN_INDIC_OUT) $(EN_INDIC_INT8_OUT) $(INDIC_EN_OUT) $(INDIC_EN_INT8_OUT) $(INDIC_INDIC_OUT) $(INDIC_INDIC_INT8_OUT)
+	rm -rf \
+		$(EN_INDIC_OUT) $(EN_INDIC_INT8_OUT) $(EN_INDIC_FP16_OUT) $(EN_INDIC_Q4F16_OUT) \
+		$(INDIC_EN_OUT) $(INDIC_EN_INT8_OUT) $(INDIC_EN_FP16_OUT) $(INDIC_EN_Q4F16_OUT) \
+		$(INDIC_INDIC_OUT) $(INDIC_INDIC_INT8_OUT) $(INDIC_INDIC_FP16_OUT) $(INDIC_INDIC_Q4F16_OUT)
 
 clean-all: clean ## Remove scratch artifacts and Python venv
 	rm -rf $(VENV)
