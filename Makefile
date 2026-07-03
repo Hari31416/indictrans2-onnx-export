@@ -9,7 +9,7 @@
 
 VENV          ?= .venv
 PYTHON        := $(VENV)/bin/python
-PIP           := $(VENV)/bin/pip
+UV            ?= uv
 SCRATCH       ?= ./scratch
 HF_ORG        ?= hari31416
 ONNX_OPSET    ?= 17
@@ -81,11 +81,9 @@ help: ## Show available targets
 # ── Setup ────────────────────────────────────────────────────────────────────
 
 setup: $(VENV)/bin/python ## Create venv and install Python deps
-	$(PIP) install --upgrade pip
-	$(PIP) install -r requirements.txt
 
-$(VENV)/bin/python:
-	python3 -m venv $(VENV)
+$(VENV)/bin/python: pyproject.toml
+	$(UV) sync
 
 install: setup ## Alias for setup
 

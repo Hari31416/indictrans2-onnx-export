@@ -19,12 +19,11 @@ make en-indic               # full en→indic pipeline
 make indic-indic            # full P1 pipeline (indic→indic 320M)
 ```
 
-Manual venv setup (equivalent to `make setup`):
+Manual setup (equivalent to `make setup`):
 
 ```bash
-python -m venv .venv
+uv sync
 source .venv/bin/activate
-pip install -r requirements.txt
 ```
 
 ## Export targets
