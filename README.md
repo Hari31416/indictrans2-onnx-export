@@ -97,10 +97,10 @@ After upload, update `IT2_ONNX_ORG` in `src/lib/translation-models.ts`.
 
 | Issue                                                                      | Status                                                              |
 | -------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| Optimum `ORTModelForSeq2SeqLM` unsupported for IndicTrans                  | Fixed — manual export in `01_export_encoder_decoder.py`             |
-| `decoder_with_past` needs dynamic axes + `encoder_attention_mask` in graph | Fixed                                                               |
-| Fast tokenizer SPM indices ≠ dict.SRC/TGT IDs                              | Fixed — SpmConverter + vocab remap in `02_build_fast_tokenizers.py` |
-| `model.generate()` broken on IndicTrans custom code                        | Workaround — manual greedy loop in `03_validate_parity.py`          |
+| Optimum `ORTModelForSeq2SeqLM` unsupported for IndicTrans                  | Fixed — manual export in `src/01_export_encoder_decoder.py`             |
+| `decoder_with_past` needs dynamic axes + `encoder_attention_mask` in graph | Fixed                                                                   |
+| Fast tokenizer SPM indices ≠ dict.SRC/TGT IDs                              | Fixed — SpmConverter + vocab remap in `src/02_build_fast_tokenizers.py` |
+| `model.generate()` broken on IndicTrans custom code                        | Workaround — manual greedy loop in `src/03_validate_parity.py`          |
 
 ## Fixtures
 

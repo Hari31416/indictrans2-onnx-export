@@ -188,16 +188,16 @@ Update `IT2_ONNX_ORG` and set `available: true` in `src/lib/translation-models.t
 
 **Fix:** Pass `decoded` directly: `postprocess_batch(decoded, lang=...)`.
 
-**File:** `03_validate_parity.py`
+**File:** `src/03_validate_parity.py`
 
 ---
 
-| File                            | Role                                            |
-| ------------------------------- | ----------------------------------------------- |
-| `01_export_encoder_decoder.py`  | Manual ONNX export (encoder + 2 decoder graphs) |
-| `02_build_fast_tokenizers.py`   | SpmConverter + dict remap + validation          |
-| `03_validate_parity.py`         | Greedy decode parity (PyTorch vs ONNX)          |
-| `04_quantize_int8.py`           | Optional INT8 quantization                      |
-| `it2_onnx_wrappers.py`          | PyTorch wrappers matching naklitechie I/O       |
+| File                                | Role                                            |
+| ----------------------------------- | ----------------------------------------------- |
+| `src/01_export_encoder_decoder.py`  | Manual ONNX export (encoder + 2 decoder graphs) |
+| `src/02_build_fast_tokenizers.py`   | SpmConverter + dict remap + validation          |
+| `src/03_validate_parity.py`         | Greedy decode parity (PyTorch vs ONNX)          |
+| `src/04_quantize_int8.py`           | Optional INT8 quantization                      |
+| `src/it2_onnx_wrappers.py`          | PyTorch wrappers matching naklitechie I/O       |
 | `fixtures/*-golden.jsonl`       | Direction-specific parity fixtures              |
 | `fixtures/parity-report-*.json` | Validation results                              |

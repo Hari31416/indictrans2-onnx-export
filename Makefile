@@ -90,30 +90,30 @@ install: setup ## Alias for setup
 # ── en→indic ─────────────────────────────────────────────────────────────────
 
 export-en-indic: setup ## Export encoder + decoder ONNX (en→indic)
-	$(PYTHON) 01_export_encoder_decoder.py \
+	$(PYTHON) src/01_export_encoder_decoder.py \
 		--model $(EN_INDIC_MODEL) \
 		--output $(EN_INDIC_OUT) \
 		--opset $(ONNX_OPSET)
 
 tokenizers-en-indic: setup ## Build fast tokenizers (en→indic)
-	$(PYTHON) 02_build_fast_tokenizers.py \
+	$(PYTHON) src/02_build_fast_tokenizers.py \
 		--model $(EN_INDIC_MODEL) \
 		--output $(EN_INDIC_OUT)
 
 validate-en-indic: setup ## Validate ONNX parity (en→indic)
-	$(PYTHON) 03_validate_parity.py \
+	$(PYTHON) src/03_validate_parity.py \
 		--onnx-dir $(EN_INDIC_OUT) \
 		--pytorch-model $(EN_INDIC_MODEL) \
 		--fixtures $(EN_INDIC_FIXTURES) \
 		--report $(EN_INDIC_REPORT)
 
 quantize-en-indic: setup ## INT8 quantize fp32 bundle (en→indic)
-	$(PYTHON) 04_quantize_int8.py \
+	$(PYTHON) src/04_quantize_int8.py \
 		--input $(EN_INDIC_OUT) \
 		--output $(EN_INDIC_INT8_OUT)
 
 capture-fixtures-en-indic: setup ## Capture golden fixtures (en→indic)
-	$(PYTHON) 03_validate_parity.py \
+	$(PYTHON) src/03_validate_parity.py \
 		--pytorch-model $(EN_INDIC_MODEL) \
 		--capture-fixtures $(EN_INDIC_FIXTURES)
 
@@ -128,30 +128,30 @@ en-indic: export-en-indic tokenizers-en-indic validate-en-indic ## Full en→ind
 # ── indic→en ─────────────────────────────────────────────────────────────────
 
 export-indic-en: setup ## Export encoder + decoder ONNX (indic→en)
-	$(PYTHON) 01_export_encoder_decoder.py \
+	$(PYTHON) src/01_export_encoder_decoder.py \
 		--model $(INDIC_EN_MODEL) \
 		--output $(INDIC_EN_OUT) \
 		--opset $(ONNX_OPSET)
 
 tokenizers-indic-en: setup ## Build fast tokenizers (indic→en)
-	$(PYTHON) 02_build_fast_tokenizers.py \
+	$(PYTHON) src/02_build_fast_tokenizers.py \
 		--model $(INDIC_EN_MODEL) \
 		--output $(INDIC_EN_OUT)
 
 validate-indic-en: setup ## Validate ONNX parity (indic→en)
-	$(PYTHON) 03_validate_parity.py \
+	$(PYTHON) src/03_validate_parity.py \
 		--onnx-dir $(INDIC_EN_OUT) \
 		--pytorch-model $(INDIC_EN_MODEL) \
 		--fixtures $(INDIC_EN_FIXTURES) \
 		--report $(INDIC_EN_REPORT)
 
 quantize-indic-en: setup ## INT8 quantize fp32 bundle (indic→en)
-	$(PYTHON) 04_quantize_int8.py \
+	$(PYTHON) src/04_quantize_int8.py \
 		--input $(INDIC_EN_OUT) \
 		--output $(INDIC_EN_INT8_OUT)
 
 capture-fixtures-indic-en: setup ## Capture golden fixtures (indic→en)
-	$(PYTHON) 03_validate_parity.py \
+	$(PYTHON) src/03_validate_parity.py \
 		--pytorch-model $(INDIC_EN_MODEL) \
 		--capture-fixtures $(INDIC_EN_FIXTURES)
 
@@ -166,30 +166,30 @@ indic-en: export-indic-en tokenizers-indic-en validate-indic-en ## Full indic→
 # ── indic→indic ──────────────────────────────────────────────────────────────
 
 export-indic-indic: setup ## Export encoder + decoder ONNX (indic→indic)
-	$(PYTHON) 01_export_encoder_decoder.py \
+	$(PYTHON) src/01_export_encoder_decoder.py \
 		--model $(INDIC_INDIC_MODEL) \
 		--output $(INDIC_INDIC_OUT) \
 		--opset $(ONNX_OPSET)
 
 tokenizers-indic-indic: setup ## Build fast tokenizers (indic→indic)
-	$(PYTHON) 02_build_fast_tokenizers.py \
+	$(PYTHON) src/02_build_fast_tokenizers.py \
 		--model $(INDIC_INDIC_MODEL) \
 		--output $(INDIC_INDIC_OUT)
 
 validate-indic-indic: setup ## Validate ONNX parity (indic→indic)
-	$(PYTHON) 03_validate_parity.py \
+	$(PYTHON) src/03_validate_parity.py \
 		--onnx-dir $(INDIC_INDIC_OUT) \
 		--pytorch-model $(INDIC_INDIC_MODEL) \
 		--fixtures $(INDIC_INDIC_FIXTURES) \
 		--report $(INDIC_INDIC_REPORT)
 
 quantize-indic-indic: setup ## INT8 quantize fp32 bundle (indic→indic)
-	$(PYTHON) 04_quantize_int8.py \
+	$(PYTHON) src/04_quantize_int8.py \
 		--input $(INDIC_INDIC_OUT) \
 		--output $(INDIC_INDIC_INT8_OUT)
 
 capture-fixtures-indic-indic: setup ## Capture golden fixtures (indic→indic)
-	$(PYTHON) 03_validate_parity.py \
+	$(PYTHON) src/03_validate_parity.py \
 		--pytorch-model $(INDIC_INDIC_MODEL) \
 		--capture-fixtures $(INDIC_INDIC_FIXTURES)
 
