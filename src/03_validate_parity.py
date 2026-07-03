@@ -64,20 +64,30 @@ def capture_fixtures(
     else:
         device = "cpu"
 
-    seed_sentences = [
-        "This is a test sentence.",
-        "Who will win the election?",
-        "The weather is nice today.",
-        "Please send an SMS to 9876543210.",
-        "Contact us at newemail123@xyz.com by 15th October, 2023.",
-        "The GDP grew by 7.5% last quarter.",
-        "Education is the key to progress.",
-        "The parliament passed a new bill.",
-        "Water is essential for life.",
-        "Technology is changing the world.",
-        "Health care must be accessible to all.",
-        "The festival was celebrated with joy.",
-    ]
+    seed_path = Path("fixtures/seed_sentences.txt")
+    if seed_path.exists():
+        logger.info("Loading seed sentences from %s", seed_path)
+        seed_sentences = [
+            line.strip()
+            for line in seed_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        sentences_per_lang = len(seed_sentences)
+    else:
+        seed_sentences = [
+            "This is a test sentence.",
+            "Who will win the election?",
+            "The weather is nice today.",
+            "Please send an SMS to 9876543210.",
+            "Contact us at newemail123@xyz.com by 15th October, 2023.",
+            "The GDP grew by 7.5% last quarter.",
+            "Education is the key to progress.",
+            "The parliament passed a new bill.",
+            "Water is essential for life.",
+            "Technology is changing the world.",
+            "Health care must be accessible to all.",
+            "The festival was celebrated with joy.",
+        ]
 
     official_indic_langs = [
         "asm_Beng", "ben_Beng", "brx_Deva", "doi_Deva", "guj_Gujr", "hin_Deva",
