@@ -167,17 +167,23 @@ def generate_default_readme(direction: str, repo_id: str, precision: str) -> str
         base_model = "ai4bharat/indictrans2-en-indic-dist-200M"
         direction_title = "en→indic"
         languages = ["en"] + indic_languages
-        example_text = "eng_Latn hin_Deva Who will win the election?"
+        example_src_text = "Who will win the election?"
+        example_src_lang = "eng_Latn"
+        example_tgt_lang = "hin_Deva"
     elif direction == "indic-en":
         base_model = "ai4bharat/indictrans2-indic-en-dist-200M"
         direction_title = "indic→en"
         languages = indic_languages + ["en"]
-        example_text = "hin_Deva eng_Latn चुनाव कौन जीतेगा?"
+        example_src_text = "चुनाव कौन जीतेगा?"
+        example_src_lang = "hin_Deva"
+        example_tgt_lang = "eng_Latn"
     else:  # indic-indic
         base_model = "ai4bharat/indictrans2-indic-indic-dist-320M"
         direction_title = "indic→indic"
         languages = indic_languages
-        example_text = "hin_Deva tam_Taml चुनाव कौन जीतेगा?"
+        example_src_text = "चुनाव कौन जीतेगा?"
+        example_src_lang = "hin_Deva"
+        example_tgt_lang = "tam_Taml"
 
     # Precision details
     precision_labels = {
@@ -277,34 +283,28 @@ SentencePiece WASM runtime.
 - `encoder_model.onnx` (and optional `.onnx.data` weights sidecar)
 - `decoder_model.onnx` (and optional `.onnx.data` weights sidecar)
 - `decoder_with_past_model.onnx` (and optional `.onnx.data` weights sidecar)
+- `translate.py` — self-contained Python inference helper (see Usage below)
 - Fast tokenizer config files (`tokenizer_src.json`, `tokenizer_tgt.json`, `tokenizer_meta.json`)
 - Model configuration configs (`config.json`, `generation_config.json`)
 
 ## Usage Example (Python, onnxruntime)
 
 ```python
-import json, numpy as np, onnxruntime as ort
-from tokenizers import Tokenizer
-from huggingface_hub import snapshot_download
+# translate.py is included in this repo alongside the ONNX bundle.
+# You can also find it (and read the full source) at:
+#   https://github.com/Hari31416/indictrans2-onnx-export/blob/main/src/translate.py
 
-snap = snapshot_download(repo_id="{repo_id}")
+from translate import IndicTransONNX
 
-src = Tokenizer.from_file(f"{{snap}}/tokenizer_src.json")
-tgt = Tokenizer.from_file(f"{{snap}}/tokenizer_tgt.json")
-meta = json.load(open(f"{{snap}}/tokenizer_meta.json"))
+# Pass a HF repo ID for automatic download, or a local bundle directory path
+model = IndicTransONNX("{repo_id}")
+print(model.translate("{example_src_text}", src_lang="{example_src_lang}", tgt_lang="{example_tgt_lang}"))
+```
 
-enc = ort.InferenceSession(f"{{snap}}/encoder_model.onnx")
-dec = ort.InferenceSession(f"{{snap}}/decoder_model.onnx")
-decp = ort.InferenceSession(f"{{snap}}/decoder_with_past_model.onnx")
+Required packages:
 
-# Tokenize example text
-text = "{example_text}"
-e = src.encode(text)
-input_ids = np.array([[i if i < meta["src_dict_size"] else meta["unk_id"] for i in e.ids]], dtype=np.int64)
-attn_mask = np.array([e.attention_mask], dtype=np.int64)
-
-# Encoder
-enc_h = enc.run(["last_hidden_state"], {{"input_ids": input_ids, "attention_mask": attn_mask}})[0]
+```bash
+pip install onnxruntime tokenizers huggingface-hub
 ```
 
 ## License
@@ -367,6 +367,15 @@ def main() -> None:
             shutil.copy2(src_path, dest_path)
         else:
             logger.warning("Plot not found in fixtures, skipping copy: %s", src_path)
+
+    # Copy translate.py into the bundle so it is uploaded alongside the ONNX files
+    translate_src = Path(__file__).parent / "translate.py"
+    if translate_src.exists():
+        dest = model_dir / "translate.py"
+        logger.info("Copying translate.py → %s", dest)
+        shutil.copy2(translate_src, dest)
+    else:
+        logger.warning("translate.py not found at %s — skipping copy", translate_src)
 
     # Create/overwrite README.md
     readme_path = model_dir / "README.md"
