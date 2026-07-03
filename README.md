@@ -156,3 +156,29 @@ make capture-fixtures-indic-en
 ```
 
 Golden files: `fixtures/*-golden.jsonl`. Expand to 11+ languages × 12 sentences for production confidence.
+
+## Documentation and ONNX Bundle Guide
+
+An interactive, self-contained HTML guide explaining the internals of the exported ONNX Translation Bundle is available in [onnx-components.html](./onnx-components.html).
+
+### Previewing Locally
+
+To run a local web server and view the guide in your browser:
+
+```bash
+make preview
+```
+
+Then open your browser and navigate to [http://localhost:8000/onnx-components.html](http://localhost:8000/onnx-components.html).
+
+### GitHub Pages Deployment
+
+The guide is configured to deploy automatically to GitHub Pages on every push to the `main` branch via a GitHub Actions workflow.
+
+To enable the deployment:
+
+- Go to your GitHub repository settings at `https://github.com/Hari31416/indictrans2-onnx-export/settings/pages`.
+- Under **Build and deployment** -> **Source**, select **GitHub Actions** (instead of "Deploy from a branch").
+
+Once enabled, the deployment workflow will run, and the documentation will be live at `https://hari31416.github.io/indictrans2-onnx-export/`.
+

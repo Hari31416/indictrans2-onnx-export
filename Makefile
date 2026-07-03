@@ -33,7 +33,7 @@ EN_INDIC_REPORT    := fixtures/parity-report-en-indic.json
 INDIC_EN_REPORT    := fixtures/parity-report-indic-en.json
 INDIC_INDIC_REPORT := fixtures/parity-report-indic-indic.json
 
-.PHONY: help setup install clean clean-all \
+.PHONY: help setup install clean clean-all preview \
 	export-en-indic tokenizers-en-indic validate-en-indic quantize-en-indic \
 	capture-fixtures-en-indic upload-en-indic en-indic \
 	export-indic-en tokenizers-indic-en validate-indic-en quantize-indic-en \
@@ -48,6 +48,7 @@ help: ## Show available targets
 	@echo "  make setup                  Create .venv and install requirements"
 	@echo "  make clean                  Remove scratch ONNX artifacts"
 	@echo "  make clean-all              Remove scratch + .venv"
+	@echo "  make preview                Local preview of the ONNX components guide"
 	@echo ""
 	@echo "en→indic (200M):"
 	@echo "  make export-en-indic"
@@ -208,3 +209,7 @@ clean: ## Remove scratch ONNX artifacts
 
 clean-all: clean ## Remove scratch artifacts and Python venv
 	rm -rf $(VENV)
+
+preview: ## Serve onnx-components.html locally
+	@echo "Starting local preview server on http://localhost:8000/onnx-components.html..."
+	python3 -m http.server 8000

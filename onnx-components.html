@@ -1,0 +1,2711 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inside an ONNX Translation Bundle: The Components of an Exported Model</title>
+    <meta name="description"
+        content="A thorough walk through every file in an exported IndicTrans2 ONNX bundle, why each component exists, and how the three graphs cooperate at inference time." />
+
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet" />
+
+    <style>
+/* Inlined from ./base.css */
+/* Clean Minimalist Standalone Article Base Stylesheet */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg-body: #ffffff;
+    --text-main: #1e293b;
+    --text-heading: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --border-soft: #f1f5f9;
+    --accent-color: #2563eb;
+    --accent-hover: #1d4ed8;
+    --accent-light: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #f8fafc;
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: "Outfit", sans-serif;
+    --font-mono: "Fira Code", monospace;
+}
+
+::selection {
+    background-color: #bfdbfe;
+    color: #1e3a8a;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    line-height: 1.75;
+    font-size: 1.05rem;
+    -webkit-font-smoothing: antialiased;
+}
+
+.layout-wrapper {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 2rem 1.5rem;
+}
+
+.article-content {
+    width: 100%;
+}
+
+.article-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.article-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-heading);
+    line-height: 1.2;
+}
+
+/* Table of Contents */
+.table-of-contents {
+    background-color: var(--border-soft);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.toc-details summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+}
+
+.toc-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.toc-details h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-heading);
+}
+
+.toc-toggle-icon {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+}
+
+.toc-details[open] .toc-toggle-icon {
+    transform: rotate(180deg);
+}
+
+.toc-content {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+}
+
+.table-of-contents ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.table-of-contents ul ul {
+    padding-left: 1.25rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    border-left: 1px solid #cbd5e1;
+}
+
+.table-of-contents li {
+    margin-bottom: 0.4rem;
+    line-height: 1.4;
+}
+
+.table-of-contents a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.table-of-contents ul ul a {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.table-of-contents a:hover {
+    text-decoration: underline;
+    color: var(--accent-hover);
+}
+
+/* Article Body Formatting — scoped to avoid widget bleed-through */
+.article-content h2 {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin: 3rem 0 1.25rem 0;
+    line-height: 1.3;
+}
+
+.article-content h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    margin: 2rem 0 1rem 0;
+}
+
+/* Reset article heading margins inside widget containers */
+.stepper-step h3,
+.quiz-container h3,
+.flashcard h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+p {
+    margin-bottom: 1.5rem;
+}
+
+strong {
+    color: var(--text-heading);
+    font-weight: 600;
+}
+
+ul,
+ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* Figures & Images */
+figure {
+    margin: 2.5rem 0;
+}
+
+figure img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    display: block;
+}
+
+figcaption {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* Callouts */
+.callout {
+    background-color: var(--accent-light);
+    border-left: 4px solid var(--accent-color);
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 8px 8px 0;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+}
+
+.callout p:last-child {
+    margin-bottom: 0;
+}
+
+/* Code Blocks */
+.code-container {
+    margin: 2rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+}
+
+.code-header {
+    background-color: #1e293b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 1rem;
+    border-bottom: 1px solid #334155;
+}
+
+.code-label {
+    color: #94a3b8;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+}
+
+.copy-btn {
+    background-color: transparent;
+    color: #94a3b8;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+    background-color: #334155;
+    color: #f8fafc;
+}
+
+pre {
+    padding: 1.25rem 1rem;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--code-text);
+}
+
+code {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    background-color: #f1f5f9;
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+    color: #0f172a;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+}
+
+/* Keyword Highlights */
+.kw {
+    color: #c084fc;
+    font-weight: 500;
+}
+
+.fn {
+    color: #38bdf8;
+}
+
+.st {
+    color: #a5d6ff;
+}
+
+.cm {
+    color: #64748b;
+    font-style: italic;
+}
+
+.dc {
+    color: #34d399;
+}
+
+.pr {
+    color: #f472b6;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+}
+
+th,
+td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--text-heading);
+    background-color: #f8fafc;
+}
+
+/* Shared keyframes — used by multiple components */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Dark mode — base overrides only */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-body: #0f172a;
+        --text-main: #cbd5e1;
+        --text-heading: #f1f5f9;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --border-soft: #1e293b;
+        --accent-color: #3b82f6;
+        --accent-hover: #60a5fa;
+        --accent-light: #1e3a5f;
+        --code-bg: #020617;
+    }
+
+    .code-header {
+        background-color: #1e293b;
+    }
+
+    th {
+        background-color: #1e293b;
+    }
+
+    ::selection {
+        background-color: rgba(59, 130, 246, 0.35);
+        color: #f1f5f9;
+    }
+}
+</style>
+    <style>
+/* Inlined from ./article.css */
+/* Article-specific styles for the ONNX components article.
+   Layout and base typography come from base.css. */
+
+/* Decode simulator panels inside stepper steps */
+.sim-panel {
+    margin-top: 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.sim-graph-label {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sim-graph-label span {
+    color: var(--accent-color);
+    font-family: var(--font-mono);
+    font-weight: 500;
+}
+
+.sim-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.35rem;
+}
+
+.sim-key {
+    flex: 0 0 2.2rem;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+.sim-val {
+    color: var(--text-main);
+    word-break: break-word;
+}
+
+.sim-status {
+    margin-top: 0.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--border-color);
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+/* Precision tradeoff calculator output */
+.precision-output {
+    margin-top: 1.5rem;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+}
+
+.precision-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.precision-stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.precision-stat-value {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-heading);
+}
+
+.precision-bar-wrap {
+    height: 8px;
+    background: var(--border-soft);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.precision-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #2563eb, #38bdf8);
+    border-radius: 4px;
+    transition: width 0.25s ease;
+}
+
+/* Formula details disclosure */
+.formula-details {
+    margin: 1.5rem 0 2rem 0;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+}
+
+.formula-summary {
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--text-heading);
+    font-size: 0.95rem;
+    list-style: none;
+    user-select: none;
+}
+
+.formula-summary::-webkit-details-marker {
+    display: none;
+}
+
+.formula-summary::before {
+    content: "▸";
+    display: inline-block;
+    margin-right: 0.5rem;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+}
+
+.formula-details[open] .formula-summary::before {
+    transform: rotate(90deg);
+}
+
+.formula-details p {
+    margin-top: 0.85rem;
+    font-size: 0.92rem;
+}
+
+.formula-details .code-container {
+    margin: 1rem 0 0.5rem 0;
+}
+
+/* Bundle manifest explorer */
+.manifest-explorer {
+    margin: 2rem 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-height: 520px;
+}
+
+.manifest-list {
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+    max-height: 520px;
+}
+
+.manifest-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.9rem;
+    border: none;
+    border-bottom: 1px solid var(--border-soft);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-main);
+    transition: background 0.15s ease;
+}
+
+.manifest-item:hover {
+    background: var(--border-soft);
+}
+
+.manifest-item.is-active {
+    background: var(--accent-light);
+    color: var(--text-heading);
+}
+
+.manifest-dot {
+    flex: 0 0 8px;
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+}
+
+.manifest-name {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.manifest-size {
+    flex: 0 0 auto;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+}
+
+.manifest-detail {
+    padding: 1.25rem 1.5rem;
+    overflow-y: auto;
+    max-height: 520px;
+}
+
+.manifest-placeholder {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.manifest-detail-name {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-heading);
+    margin: 0 0 0.75rem 0;
+    word-break: break-word;
+}
+
+.manifest-detail-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.manifest-badge {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+}
+
+.manifest-detail-size {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.manifest-detail-desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-main);
+    margin: 0;
+}
+
+@media (max-width: 640px) {
+    .manifest-explorer {
+        grid-template-columns: 1fr;
+        max-height: none;
+    }
+
+    .manifest-list {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        max-height: 240px;
+    }
+
+    .manifest-detail {
+        max-height: none;
+    }
+}
+
+/* Dark mode overrides for custom surfaces */
+@media (prefers-color-scheme: dark) {
+    .sim-panel {
+        background: #1e293b;
+        border-color: #334155;
+    }
+
+    .sim-graph-label {
+        border-bottom-color: #334155;
+    }
+
+    .sim-status {
+        border-top-color: #334155;
+    }
+
+    .precision-output {
+        background: #1e293b;
+        border-color: #334155;
+    }
+
+    .precision-bar-wrap {
+        background: #0f172a;
+    }
+
+    .formula-details {
+        background: #2a1e0a;
+        border-color: #5b4416;
+    }
+
+    .manifest-item.is-active {
+        background: #1e3a5f;
+    }
+}
+
+</style>
+    <style>
+/* Inlined from ./components/flashcard.css */
+/* Flashcard component styles */
+
+.flashcard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+}
+
+.flashcard {
+    perspective: 1000px;
+    height: 200px;
+    cursor: pointer;
+}
+
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.flashcard.is-flipped .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.flashcard-front {
+    background-color: white;
+    color: var(--text-heading);
+}
+
+.flashcard-back {
+    background-color: var(--accent-light);
+    color: var(--accent-color);
+    transform: rotateY(180deg);
+}
+
+.flashcard-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    opacity: 0.6;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .flashcard-front {
+        background-color: #1e293b;
+    }
+
+    .flashcard-back {
+        background-color: #1e3a5f;
+    }
+}
+
+</style>
+    <style>
+/* Inlined from ./components/quiz.css */
+/* Quiz / knowledge-check component styles */
+
+.quiz-container {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2.5rem 0;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+.quiz-question {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text-heading);
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.quiz-option {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--bg-body);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.quiz-option:hover:not(.is-disabled) {
+    border-color: var(--accent-color);
+    background: var(--accent-light);
+}
+
+.quiz-option.is-selected {
+    border-color: var(--accent-color);
+    background: var(--accent-light);
+    font-weight: 600;
+}
+
+.quiz-option.is-correct {
+    border-color: #10b981;
+    background: #ecfdf5;
+    color: #065f46;
+}
+
+.quiz-option.is-incorrect {
+    border-color: #ef4444;
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.quiz-feedback {
+    margin-top: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    display: none;
+    border: 1px solid var(--border-color);
+    background: var(--border-soft);
+}
+
+.quiz-feedback.is-visible {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+.quiz-feedback.is-correct {
+    border-color: #10b981;
+    background: #ecfdf5;
+}
+
+.quiz-feedback.is-incorrect {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+.quiz-feedback [data-feedback] {
+    display: none !important;
+}
+
+.quiz-feedback.is-visible [data-feedback].is-active {
+    display: block !important;
+}
+
+/* Shake animation for wrong answers */
+.quiz-container.shake {
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+.quiz-retry-btn {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.5rem 1.25rem;
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quiz-retry-btn:hover {
+    background: var(--accent-color);
+    color: white;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .quiz-container {
+        background: #1e293b;
+    }
+
+    .quiz-option {
+        background: #1e293b;
+    }
+
+    .quiz-option.is-correct {
+        background: #052e16;
+        border-color: #10b981;
+        color: #6ee7b7;
+    }
+
+    .quiz-option.is-incorrect {
+        background: #3b0000;
+        border-color: #ef4444;
+        color: #fca5a5;
+    }
+
+    .quiz-feedback {
+        background: #1e293b;
+    }
+
+    .quiz-feedback.is-correct {
+        background: #052e16;
+        border-color: #10b981;
+    }
+
+    .quiz-feedback.is-incorrect {
+        background: #3b0000;
+        border-color: #ef4444;
+    }
+}
+
+</style>
+    <style>
+/* Inlined from ./components/stepper.css */
+/* Stepper component styles */
+
+.stepper {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin: 2.5rem 0;
+    overflow: hidden;
+}
+
+.stepper-header {
+    display: flex;
+    background: white;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem;
+    gap: 0.5rem;
+}
+
+.stepper-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.stepper-dot.is-active {
+    background: var(--accent-color);
+    transform: scale(1.2);
+}
+
+.stepper-content-wrapper {
+    position: relative;
+    min-height: 200px;
+}
+
+.stepper-step {
+    padding: 2rem;
+    display: none;
+}
+
+.stepper-step.is-active {
+    display: block;
+    animation: slideIn 0.4s ease;
+}
+
+.stepper-controls {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: white;
+    border-top: 1px solid var(--border-color);
+}
+
+.stepper-counter {
+    margin-left: auto;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    align-self: center;
+}
+
+.stepper-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.stepper-btn:hover:not(:disabled) {
+    background: var(--border-soft);
+}
+
+.stepper-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .stepper {
+        background: #0f172a;
+    }
+
+    .stepper-header,
+    .stepper-controls {
+        background: #1e293b;
+    }
+}
+
+</style>
+    <style>
+/* Inlined from ./components/primitives.css */
+/* Primitives component styles — range sliders and explorable explanations */
+
+.primitive-control-group {
+    background: var(--border-soft);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.primitive-control {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.primitive-control:last-child {
+    margin-bottom: 0;
+}
+
+.primitive-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    display: flex;
+    justify-content: space-between;
+}
+
+.primitive-value {
+    color: var(--accent-color);
+    font-family: var(--font-mono);
+}
+
+input[type="range"] {
+    width: 100%;
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
+    appearance: none;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+</style>
+</head>
+
+<body>
+    <div class="layout-wrapper">
+        <article class="article-content">
+            <header class="article-header">
+                <h1 class="article-title">Inside an ONNX Translation Bundle</h1>
+            </header>
+
+            <nav class="table-of-contents">
+                <details class="toc-details" open>
+                    <summary class="toc-summary">
+                        <h3>Table of Contents</h3>
+                        <span class="toc-toggle-icon">▼</span>
+                    </summary>
+                    <div class="toc-content">
+                        <ul>
+                            <li><a href="#what-is-onnx">What ONNX actually is</a></li>
+                            <li>
+                                <a href="#seq2seq-model">The model you start with</a>
+                                <ul>
+                                    <li><a href="#seq2seq-architecture">Encoder, decoder, and autoregression</a></li>
+                                    <li><a href="#indictrans-constants">IndicTrans2 architecture constants</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#three-graphs">Why one model becomes three graphs</a>
+                                <ul>
+                                    <li><a href="#kv-cache-problem">The KV cache problem</a></li>
+                                    <li><a href="#three-graph-split">The split</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#encoder-graph">The encoder graph</a></li>
+                            <li><a href="#decoder-first">The decoder (first step) graph</a></li>
+                            <li><a href="#decoder-with-past">The decoder_with_past graph</a></li>
+                            <li>
+                                <a href="#kv-cache">The KV cache: four tensors per layer</a>
+                                <ul>
+                                    <li><a href="#decode-simulator">Decode step simulator</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#external-data">External data sidecars</a></li>
+                            <li>
+                                <a href="#tokenizers">Tokenizers: the other half of the bundle</a>
+                                <ul>
+                                    <li><a href="#slow-vs-fast">Slow versus fast</a></li>
+                                    <li><a href="#dict-remap">Why the dict remap is necessary</a></li>
+                                    <li><a href="#two-tokenizers">Why two tokenizers</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#configs">Config files</a></li>
+                            <li><a href="#decode-loop">Putting it together: the greedy decode loop</a></li>
+                            <li>
+                                <a href="#quantization">Quantization: a second tier</a>
+                                <ul>
+                                    <li><a href="#precision-calculator">Precision tradeoff calculator</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#manifest">The full bundle manifest</a></li>
+                        </ul>
+                    </div>
+                </details>
+            </nav>
+
+            <section id="what-is-onnx">
+                <h2>What ONNX actually is</h2>
+                <p>
+                    A trained PyTorch model is a graph of operations expressed in PyTorch's Python API.
+                    You cannot run that graph directly inside a browser or in a generic C++ runtime without
+                    dragging PyTorch along. <strong>ONNX</strong>, the Open Neural Network Exchange, is an
+                    intermediate representation for that graph. It stores the same math as a list of
+                    standardized operators plus their initial weights, serialized into a binary file.
+                </p>
+                <p>
+                    An ONNX file is a serialized <strong>protobuf</strong> message. It holds three things: a
+                    list of <strong>nodes</strong> (each node is one operator like MatMul, Add, or Softmax),
+                    a list of <strong>initializers</strong> (the trained weight tensors), and metadata
+                    describing inputs, outputs, and the <strong>opset</strong> version. The opset is the
+                    dialect of operators the graph uses. This bundle targets opset 17, which
+                    <code>onnxruntime-web</code> 1.21 and later supports in the browser.
+                </p>
+                <p>
+                    A separate program called a <strong>runtime</strong> loads the protobuf and executes the
+                    operator graph. <strong>onnxruntime</strong> is the reference runtime from Microsoft. It
+                    ships builds for Python, C++, and JavaScript. The JavaScript build,
+                    <strong>onnxruntime-web</strong>, can run the same file through a WASM CPU provider or a
+                    WebGPU provider. That portability is the whole point. You export once, then run the file
+                    anywhere a runtime exists.
+                </p>
+                <p>
+                    Export is the act of turning a PyTorch module into an ONNX file. PyTorch's exporter walks
+                    the module with example inputs, records every tensor operation into the ONNX operator
+                    vocabulary, and writes the protobuf. This process is called <strong>tracing</strong>. The
+                    example inputs you feed during tracing fix the operations recorded, so you must declare
+                    which input dimensions are allowed to vary later through <strong>dynamic axes</strong>.
+                </p>
+
+                <div class="callout">
+                    <p>
+                        The export pipeline this article describes lives in the
+                        <a href="https://github.com/Hari31416/indictrans2-onnx-export">indictrans2-onnx-export</a>
+                        repository. It exports the AI4Bharat
+                        IndicTrans2 translation models into browser-ready ONNX bundles. Each bundle ships to
+                        a Hugging Face repo and is consumed by a <a href="https://github.com/Hari31416/local-voice-chat">browser voice chat app</a>. Every component below
+                        comes from that real pipeline.
+                    </p>
+                </div>
+
+                <h3>ONNX terminology you need first</h3>
+                <p>
+                    The rest of this article uses a handful of ONNX terms repeatedly. These four cards define
+                    them. Flip each one to check the definition.
+                </p>
+
+                <div class="flashcard-grid">
+                    <div class="flashcard">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <span class="flashcard-label">Concept</span>
+                                <p>Opset</p>
+                            </div>
+                            <div class="flashcard-back">
+                                <span class="flashcard-label">Definition</span>
+                                <p>The operator dialect version a graph is built against. Opset 17 is used here for onnxruntime-web compatibility.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flashcard">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <span class="flashcard-label">Concept</span>
+                                <p>Dynamic axes</p>
+                            </div>
+                            <div class="flashcard-back">
+                                <span class="flashcard-label">Definition</span>
+                                <p>A declaration that a specific tensor dimension (batch, sequence length) may vary at runtime instead of staying fixed at the traced value.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flashcard">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <span class="flashcard-label">Concept</span>
+                                <p>Initializer</p>
+                            </div>
+                            <div class="flashcard-back">
+                                <span class="flashcard-label">Definition</span>
+                                <p>A trained weight tensor stored inside the ONNX protobuf, or in an external data sidecar file when the protobuf would exceed size limits.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flashcard">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <span class="flashcard-label">Concept</span>
+                                <p>Inference session</p>
+                            </div>
+                            <div class="flashcard-back">
+                                <span class="flashcard-label">Definition</span>
+                                <p>A loaded, runnable ONNX graph. You call <code>session.run(outputs, inputs)</code> with named tensors and receive named output tensors back.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="seq2seq-model">
+                <h2>The model you start with</h2>
+
+                <h3 id="seq2seq-architecture">Encoder, decoder, and autoregression</h3>
+                <p>
+                    IndicTrans2 is a <strong>sequence-to-sequence</strong> transformer. It translates a
+                    source sentence into a target sentence. The model has two halves. The
+                    <strong>encoder</strong> reads the source tokens and produces a contextual embedding for
+                    each one. The <strong>decoder</strong> generates target tokens one at a time, attending
+                    back to the encoder outputs at every step.
+                </p>
+                <p>
+                    Generation is <strong>autoregressive</strong>. The decoder produces token 1, then token 2
+                    conditioned on token 1, then token 3 conditioned on tokens 1 and 2, and so on until it
+                    emits an end of sentence token. Each new token depends on every previously generated
+                    token. This dependency is what makes the export split into multiple graphs.
+                </p>
+
+                <figure>
+                    <svg viewBox="0 0 620 230" width="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <marker id="arrow1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L8,3 z" fill="#64748b" />
+                            </marker>
+                        </defs>
+                        <!-- Encoder -->
+                        <g>
+                            <rect x="20" y="40" width="170" height="150" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2" />
+                            <text x="105" y="70" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#0f172a">Encoder</text>
+                            <text x="105" y="120" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#1e293b">input_ids</text>
+                            <text x="105" y="140" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#1e293b">attention_mask</text>
+                            <text x="105" y="170" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">→ last_hidden_state</text>
+                        </g>
+                        <!-- Arrow -->
+                        <line x1="190" y1="115" x2="250" y2="115" stroke="#64748b" stroke-width="2" marker-end="url(#arrow1)" />
+                        <text x="220" y="105" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#64748b">hidden states</text>
+                        <!-- Decoder -->
+                        <g>
+                            <rect x="250" y="40" width="180" height="150" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" />
+                            <text x="340" y="70" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#0f172a">Decoder</text>
+                            <text x="340" y="120" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#1e293b">prev token</text>
+                            <text x="340" y="140" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#1e293b">+ KV cache</text>
+                            <text x="340" y="170" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">→ logits</text>
+                        </g>
+                        <!-- Arrow to output -->
+                        <line x1="430" y1="115" x2="490" y2="115" stroke="#64748b" stroke-width="2" marker-end="url(#arrow1)" />
+                        <!-- Output -->
+                        <g>
+                            <rect x="490" y="75" width="110" height="80" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2" />
+                            <text x="545" y="105" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#0f172a">argmax</text>
+                            <text x="545" y="125" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#1e293b">next token</text>
+                        </g>
+                        <!-- Feedback loop -->
+                        <path d="M545,155 Q545,210 340,210 Q340,180 340,190" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow1)" />
+                        <text x="440" y="225" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#64748b">feed back as prev token</text>
+                    </svg>
+                    <figcaption>Autoregressive decoding. The encoder runs once. The decoder runs repeatedly, fed its own previous output, until it emits the end of sentence token.</figcaption>
+                </figure>
+
+                <h3 id="indictrans-constants">IndicTrans2 architecture constants</h3>
+                <p>
+                    The export scripts hardcode a few constants that must match the model's
+                    <code>config.json</code>. For the en to indic 200M model, the encoder and decoder each
+                    have 18 layers. Each layer has 8 attention heads. The embedding dimension is 512, so each
+                    head has dimension 64. These numbers drive the shape of every past and present KV tensor
+                    in the exported graphs.
+                </p>
+                <p>
+                    The decoder starts from token id 2, the <code>decoder_start_token_id</code>, and stops when
+                    it emits token id 2, the <code>eos_token_id</code>. The pad token is id 1, the bos token
+                    is id 0, and the unknown token is id 3. The source vocabulary holds 32322 entries. The
+                    target vocabulary holds 122672 entries.
+                </p>
+            </section>
+
+            <section id="three-graphs">
+                <h2>Why one model becomes three graphs</h2>
+
+                <h3 id="kv-cache-problem">The KV cache problem</h3>
+                <p>
+                    Naive autoregressive decoding recomputes the full decoder forward pass for every new
+                    token. To generate token N, the decoder reprocesses tokens 1 through N minus 1. That is
+                    quadratic in the output length and wasteful, because the attention keys and values for
+                    earlier tokens do not change when a new token is added.
+                </p>
+                <p>
+                    The fix is the <strong>KV cache</strong>. At each step the decoder computes the key and
+                    value tensors for the current token and appends them to a running cache. The next step
+                    receives that cache as input and only computes attention for the new token against the
+                    cached history. This makes generation linear in the output length.
+                </p>
+                <p>
+                    The cache changes the decoder's input signature between the first step and every later
+                    step. At step 1 there is no cache yet, so the decoder takes fresh encoder outputs and
+                    produces a cache. At step 2 and onward the decoder takes an existing cache plus the
+                    previous token and produces an updated cache. ONNX graphs have fixed input and output
+                    lists. You cannot declare a graph that sometimes has 2 inputs and sometimes has 74. That
+                    is why a single PyTorch decoder becomes two ONNX graphs, and the encoder becomes a third.
+                </p>
+
+                <h3 id="three-graph-split">The split</h3>
+                <p>
+                    The export script <code>01_export_encoder_decoder.py</code> produces exactly three ONNX
+                    files. Each has a distinct job and a distinct input and output contract.
+                </p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Runs when</th>
+                            <th>Past KV in</th>
+                            <th>Present KV out</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>encoder_model.onnx</code></td>
+                            <td>Once per sentence</td>
+                            <td>None</td>
+                            <td>None</td>
+                        </tr>
+                        <tr>
+                            <td><code>decoder_model.onnx</code></td>
+                            <td>Step 1 only</td>
+                            <td>None</td>
+                            <td>Full cache</td>
+                        </tr>
+                        <tr>
+                            <td><code>decoder_with_past_model.onnx</code></td>
+                            <td>Steps 2 through end</td>
+                            <td>Full cache</td>
+                            <td>Updated cache</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>
+                    A common question is why the encoder is split at all, rather than fused into the first
+                    decoder step. Splitting lets the encoder run once and feed all decoder steps. It also
+                    matches the I/O layout of the reference naklitechie bundle, so the output works with
+                    existing loaders without custom glue.
+                </p>
+
+                <div class="quiz-container" data-allow-retry="true">
+                    <div class="quiz-question">
+                        Why does the decoder become two separate ONNX graphs instead of one?
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-correct="false">ONNX cannot represent attention layers in a single graph.</div>
+                        <div class="quiz-option" data-correct="true">The decoder's input list changes between step 1 (no cache) and step 2+ (cache in), and ONNX graphs have a fixed input and output contract.</div>
+                        <div class="quiz-option" data-correct="false">Two graphs run faster on WebGPU than one graph.</div>
+                    </div>
+                    <div class="quiz-feedback">
+                        <div data-feedback="correct">
+                            <strong>Correct.</strong> The KV cache is absent on step 1 and present on every later step. Because an ONNX graph declares its inputs once at export time, the two signatures require two graphs.
+                        </div>
+                        <div data-feedback="incorrect">
+                            <strong>Not quite.</strong> The reason is the input contract, not performance or operator support. Think about what inputs the decoder needs on step 1 versus step 5.
+                        </div>
+                        <div data-feedback="general">
+                            <em>Tip: ONNX graphs declare a fixed list of named inputs at export time. They cannot grow that list at runtime.</em>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="encoder-graph">
+                <h2>The encoder graph</h2>
+                <p>
+                    The encoder graph is the simplest of the three. It takes the source token ids and an
+                    attention mask, and returns the contextual embedding for every source token. It runs once
+                    per sentence. Its output, <code>last_hidden_state</code>, is what the decoder attends to
+                    through cross attention.
+                </p>
+                <p>
+                    The export wraps the encoder in a thin PyTorch module so the exported graph exposes a
+                    clean two input, one output contract.
+                </p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-label">it2_onnx_wrappers.py</div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code><span class="kw">class</span> <span class="fn">IndicTransEncoderWrapper</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, encoder: nn.Module) -> <span class="kw">None</span>:
+        <span class="kw">super</span>().__init__()
+        self.encoder = encoder
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, input_ids, attention_mask):
+        <span class="kw">return</span> self.encoder(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+        ).last_hidden_state</code></pre>
+                </div>
+
+                <p>
+                    The export call declares two dynamic axes. <code>batch_size</code> lets the graph accept
+                    any batch size at runtime. <code>encoder_sequence_length</code> lets it accept sentences
+                    of any length up to the model maximum of 256. Without these declarations the traced graph
+                    would lock to the dummy shape used during tracing, batch 1 and length 8, and fail on real
+                    inputs.
+                </p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-label">01_export_encoder_decoder.py</div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>torch.onnx.export(
+    wrapper,
+    (input_ids, attention_mask),
+    str(path),
+    input_names=[<span class="st">"input_ids"</span>, <span class="st">"attention_mask"</span>],
+    output_names=[<span class="st">"last_hidden_state"</span>],
+    dynamic_axes={
+        <span class="st">"input_ids"</span>: {<span class="st">0</span>: <span class="st">"batch_size"</span>, <span class="st">1</span>: <span class="st">"encoder_sequence_length"</span>},
+        <span class="st">"attention_mask"</span>: {<span class="st">0</span>: <span class="st">"batch_size"</span>, <span class="st">1</span>: <span class="st">"encoder_sequence_length"</span>},
+        <span class="st">"last_hidden_state"</span>: {<span class="st">0</span>: <span class="st">"batch_size"</span>, <span class="st">1</span>: <span class="st">"encoder_sequence_length"</span>},
+    },
+    opset_version=<span class="pr">17</span>,
+    do_constant_folding=<span class="kw">True</span>,
+    dynamo=<span class="kw">False</span>,
+)</code></pre>
+                </div>
+
+                <p>
+                    <code>do_constant_folding=True</code> tells the exporter to precompute parts of the graph
+                    that depend only on constants, folding them into stored initializers. <code>dynamo=False</code>
+                    forces the legacy TorchScript tracer instead of the newer dynamo exporter. The dynamo
+                    path requires an extra dependency called <code>onnxscript</code> and was less reliable for
+                    this custom architecture, so the pipeline pins the legacy tracer.
+                </p>
+            </section>
+
+            <section id="decoder-first">
+                <h2>The decoder (first step) graph</h2>
+                <p>
+                    <code>decoder_model.onnx</code> handles the first generation step. It receives the start
+                    token and the full encoder output, and it produces two things: the logits used to pick the
+                    first real token, and the complete initial KV cache that every later step will carry.
+                </p>
+                <p>
+                    Its inputs are <code>input_ids</code> (the single start token), <code>encoder_attention_mask</code>,
+                    and <code>encoder_hidden_states</code> (the encoder output tensor). Notice the encoder
+                    output is a direct input here. On step 1 the cache is empty, so cross attention must read
+                    the fresh encoder states.
+                </p>
+                <p>
+                    Its outputs are <code>logits</code> plus one set of four present KV tensors per decoder
+                    layer. With 18 layers that is 72 cache tensors leaving the graph. The wrapper flattens the
+                    nested cache into a flat tuple of named tensors so ONNX can declare each one explicitly.
+                </p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-label">it2_onnx_wrappers.py</div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code><span class="kw">class</span> <span class="fn">IndicTransDecoderWrapper</span>(nn.Module):
+    <span class="cm">"""First decode step: no past KV in, full present KV out + logits."""</span>
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, input_ids, encoder_attention_mask, encoder_hidden_states):
+        out = self.decoder(
+            input_ids=input_ids,
+            attention_mask=<span class="kw">None</span>,
+            encoder_hidden_states=encoder_hidden_states,
+            encoder_attention_mask=encoder_attention_mask,
+            use_cache=<span class="kw">True</span>,
+        )
+        logits = self.lm_head(out.last_hidden_state)
+        <span class="kw">return</span> (logits, *_flatten_past(out.past_key_values))</code></pre>
+                </div>
+
+                <p>
+                    The output names follow a strict convention. For each layer index <code>i</code> the graph
+                    emits <code>present.i.decoder.key</code>, <code>present.i.decoder.value</code>,
+                    <code>present.i.encoder.key</code>, and <code>present.i.encoder.value</code>. The decoder
+                    self attention cache and the cross attention cache are emitted together. This naming is
+                    what the runtime loop uses to feed the next graph.
+                </p>
+            </section>
+
+            <section id="decoder-with-past">
+                <h2>The decoder_with_past graph</h2>
+                <p>
+                    <code>decoder_with_past_model.onnx</code> is the workhorse. It runs for every step after
+                    the first. It receives the previous token, the encoder attention mask, and the full cache
+                    from the prior step. It returns updated logits and an updated cache with one more entry
+                    appended to the decoder self attention portion.
+                </p>
+                <p>
+                    Two non-obvious tricks live in this wrapper. Both fix subtle tracing bugs that produced
+                    broken translations in earlier exports.
+                </p>
+
+                <h3>The dummy encoder hidden states trick</h3>
+                <p>
+                    The AI4Bharat modeling code guards cross attention with a check: <em>if
+                    encoder_hidden_states is not None, run cross attention.</em> During step 2 and later, the
+                    real encoder information already lives in the cached cross attention keys and values. So
+                    you might pass <code>None</code> for <code>encoder_hidden_states</code> to signal
+                    "use the cache".
+                </p>
+                <p>
+                    That breaks the export. When the tracer sees <code>None</code>, it skips recording the
+                    cross attention block entirely. The exported graph then has no cross attention operators
+                    at all, so it produces repetitive garbage from step 2 onward. The fix is to pass a
+                    <strong>dummy</strong> zero tensor shaped like the encoder output. The presence of a real
+                    tensor makes the tracer compile the cross attention block. At runtime the cross attention
+                    reads from the cached keys and values, and the dummy states are projected away.
+                </p>
+
+                <h3>The zero-cost mask dependency</h3>
+                <p>
+                    The ONNX optimizer noticed that <code>encoder_attention_mask</code> appeared unused inside
+                    the wrapper's forward path, because the cached cross attention already incorporated the
+                    mask. The optimizer then dropped the mask from the graph's input list. At runtime the
+                    session rejected calls that supplied the mask, or silently misused it.
+                </p>
+                <p>
+                    The fix is a single line that creates a zero-cost dependency on the mask.
+                </p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-label">it2_onnx_wrappers.py</div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code><span class="cm"># Keep encoder_attention_mask in the ONNX graph (cross-attn mask for cached KV)</span>
+logits = logits + encoder_attention_mask.sum() * <span class="pr">0.0</span></code></pre>
+                </div>
+
+                <p>
+                    Multiplying the mask sum by zero adds nothing to the logits numerically. But the tracer
+                    now records a data flow edge from <code>encoder_attention_mask</code> into the output.
+                    The optimizer keeps the input. The mask stays in the graph's public contract without
+                    changing any result.
+                </p>
+
+                <div class="quiz-container" data-allow-retry="true">
+                    <div class="quiz-question">
+                        Why is a dummy zero tensor passed as encoder_hidden_states in the decoder_with_past wrapper?
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-correct="false">The decoder needs fresh encoder context at every step.</div>
+                        <div class="quiz-option" data-correct="true">Passing None makes the tracer skip the cross attention block, so a dummy tensor forces that block to compile while the real context is read from the cache at runtime.</div>
+                        <div class="quiz-option" data-correct="false">Zeros are required for numerical stability of attention.</div>
+                    </div>
+                    <div class="quiz-feedback">
+                        <div data-feedback="correct">
+                            <strong>Correct.</strong> The dummy exists to satisfy the tracer. The cached cross attention keys and values already hold the encoder context for steps 2 and onward.
+                        </div>
+                        <div data-feedback="incorrect">
+                            <strong>Not quite.</strong> The decoder does not need fresh encoder context every step. Reconsider what the tracer does when it encounters a None input.
+                        </div>
+                        <div data-feedback="general">
+                            <em>Tip: Tracing records only the code paths actually executed with the example inputs. A None input can hide a whole branch from the exported graph.</em>
+                        </div>
+                    </div>
+                </div>
+
+                <p>
+                    The dynamic axes for this graph are the most involved. The decoder cache tensors declare a
+                    <code>past_decoder_sequence_length</code> dynamic axis that grows by one each step. The
+                    present outputs declare a matching <code>past_decoder_sequence_length_plus_1</code> axis.
+                    The encoder cache tensors declare <code>encoder_sequence_length</code> dynamic, so the
+                    graph is not locked to the length 8 used during tracing.
+                </p>
+            </section>
+
+            <section id="kv-cache">
+                <h2>The KV cache: four tensors per layer</h2>
+                <p>
+                    Every decoder layer contributes four cache tensors. Two belong to self attention and grow
+                    each step. Two belong to cross attention and stay fixed at the encoder sequence length.
+                    Understanding this split is the key to reading any seq2seq ONNX export.
+                </p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tensor</th>
+                            <th>Source</th>
+                            <th>Shape (batch, heads, seq, head_dim)</th>
+                            <th>Grows per step?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>decoder.key</code></td>
+                            <td>Self attention</td>
+                            <td>B, 8, T, 64</td>
+                            <td>Yes, T increases by 1</td>
+                        </tr>
+                        <tr>
+                            <td><code>decoder.value</code></td>
+                            <td>Self attention</td>
+                            <td>B, 8, T, 64</td>
+                            <td>Yes, T increases by 1</td>
+                        </tr>
+                        <tr>
+                            <td><code>encoder.key</code></td>
+                            <td>Cross attention</td>
+                            <td>B, 8, S, 64</td>
+                            <td>No, fixed at encoder length S</td>
+                        </tr>
+                        <tr>
+                            <td><code>encoder.value</code></td>
+                            <td>Cross attention</td>
+                            <td>B, 8, S, 64</td>
+                            <td>No, fixed at encoder length S</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>
+                    With 18 layers, each step carries 72 cache tensors in and emits 72 out. The encoder cross
+                    attention half of the cache is set once at step 1 and then carried unchanged through every
+                    later step. Only the decoder self attention half grows. This is why step 1 is expensive,
+                    it computes the full cross attention cache from the encoder output, and later steps are
+                    cheap, they only extend the self attention cache by one entry.
+                </p>
+
+                <figure>
+                    <svg viewBox="0 0 620 260" width="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L8,3 z" fill="#64748b" />
+                            </marker>
+                        </defs>
+                        <!-- Layer box -->
+                        <rect x="20" y="20" width="580" height="220" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+                        <text x="40" y="45" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#0f172a">One decoder layer's cache (repeated x18)</text>
+
+                        <!-- Self attention cache (grows) -->
+                        <rect x="40" y="65" width="250" height="150" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5" />
+                        <text x="165" y="90" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#0f172a">Self attention cache</text>
+                        <rect x="60" y="110" width="210" height="28" rx="4" fill="#bfdbfe" />
+                        <text x="165" y="129" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#1e3a8a">decoder.key  [B,8,T,64]</text>
+                        <rect x="60" y="148" width="210" height="28" rx="4" fill="#bfdbfe" />
+                        <text x="165" y="167" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#1e3a8a">decoder.value  [B,8,T,64]</text>
+                        <text x="165" y="200" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">T grows +1 each step</text>
+
+                        <!-- Cross attention cache (fixed) -->
+                        <rect x="330" y="65" width="250" height="150" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5" />
+                        <text x="455" y="90" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#0f172a">Cross attention cache</text>
+                        <rect x="350" y="110" width="210" height="28" rx="4" fill="#bbf7d0" />
+                        <text x="455" y="129" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#14532d">encoder.key  [B,8,S,64]</text>
+                        <rect x="350" y="148" width="210" height="28" rx="4" fill="#bbf7d0" />
+                        <text x="455" y="167" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#14532d">encoder.value  [B,8,S,64]</text>
+                        <text x="455" y="200" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#64748b">S fixed at encoder length</text>
+                    </svg>
+                    <figcaption>The four cache tensors per layer. The blue self attention half grows with the output. The green cross attention half is fixed by the source sentence length.</figcaption>
+                </figure>
+
+                <h3 id="decode-simulator">Decode step simulator</h3>
+                <p>
+                    Step through the first few generation steps to see how the three graphs cooperate and how
+                    the cache grows. The example uses a 5 token source sentence and watches the decoder emit
+                    tokens until it reaches the end of sentence marker.
+                </p>
+
+                <div class="stepper">
+                    <div class="stepper-header">
+                        <div class="stepper-dot is-active"></div>
+                        <div class="stepper-dot"></div>
+                        <div class="stepper-dot"></div>
+                        <div class="stepper-dot"></div>
+                        <div class="stepper-dot"></div>
+                        <div class="stepper-dot"></div>
+                    </div>
+                    <div class="stepper-content-wrapper">
+                        <div class="stepper-step is-active">
+                            <h3>Encode the source sentence</h3>
+                            <p>The tokenizer turns the source sentence into 5 token ids plus an attention mask of five ones.</p>
+                            <div class="sim-panel" data-graph="encoder">
+                                <div class="sim-graph-label">Graph: <span>encoder_model.onnx</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">input_ids [1,5]</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">attention_mask [1,5]</span></div>
+                                <div class="sim-row"><span class="sim-key">out</span><span class="sim-val">last_hidden_state [1,5,512]</span></div>
+                                <div class="sim-status">Cache: empty. Encoder output stored for all later steps.</div>
+                            </div>
+                        </div>
+                        <div class="stepper-step">
+                            <h3>Decode step 1</h3>
+                            <p>The first decoder graph runs with the start token and the fresh encoder states. It emits the first real token plus the full initial cache.</p>
+                            <div class="sim-panel" data-graph="decoder">
+                                <div class="sim-graph-label">Graph: <span>decoder_model.onnx</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">input_ids [1,1] (start)</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">encoder_hidden_states [1,5,512]</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">encoder_attention_mask [1,5]</span></div>
+                                <div class="sim-row"><span class="sim-key">out</span><span class="sim-val">logits [1,1,122672] → token 1</span></div>
+                                <div class="sim-row"><span class="sim-key">out</span><span class="sim-val">present[0..17].decoder.{key,value} [1,8,1,64]</span></div>
+                                <div class="sim-row"><span class="sim-key">out</span><span class="sim-val">present[0..17].encoder.{key,value} [1,8,5,64]</span></div>
+                                <div class="sim-status">Cache: 72 tensors. Decoder half length 1. Encoder half length 5.</div>
+                            </div>
+                        </div>
+                        <div class="stepper-step">
+                            <h3>Decode step 2</h3>
+                            <p>Control switches to decoder_with_past. It takes token 1, the mask, and the cache. It appends one entry to the decoder half and reuses the fixed encoder half.</p>
+                            <div class="sim-panel" data-graph="decoder_with_past">
+                                <div class="sim-graph-label">Graph: <span>decoder_with_past_model.onnx</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">input_ids [1,1] (token 1)</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">encoder_attention_mask [1,5]</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">past_key_values[0..17].decoder.{key,value} [1,8,1,64]</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">past_key_values[0..17].encoder.{key,value} [1,8,5,64]</span></div>
+                                <div class="sim-row"><span class="sim-key">out</span><span class="sim-val">logits → token 2</span></div>
+                                <div class="sim-row"><span class="sim-key">out</span><span class="sim-val">present.decoder.{key,value} [1,8,2,64]</span></div>
+                                <div class="sim-status">Cache: decoder half length 2. Encoder half still length 5.</div>
+                            </div>
+                        </div>
+                        <div class="stepper-step">
+                            <h3>Decode step 3</h3>
+                            <p>The same graph runs again with token 2 and the updated cache. The decoder half grows to length 3.</p>
+                            <div class="sim-panel" data-graph="decoder_with_past">
+                                <div class="sim-graph-label">Graph: <span>decoder_with_past_model.onnx</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">input_ids [1,1] (token 2)</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">past decoder cache [1,8,2,64] per layer</span></div>
+                                <div class="sim-row"><span class="sim-key">out</span><span class="sim-val">logits → token 3</span></div>
+                                <div class="sim-row"><span class="sim-key">out</span><span class="sim-val">present decoder cache [1,8,3,64] per layer</span></div>
+                                <div class="sim-status">Cache: decoder half length 3. Encoder half still length 5.</div>
+                            </div>
+                        </div>
+                        <div class="stepper-step">
+                            <h3>Decode step 4</h3>
+                            <p>Token 3 is fed back. The decoder half grows to length 4. No encoder work happens. The fixed encoder cache is reused as-is.</p>
+                            <div class="sim-panel" data-graph="decoder_with_past">
+                                <div class="sim-graph-label">Graph: <span>decoder_with_past_model.onnx</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">input_ids [1,1] (token 3)</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">past decoder cache [1,8,3,64] per layer</span></div>
+                                <div class="sim-row"><span class="sim-key">out</span><span class="sim-val">logits → token 4 (eos)</span></div>
+                                <div class="sim-row"><span class="sim-key">out</span><span class="sim-val">present decoder cache [1,8,4,64] per layer</span></div>
+                                <div class="sim-status">Token 4 equals eos id 2. The loop stops.</div>
+                            </div>
+                        </div>
+                        <div class="stepper-step">
+                            <h3>Detokenize the output</h3>
+                            <p>The emitted token sequence [start, 1, 2, 3, eos] is decoded back to text through the target tokenizer. The IndicProcessor postprocess step restores scripts and numerals. Translation complete.</p>
+                            <div class="sim-panel" data-graph="done">
+                                <div class="sim-graph-label">Graph: <span>none (string decode)</span></div>
+                                <div class="sim-row"><span class="sim-key">in</span><span class="sim-val">output token ids</span></div>
+                                <div class="sim-row"><span class="sim-key">out</span><span class="sim-val">target language text</span></div>
+                                <div class="sim-status">Encoder ran once. decoder_model ran once. decoder_with_past ran three times. Total graph calls: 5.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stepper-controls">
+                        <button class="stepper-btn is-prev">Back</button>
+                        <button class="stepper-btn is-next">Next</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="external-data">
+                <h2>External data sidecars</h2>
+                <p>
+                    An ONNX protobuf has a hard practical size limit around 2 GB because of the 32 bit
+                    message size cap in the protobuf format. The decoder weights for the 200M model approach
+                    or exceed that limit. The export pipeline handles this with a sidecar file.
+                </p>
+                <p>
+                    The function <code>_externalize_if_large</code> checks the serialized proto size. If it
+                    exceeds 512 MB, it calls <code>convert_model_to_external_data</code> to move every weight
+                    tensor into a separate binary file named <code>encoder_model.onnx.data</code> or
+                    <code>decoder_model.onnx.data</code>. The proto then keeps only the graph structure and
+                    small metadata, while the bulk weights live in the sidecar.
+                </p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-label">01_export_encoder_decoder.py</div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code><span class="kw">def</span> <span class="fn">_externalize_if_large</span>(onnx_path: Path, size_threshold_mb=<span class="pr">512</span>) -> <span class="kw">None</span>:
+    model = onnx.load(str(onnx_path), load_external_data=<span class="kw">True</span>)
+    proto_mb = onnx_path.stat().st_size / (<span class="pr">1024</span> * <span class="pr">1024</span>)
+    <span class="kw">if</span> proto_mb < size_threshold_mb:
+        <span class="kw">return</span>
+    convert_model_to_external_data(
+        model,
+        all_tensors_to_one_file=<span class="kw">True</span>,
+        location=data_path.name,
+        size_threshold=<span class="pr">1024</span>,
+    )
+    save_model(model, str(onnx_path))</code></pre>
+                </div>
+
+                <p>
+                    In the real en to indic bundle this produces a striking split. The encoder proto is 294
+                    MB, under the threshold, so its weights stay inside <code>encoder_model.onnx</code>. Each
+                    decoder proto is about 1.2 MB of graph structure, while the actual weights live in a 805
+                    MB and 767 MB sidecar respectively. You must ship the <code>.onnx.data</code> file next to
+                    its <code>.onnx</code> file. The runtime loads both automatically as long as they sit in
+                    the same directory.
+                </p>
+
+                <div class="callout">
+                    <p>
+                        If you upload a bundle to Hugging Face without the <code>.onnx.data</code> sidecars,
+                        the runtime will fail to load the decoders. Treat each <code>.onnx</code> plus its
+                        <code>.onnx.data</code> as an inseparable pair.
+                    </p>
+                </div>
+            </section>
+
+            <section id="tokenizers">
+                <h2>Tokenizers: the other half of the bundle</h2>
+                <p>
+                    The ONNX graphs only know about integer token ids. Turning raw text into ids and ids back
+                    into text is the job of the tokenizer, which ships as a separate set of files in the same
+                    bundle. For IndicTrans2 this is where most of the export difficulty lives.
+                </p>
+
+                <h3 id="slow-vs-fast">Slow versus fast</h3>
+                <p>
+                    The original model ships a <strong>slow tokenizer</strong> implemented in Python, the file
+                    <code>tokenization_indictrans.py</code>, loaded through <code>trust_remote_code=True</code>.
+                    It wraps two SentencePiece models, <code>model.SRC</code> and <code>model.TGT</code>, plus
+                    two Fairseq dictionaries, <code>dict.SRC.json</code> and <code>dict.TGT.json</code>. The
+                    slow tokenizer works in Python but cannot run efficiently in a browser.
+                </p>
+                <p>
+                    The browser needs a <strong>fast tokenizer</strong>, the single file format
+                    <code>tokenizer.json</code> understood by the Rust <code>tokenizers</code> library and by
+                    onnxruntime-web's tokenizer support. The build script
+                    <code>02_build_fast_tokenizers.py</code> converts the SentencePiece models into
+                    <code>tokenizer_src.json</code> and <code>tokenizer_tgt.json</code> using the Hugging Face
+                    <code>SpmConverter</code>.
+                </p>
+
+                <h3 id="dict-remap">Why the dict remap is necessary</h3>
+                <p>
+                    The conversion is not a one step copy. <code>SpmConverter</code> assigns token ids using
+                    SentencePiece's native indexing, which does not match the Fairseq dictionary ids the model
+                    was trained on. If you shipped the raw converted file, the model would receive the wrong
+                    id for almost every token and produce garbage.
+                </p>
+                <p>
+                    The build script remaps every vocabulary entry to the id from the matching dict json. It
+                    then registers the special tokens and the language tags as <strong>added tokens</strong>
+                    with their correct dict ids. The language tags like <code>hin_Deva</code> and
+                    <code>eng_Latn</code> are marked <code>single_word: true</code> and <code>special: false</code>,
+                    matching the reference bundle. Finally it installs a <code>TemplateProcessing</code>
+                    post-processor that appends the end of sentence token with id 2.
+                </p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-label">02_build_fast_tokenizers.py</div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>remapped = {
+    token: vocab_dict.get(token, UNK_ID)
+    <span class="kw">for</span> token <span class="kw">in</span> fast[<span class="st">"model"</span>][<span class="st">"vocab"</span>]
+}
+fast[<span class="st">"model"</span>][<span class="st">"vocab"</span>] = remapped
+fast[<span class="st">"added_tokens"</span>] = added_tokens
+fast[<span class="st">"post_processor"</span>] = EOS_POST_PROCESSOR</code></pre>
+                </div>
+
+                <p>
+                    A small <code>tokenizer_meta.json</code> file records <code>src_dict_size</code>,
+                    <code>tgt_dict_size</code>, and <code>unk_id: 3</code>. The runtime uses these to clamp
+                    any id greater than or equal to the dict size down to the unknown token. This guards
+                    against the fast tokenizer emitting ids for vocabulary entries the model never trained on.
+                </p>
+
+                <p>
+                    Encoding a source sentence also requires a language prefix. The runtime prepends the
+                    source and target language tags before the text, for example
+                    <code>hin_Deva eng_Latn यह एक परीक्षण वाक्य है।</code>. The added tokens setup ensures the
+                    tokenizer recognizes those tags and maps them to their dict ids.
+                </p>
+
+                <h3 id="two-tokenizers">Why two tokenizers</h3>
+                <p>
+                    Source and target use separate vocabularies, separate SentencePiece models, and separate
+                    dictionaries. The source side encodes input text in the source script. The target side
+                    decodes generated ids back to the target script. They are not interchangeable. Swapping a
+                    source tokenizer from one direction into another direction gives zero percent token match,
+                    because the dictionaries interleave language tags at different ids. Each direction builds
+                    its own pair from scratch.
+                </p>
+
+                <div class="quiz-container" data-allow-retry="true">
+                    <div class="quiz-question">
+                        After SpmConverter produces a fast tokenizer, why is an extra remap step required?
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" data-correct="false">The fast format is missing the post-processor.</div>
+                        <div class="quiz-option" data-correct="true">SpmConverter uses SentencePiece-native ids that differ from the Fairseq dict ids the model was trained on, so ids must be remapped to the dict json values.</div>
+                        <div class="quiz-option" data-correct="false">The conversion drops language tags, so they must be reinserted manually.</div>
+                    </div>
+                    <div class="quiz-feedback">
+                        <div data-feedback="correct">
+                            <strong>Correct.</strong> Without the remap the model receives ids from the wrong vocabulary indexing and produces garbage output.
+                        </div>
+                        <div data-feedback="incorrect">
+                            <strong>Not quite.</strong> The post-processor and language tags are added separately. The remap exists because of an id numbering mismatch between two vocabulary systems.
+                        </div>
+                        <div data-feedback="general">
+                            <em>Tip: SentencePiece and Fairseq are two different tokenization systems with their own id assignments. The model was trained against the Fairseq ids.</em>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="configs">
+                <h2>Config files</h2>
+                <p>
+                    Two json files carry model level configuration into the bundle.
+                    <code>config.json</code> holds the architecture constants, layer counts, head counts,
+                    embedding dimensions, vocabulary sizes, and token ids. The runtime does not always need it
+                    to run the graphs, but loaders and validation scripts read it to recover the layer count
+                    and dimensions.
+                </p>
+                <p>
+                    <code>generation_config.json</code> holds the decoding parameters. The two values that
+                    matter most for the greedy loop are <code>decoder_start_token_id</code> and
+                    <code>eos_token_id</code>, both 2 for these models. The runtime uses the start id to seed
+                    the decoder and the eos id to detect when generation is complete. Without
+                    <code>generation_config.json</code> the validation script falls back to defaults, which
+                    happen to match, but shipping the file makes the bundle self describing.
+                </p>
+                <p>
+                    The remaining tokenizer support files, <code>tokenizer_config.json</code>,
+                    <code>special_tokens_map.json</code>, and <code>tokenization_indictrans.py</code>, are
+                    copied from the original repo. They let the slow tokenizer still load in Python for
+                    validation and postprocessing even though the browser uses the fast json tokenizers.
+                </p>
+            </section>
+
+            <section id="decode-loop">
+                <h2>Putting it together: the greedy decode loop</h2>
+                <p>
+                    The validation script <code>03_validate_parity.py</code> contains the cleanest statement
+                    of how all the components cooperate. It runs the same greedy loop against both the PyTorch
+                    model and the three ONNX sessions and compares the emitted token ids. The pass bar is 99
+                    percent token exact match. All three directions hit 100 percent on their fixtures.
+                </p>
+                <p>
+                    The loop is short. The encoder session runs once. The decoder session runs for step 1.
+                    The decoder_with_past session runs for every step after that, carrying the cache forward
+                    each time. Argmax over the last logits position picks the next token. When that token
+                    equals the eos id, the loop stops.
+                </p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-label">03_validate_parity.py</div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>enc_out = enc.run([<span class="st">"last_hidden_state"</span>], {
+    <span class="st">"input_ids"</span>: input_ids,
+    <span class="st">"attention_mask"</span>: attn_mask,
+})[<span class="pr">0</span>]
+
+decoder_input_ids = np.array([[decoder_start_id]], dtype=np.int64)
+output_ids = [decoder_start_id]
+past_outputs = <span class="kw">None</span>
+
+<span class="kw">for</span> step <span class="kw">in</span> range(max_new_tokens):
+    <span class="kw">if</span> step == <span class="pr">0</span>:
+        dec_out = dec.run(<span class="kw">None</span>, {
+            <span class="st">"input_ids"</span>: decoder_input_ids,
+            <span class="st">"encoder_hidden_states"</span>: enc_out,
+            <span class="st">"encoder_attention_mask"</span>: attn_mask,
+        })
+    <span class="kw">else</span>:
+        dec_out = dec_past.run(<span class="kw">None</span>, {
+            <span class="st">"input_ids"</span>: decoder_input_ids,
+            <span class="st">"encoder_attention_mask"</span>: attn_mask,
+            **_past_feed_from_outputs(past_outputs, num_layers),
+        })
+
+    logits = dec_out[<span class="pr">0</span>]
+    past_outputs = list(dec_out[<span class="pr">1</span>:])
+    next_id = int(np.argmax(logits[<span class="pr">0</span>, -<span class="pr">1</span>, :]))
+    output_ids.append(next_id)
+    <span class="kw">if</span> next_id == eos_id:
+        <span class="kw">break</span>
+    decoder_input_ids = np.array([[next_id]], dtype=np.int64)</code></pre>
+                </div>
+
+                <p>
+                    The helper <code>_past_feed_from_outputs</code> is the bridge between the two decoder
+                    graphs. It takes the flat list of present outputs from the previous step and renames them
+                    into the <code>past_key_values.*</code> input names the next step expects. The encoder
+                    cross attention half of that feed never changes after step 1. Only the decoder self
+                    attention half grows.
+                </p>
+                <p>
+                    Note that <code>model.generate()</code>, the usual Hugging Face generation entry point,
+                    does not work on this custom architecture. It raises an attribute error around
+                    <code>use_cache</code>. The manual loop is the workaround, and it doubles as the
+                    reference implementation that the browser worker later mirrors in TypeScript.
+                </p>
+            </section>
+
+            <section id="quantization">
+                <h2>Quantization: a second tier</h2>
+                <p>
+                    The fp32 bundles are large. The en to indic bundle is about 1.7 GB. For low bandwidth or
+                    mobile deployments, the pipeline offers an optional INT8 tier built by
+                    <code>04_quantize_int8.py</code>. It runs <strong>dynamic quantization</strong> on the
+                    weights of all three graphs, leaving activations in floating point.
+                </p>
+                <p>
+                    Dynamic quantization replaces weight matrices with int8 lookups and small scale and zero
+                    point metadata. The script uses <code>QuantType.QInt8</code> and per channel scaling,
+                    which keeps a separate scale per output channel and usually preserves more quality than
+                    per tensor scaling. The tokenizer and config files are copied across unchanged from the
+                    fp32 bundle, because quantization only touches the graph weights.
+                </p>
+
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="code-label">04_quantize_int8.py</div>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+                    <pre><code>quantize_dynamic(
+    model_input=str(src),
+    model_output=str(dst),
+    weight_type=QuantType.QInt8,
+    per_channel=<span class="kw">True</span>,
+)</code></pre>
+                </div>
+
+                <p>
+                    The tradeoff is real. The reference int8 benchmark hits about 80 percent exact text match,
+                    well below the 99 percent bar that fp32 clears. INT8 ships as a separate preview repo with
+                    a warning that it is not production quality. The roadmap also lists fp16 and q4f16 as
+                    future tiers with better size to quality tradeoffs.
+                </p>
+
+                <h3 id="precision-calculator">Precision tradeoff calculator</h3>
+                <p>
+                    Adjust the precision tier to see the estimated bundle size and quality outcome for the en
+                    to indic 200M model. The values are approximations derived from the fp32 baseline and the
+                    reduction ratios documented in the roadmap.
+                </p>
+
+                <div class="primitive-control-group">
+                    <div class="primitive-control">
+                        <label class="primitive-label" for="precision-slider">
+                            Precision tier
+                            <span class="primitive-value" id="precision-value">fp32</span>
+                        </label>
+                        <input type="range" min="0" max="3" value="0" id="precision-slider" />
+                    </div>
+                </div>
+
+                <div class="precision-output" id="precision-output">
+                    <div class="precision-stat">
+                        <span class="precision-stat-label">Estimated bundle size</span>
+                        <span class="precision-stat-value" id="precision-size">1.7 GB</span>
+                    </div>
+                    <div class="precision-stat">
+                        <span class="precision-stat-label">Expected text parity</span>
+                        <span class="precision-stat-value" id="precision-parity">100% (production)</span>
+                    </div>
+                    <div class="precision-stat">
+                        <span class="precision-stat-label">Runtime target</span>
+                        <span class="precision-stat-value" id="precision-target">WASM / WebGPU</span>
+                    </div>
+                    <div class="precision-bar-wrap">
+                        <div class="precision-bar" id="precision-bar"></div>
+                    </div>
+                </div>
+
+                <details class="formula-details">
+                    <summary class="formula-summary">How are these values calculated?</summary>
+                    <p>
+                        The size estimate starts from the measured fp32 en to indic bundle size of 1.7 GB and
+                        applies a reduction ratio per tier. fp16 halves the weight bytes, giving roughly 0.5
+                        times the fp32 size. INT8 reduces 32 bit weights to 8 bit, giving roughly 0.25 times
+                        the fp32 size. q4f16 uses 4 bit weights with 16 bit activations, giving roughly 0.125
+                        times the fp32 size. A fixed overhead of 90 MB is added to every tier to account for
+                        the two fast tokenizer json files and the config files, which are not quantized.
+                    </p>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <div class="code-label">size model</div>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code>FP32_BASE_GB = <span class="pr">1.7</span>
+OVERHEAD_GB   = <span class="pr">0.09</span>
+RATIO = {<span class="st">"fp32"</span>: <span class="pr">1.0</span>, <span class="st">"fp16"</span>: <span class="pr">0.5</span>, <span class="st">"int8"</span>: <span class="pr">0.25</span>, <span class="st">"q4f16"</span>: <span class="pr">0.125</span>}
+size_gb = max(FP32_BASE_GB * RATIO[tier] * <span class="pr">0.94</span> + OVERHEAD_GB, OVERHEAD_GB)</code></pre>
+                    </div>
+                    <p>
+                        The 0.94 factor accounts for the roughly 6 percent of the fp32 bundle that is already
+                        non weight data, tokenizer json and configs, which the ratio should not shrink. Parity
+                        values come from the measured fp32 result of 100 percent and the documented int8
+                        benchmark of about 80 percent. fp16 and q4f16 parity is projected, not yet measured,
+                        and marked as such.
+                    </p>
+                    <p>
+                        These numbers assume the en to indic 200M model specifically. The indic to indic 320M
+                        model scales up by roughly the parameter ratio, and q4f16 quality for Indic scripts is
+                        still unverified.
+                    </p>
+                </details>
+            </section>
+
+            <section id="manifest">
+                <h2>The full bundle manifest</h2>
+                <p>
+                    Click any file in the exported en to indic bundle to see what it is, why it is needed, and
+                    its real size on disk. This is the complete set of components that ship together.
+                </p>
+
+                <div class="manifest-explorer" id="manifest-explorer">
+                    <div class="manifest-list" id="manifest-list"></div>
+                    <div class="manifest-detail" id="manifest-detail">
+                        <p class="manifest-placeholder">Select a file to see its role.</p>
+                    </div>
+                </div>
+
+                <p>
+                    Every file above serves one of three roles. The three <code>.onnx</code> graphs plus their
+                    <code>.data</code> sidecars hold the model weights and operator graph. The tokenizer files
+                    turn text into ids and back. The config files describe the architecture and decoding
+                    parameters. Drop the whole directory into a Hugging Face repo and a browser worker can
+                    load it end to end.
+                </p>
+
+                <div class="callout">
+                    <p>
+                        The pipeline validates the bundle before it ships. The parity check runs the same
+                        greedy decode loop against PyTorch and ONNX, compares token ids, and requires 99
+                        percent exact match. All three directions pass at 100 percent. The committed parity
+                        reports live under <code>fixtures/parity-report-*.json</code>.
+                    </p>
+                </div>
+            </section>
+        </article>
+    </div>
+    <script>
+/* Inlined from ./base.js */
+// base.js — always included. Handles copy-button behavior for code blocks.
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initCodeCopyButtons);
+} else {
+  initCodeCopyButtons();
+}
+
+function initCodeCopyButtons() {
+  document.querySelectorAll(".copy-btn").forEach((btn) => {
+    if (btn.dataset.copyInitialized) return;
+    btn.dataset.copyInitialized = "true";
+
+    btn.addEventListener("click", () => {
+      const codeContainer = btn.closest(".code-container");
+      if (!codeContainer) return;
+
+      const codeBlock =
+        codeContainer.querySelector("pre code") ||
+        codeContainer.querySelector("pre");
+      if (codeBlock) {
+        navigator.clipboard
+          .writeText(codeBlock.textContent)
+          .then(() => {
+            const originalText = btn.textContent;
+            btn.textContent = "Copied!";
+            btn.style.color = "#34d399";
+            btn.style.borderColor = "#34d399";
+            setTimeout(() => {
+              btn.textContent = originalText;
+              btn.style.color = "";
+              btn.style.borderColor = "";
+            }, 2000);
+          })
+          .catch((err) => console.error("Copy failed", err));
+      }
+    });
+  });
+}
+
+</script>
+    <script>
+/* Inlined from ./components/flashcard.js */
+// flashcard.js — flip-card interaction for .flashcard elements.
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initFlashcards);
+} else {
+  initFlashcards();
+}
+
+function initFlashcards() {
+  document.querySelectorAll(".flashcard").forEach((card) => {
+    if (card.dataset.initialized) return;
+    card.dataset.initialized = "true";
+    card.addEventListener("click", () => card.classList.toggle("is-flipped"));
+  });
+}
+
+</script>
+    <script>
+/* Inlined from ./components/quiz.js */
+// quiz.js — knowledge-check quiz interaction for .quiz-container elements.
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initQuizzes);
+} else {
+  initQuizzes();
+}
+
+function initQuizzes() {
+  document.querySelectorAll(".quiz-container").forEach((quiz) => {
+    if (quiz.dataset.initialized) return;
+    quiz.dataset.initialized = "true";
+
+    const options = quiz.querySelectorAll(".quiz-option");
+    const feedback = quiz.querySelector(".quiz-feedback");
+    const allowRetry = quiz.dataset.allowRetry === "true";
+
+    const resetQuiz = () => {
+      delete quiz.dataset.completed;
+      options.forEach((opt) => {
+        opt.classList.remove(
+          "is-disabled",
+          "is-correct",
+          "is-incorrect",
+          "is-selected",
+        );
+      });
+      const existingRetryBtn = quiz.querySelector(".quiz-retry-btn");
+      if (existingRetryBtn) existingRetryBtn.remove();
+      if (feedback) {
+        feedback.classList.remove("is-visible", "is-correct", "is-incorrect");
+        feedback
+          .querySelectorAll("[data-feedback]")
+          .forEach((el) => el.classList.remove("is-active"));
+        const dynamicPrefix = feedback.querySelector("strong[data-dynamic]");
+        if (dynamicPrefix) dynamicPrefix.remove();
+      }
+    };
+
+    options.forEach((option) => {
+      option.addEventListener("click", () => {
+        if (quiz.dataset.completed) return;
+
+        const isCorrect = option.dataset.correct === "true";
+
+        quiz.dataset.completed = "true";
+        options.forEach((opt) => {
+          opt.classList.add("is-disabled");
+          // Only reveal the correct answer if the player got it right,
+          // or if there is no retry — avoids spoiling the answer on a wrong guess.
+          if (opt.dataset.correct === "true" && (isCorrect || !allowRetry))
+            opt.classList.add("is-correct");
+          else if (opt === option && !isCorrect)
+            opt.classList.add("is-incorrect");
+        });
+
+        if (feedback) {
+          const correctMsg = feedback.querySelector(
+            '[data-feedback="correct"]',
+          );
+          const incorrectMsg = feedback.querySelector(
+            '[data-feedback="incorrect"]',
+          );
+          const generalMsg = feedback.querySelector(
+            '[data-feedback="general"]',
+          );
+
+          if (correctMsg || incorrectMsg) {
+            if (isCorrect && correctMsg) correctMsg.classList.add("is-active");
+            else if (!isCorrect && incorrectMsg)
+              incorrectMsg.classList.add("is-active");
+            if (generalMsg) generalMsg.classList.add("is-active");
+          } else {
+            const resultPrefix = document.createElement("strong");
+            resultPrefix.dataset.dynamic = "true";
+            resultPrefix.textContent = isCorrect ? "Correct! " : "Incorrect. ";
+            resultPrefix.style.color = isCorrect ? "#059669" : "#dc2626";
+            feedback.prepend(resultPrefix);
+          }
+
+          if (!isCorrect) {
+            quiz.classList.add("shake");
+            setTimeout(() => quiz.classList.remove("shake"), 500);
+
+            if (allowRetry) {
+              const retryBtn = document.createElement("button");
+              retryBtn.className = "quiz-retry-btn";
+              retryBtn.textContent = "Try Again";
+              retryBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                resetQuiz();
+              });
+              feedback.appendChild(retryBtn);
+            }
+          }
+
+          feedback.classList.add("is-visible");
+          feedback.classList.add(isCorrect ? "is-correct" : "is-incorrect");
+        }
+      });
+    });
+  });
+}
+
+</script>
+    <script>
+/* Inlined from ./components/stepper.js */
+// stepper.js — multi-step walkthrough interaction for .stepper elements.
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initSteppers);
+} else {
+  initSteppers();
+}
+
+function initSteppers() {
+  document.querySelectorAll(".stepper").forEach((stepper) => {
+    if (stepper.dataset.initialized) return;
+    stepper.dataset.initialized = "true";
+
+    const steps = stepper.querySelectorAll(".stepper-step");
+    const dots = stepper.querySelectorAll(".stepper-dot");
+    const prevBtn = stepper.querySelector(".stepper-btn.is-prev");
+    const nextBtn = stepper.querySelector(".stepper-btn.is-next");
+
+    // Auto-inject step counter into the header
+    const header = stepper.querySelector(".stepper-header");
+    let counter = null;
+    if (header && steps.length > 0) {
+      counter = document.createElement("span");
+      counter.className = "stepper-counter";
+      header.appendChild(counter);
+    }
+
+    let currentStep = 0;
+
+    const updateStepper = () => {
+      steps.forEach((step, i) =>
+        step.classList.toggle("is-active", i === currentStep),
+      );
+      dots.forEach((dot, i) =>
+        dot.classList.toggle("is-active", i === currentStep),
+      );
+      if (prevBtn) prevBtn.disabled = currentStep === 0;
+      if (nextBtn) nextBtn.disabled = currentStep === steps.length - 1;
+      if (counter)
+        counter.textContent = `Step ${currentStep + 1} of ${steps.length}`;
+    };
+
+    if (prevBtn)
+      prevBtn.addEventListener("click", () => {
+        if (currentStep > 0) {
+          currentStep--;
+          updateStepper();
+        }
+      });
+
+    if (nextBtn)
+      nextBtn.addEventListener("click", () => {
+        if (currentStep < steps.length - 1) {
+          currentStep++;
+          updateStepper();
+        }
+      });
+
+    updateStepper();
+  });
+}
+
+</script>
+    <script>
+/* Inlined from ./components/primitives.js */
+// primitives.js — range-input value display wiring for .primitive-control elements.
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initPrimitives);
+} else {
+  initPrimitives();
+}
+
+function initPrimitives() {
+  document.querySelectorAll('input[type="range"]').forEach((range) => {
+    if (range.dataset.initialized) return;
+    range.dataset.initialized = "true";
+
+    const valueDisplay = range
+      .closest(".primitive-control")
+      ?.querySelector(".primitive-value");
+    if (valueDisplay) {
+      range.addEventListener("input", () => {
+        valueDisplay.textContent = range.value;
+      });
+    } else {
+      console.warn(
+        "[interactive-article] Range input missing a .primitive-value display. " +
+          'Wrap it in .primitive-control containing a <span class="primitive-value">.',
+        range,
+      );
+    }
+  });
+}
+
+</script>
+    <script>
+        // Precision tradeoff calculator
+        (function () {
+            const slider = document.getElementById("precision-slider");
+            const valueLabel = document.getElementById("precision-value");
+            const sizeEl = document.getElementById("precision-size");
+            const parityEl = document.getElementById("precision-parity");
+            const targetEl = document.getElementById("precision-target");
+            const barEl = document.getElementById("precision-bar");
+
+            const FP32_BASE_GB = 1.7;
+            const OVERHEAD_GB = 0.09;
+
+            const tiers = [
+                {
+                    name: "fp32",
+                    ratio: 1.0,
+                    parity: "100% (production)",
+                    target: "WASM / WebGPU",
+                    pct: 100,
+                    measured: true,
+                },
+                {
+                    name: "fp16",
+                    ratio: 0.5,
+                    parity: "projected ~99% (unmeasured)",
+                    target: "WebGPU (Chrome 121+)",
+                    pct: 70,
+                    measured: false,
+                },
+                {
+                    name: "int8",
+                    ratio: 0.25,
+                    parity: "~80% (preview tier)",
+                    target: "WASM CPU",
+                    pct: 45,
+                    measured: true,
+                },
+                {
+                    name: "q4f16",
+                    ratio: 0.125,
+                    parity: "projected (unmeasured)",
+                    target: "WebGPU / mobile",
+                    pct: 22,
+                    measured: false,
+                },
+            ];
+
+            function fmtSize(gb) {
+                if (gb >= 1) return gb.toFixed(2) + " GB";
+                return Math.round(gb * 1024) + " MB";
+            }
+
+            function render() {
+                const t = tiers[parseInt(slider.value, 10)];
+                const sizeGb = Math.max(FP32_BASE_GB * t.ratio * 0.94 + OVERHEAD_GB, OVERHEAD_GB);
+                valueLabel.textContent = t.name;
+                sizeEl.textContent = fmtSize(sizeGb);
+                parityEl.textContent = t.parity;
+                targetEl.textContent = t.target;
+                barEl.style.width = t.pct + "%";
+            }
+
+            slider.addEventListener("input", render);
+            render();
+        })();
+
+        // Bundle manifest explorer
+        (function () {
+            const files = [
+                {
+                    name: "encoder_model.onnx",
+                    size: "294 MB",
+                    role: "graph",
+                    desc: "The encoder graph. Takes source input_ids and attention_mask, returns last_hidden_state. Runs once per sentence. Weights stay internal because the proto is under the 512 MB externalization threshold.",
+                },
+                {
+                    name: "decoder_model.onnx",
+                    size: "1.2 MB",
+                    role: "graph",
+                    desc: "The first step decoder graph. Takes the start token, encoder hidden states, and encoder attention mask. Returns logits plus the full initial KV cache (72 present tensors for 18 layers). Graph structure only, weights are in the sidecar.",
+                },
+                {
+                    name: "decoder_model.onnx.data",
+                    size: "805 MB",
+                    role: "weights",
+                    desc: "External weight sidecar for decoder_model.onnx. Holds all decoder weight tensors moved out of the protobuf to stay under the 2 GB proto limit. Must ship next to its .onnx file.",
+                },
+                {
+                    name: "decoder_with_past_model.onnx",
+                    size: "1.2 MB",
+                    role: "graph",
+                    desc: "The autoregressive decoder graph for steps 2 and onward. Takes the previous token, encoder attention mask, and the past KV cache. Returns logits and the updated cache. Uses a dummy encoder hidden states tensor and a zero-cost mask dependency to keep cross attention in the graph.",
+                },
+                {
+                    name: "decoder_with_past_model.onnx.data",
+                    size: "767 MB",
+                    role: "weights",
+                    desc: "External weight sidecar for decoder_with_past_model.onnx. Inseparable from its .onnx file at load time.",
+                },
+                {
+                    name: "tokenizer_src.json",
+                    size: "3.9 MB",
+                    role: "tokenizer",
+                    desc: "Fast source tokenizer in the tokenizers json format. Converted from model.SRC via SpmConverter, then remapped to dict.SRC.json ids. Used by the browser to encode source text into token ids.",
+                },
+                {
+                    name: "tokenizer_tgt.json",
+                    size: "23.8 MB",
+                    role: "tokenizer",
+                    desc: "Fast target tokenizer. Converted from model.TGT and remapped to dict.TGT.json ids. Used to decode generated token ids back into target language text.",
+                },
+                {
+                    name: "tokenizer_meta.json",
+                    size: "70 B",
+                    role: "tokenizer",
+                    desc: "Holds src_dict_size, tgt_dict_size, and unk_id (3). The runtime clamps any id at or above the dict size down to the unknown token to guard against untrained vocabulary entries.",
+                },
+                {
+                    name: "model.SRC",
+                    size: "0.8 MB",
+                    role: "tokenizer",
+                    desc: "Original SentencePiece model for the source side. Kept so the slow Python tokenizer can still run for validation and parity checks.",
+                },
+                {
+                    name: "model.TGT",
+                    size: "3.3 MB",
+                    role: "tokenizer",
+                    desc: "Original SentencePiece model for the target side. Same role as model.SRC for the target vocabulary.",
+                },
+                {
+                    name: "dict.SRC.json",
+                    size: "0.6 MB",
+                    role: "tokenizer",
+                    desc: "Fairseq source dictionary mapping tokens to the ids the model was trained on. The fast tokenizer is remapped against this file so emitted ids match the training vocabulary.",
+                },
+                {
+                    name: "dict.TGT.json",
+                    size: "3.4 MB",
+                    role: "tokenizer",
+                    desc: "Fairseq target dictionary. Same role as dict.SRC.json for the target side.",
+                },
+                {
+                    name: "tokenization_indictrans.py",
+                    size: "8.0 KB",
+                    role: "tokenizer",
+                    desc: "The slow Python tokenizer implementation from AI4Bharat. Loaded with trust_remote_code=True during validation and postprocessing. Not used by the browser path.",
+                },
+                {
+                    name: "tokenizer_config.json",
+                    size: "1.1 KB",
+                    role: "tokenizer",
+                    desc: "Hugging Face tokenizer configuration metadata. Needed to instantiate the slow tokenizer correctly in Python.",
+                },
+                {
+                    name: "special_tokens_map.json",
+                    size: "96 B",
+                    role: "tokenizer",
+                    desc: "Declares the special tokens pad, bos, eos, unk and their mapping. Consumed by the slow tokenizer loader.",
+                },
+                {
+                    name: "config.json",
+                    size: "1.4 KB",
+                    role: "config",
+                    desc: "Architecture constants: 18 encoder layers, 18 decoder layers, 8 heads, 512 embed dim, vocab sizes, token ids. Loaders and validation read it to recover layer count and dimensions.",
+                },
+                {
+                    name: "generation_config.json",
+                    size: "163 B",
+                    role: "config",
+                    desc: "Decoding parameters. The two that matter for the greedy loop are decoder_start_token_id (2) and eos_token_id (2). Lets the bundle self-describe its generation defaults.",
+                },
+            ];
+
+            const list = document.getElementById("manifest-list");
+            const detail = document.getElementById("manifest-detail");
+
+            const roleColors = {
+                graph: "#2563eb",
+                weights: "#7c3aed",
+                tokenizer: "#16a34a",
+                config: "#d97706",
+            };
+
+            files.forEach((f, idx) => {
+                const item = document.createElement("button");
+                item.className = "manifest-item";
+                item.type = "button";
+                item.innerHTML =
+                    '<span class="manifest-dot" style="background:' + roleColors[f.role] + '"></span>' +
+                    '<span class="manifest-name">' + f.name + "</span>" +
+                    '<span class="manifest-size">' + f.size + "</span>";
+                item.addEventListener("click", () => {
+                    document.querySelectorAll(".manifest-item").forEach((el) => el.classList.remove("is-active"));
+                    item.classList.add("is-active");
+                    detail.innerHTML =
+                        '<h3 class="manifest-detail-name">' + f.name + "</h3>" +
+                        '<div class="manifest-detail-meta">' +
+                        '<span class="manifest-badge" style="background:' + roleColors[f.role] + '1a;color:' + roleColors[f.role] + '">' + f.role + "</span>" +
+                        '<span class="manifest-detail-size">' + f.size + " on disk</span>" +
+                        "</div>" +
+                        '<p class="manifest-detail-desc">' + f.desc + "</p>";
+                });
+                list.appendChild(item);
+            });
+
+            // Auto-select the encoder to show a populated detail panel
+            const first = list.querySelector(".manifest-item");
+            if (first) first.click();
+        })();
+    </script>
+</body>
+
+</html>
