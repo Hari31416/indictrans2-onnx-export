@@ -141,11 +141,21 @@ def pytorch_greedy_decode(
                         use_cache=True,
                     )
                 else:
-                    hf_past = tuple((layer[0], layer[1]) for layer in past_key_values)
+                    batch_size = decoder_input_ids.shape[0]
+                    encoder_seq_len = inputs["attention_mask"].shape[1]
+                    embed_dim = getattr(model.config, "decoder_embed_dim", 512)
+                    dummy_encoder_hidden_states = torch.zeros(
+                        batch_size,
+                        encoder_seq_len,
+                        embed_dim,
+                        dtype=torch.float32,
+                        device=device
+                    )
                     dec_out = model.model.decoder(
                         input_ids=decoder_input_ids,
+                        encoder_hidden_states=dummy_encoder_hidden_states,
                         encoder_attention_mask=inputs["attention_mask"],
-                        past_key_values=hf_past,
+                        past_key_values=past_key_values,
                         use_cache=True,
                     )
 
@@ -157,16 +167,7 @@ def pytorch_greedy_decode(
                     break
 
                 decoder_input_ids = torch.tensor([[next_id]], device=device)
-                # Re-merge decoder KV with encoder cross-attn KV for next step
-                if past_key_values is None:
-                    past_key_values = dec_out.past_key_values
-                else:
-                    merged = []
-                    for i, layer_out in enumerate(dec_out.past_key_values):
-                        dec_k, dec_v = layer_out
-                        enc_k, enc_v = past_key_values[i][2], past_key_values[i][3]
-                        merged.append((dec_k, dec_v, enc_k, enc_v))
-                    past_key_values = tuple(merged)
+                past_key_values = dec_out.past_key_values
 
         token_ids = output_ids
         with tokenizer.as_target_tokenizer():

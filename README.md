@@ -101,15 +101,33 @@ See [ROADMAP.md](./ROADMAP.md) for fp16 / q4f16 plans — not implemented yet.
 
 ### 5. Upload to Hugging Face
 
+Uploads the local ONNX bundles to Hugging Face Hub using the new `hf upload` CLI. It automatically generates and includes a model card `README.md` inside the repository.
+
 ```bash
-make upload-en-indic HF_ORG=your-hf-org
-make upload-indic-en HF_ORG=your-hf-org
-make upload-indic-indic HF_ORG=your-hf-org
+make upload-en-indic HF_ORG=your-hf-org COMMIT_MESSAGE="Initial release of en-indic ONNX bundle"
+make upload-indic-en HF_ORG=your-hf-org COMMIT_MESSAGE="Initial release of indic-en ONNX bundle"
+make upload-indic-indic HF_ORG=your-hf-org COMMIT_MESSAGE="Initial release of indic-indic ONNX bundle"
 ```
 
 Local bundles: `scratch/en-indic-onnx/` (~1.7 GB), `scratch/indic-en-onnx/` (~1.2 GB), `scratch/indic-indic-onnx/` (~1.9 GB).
 
 After upload, set bundle paths in [local-voice-chat `translation-models.ts`](https://github.com/Hari31416/local-voice-chat/blob/main/src/lib/translation-models.ts).
+
+### 6. Smoke-Test Verification & Translation Matrix
+
+To verify that the exported ONNX models translate correctly across target languages and to generate translation matrices, run:
+
+```bash
+# Verify model download and translate a sample sentence
+.venv/bin/python src/test_hf_models.py --repo-id your-hf-org/indictrans2-indic-en-dist-200M-ONNX
+
+# Generate translation matrix of smoke-test sentences
+.venv/bin/python src/generate_translation_matrix.py --repo-id scratch/en-indic-onnx
+.venv/bin/python src/generate_translation_matrix.py --repo-id scratch/indic-en-onnx
+.venv/bin/python src/generate_translation_matrix.py --repo-id scratch/indic-indic-onnx
+```
+
+Input sentences are loaded from `fixtures/smoke-test/test_sentences_<lang>.json`, and the resulting matrices are saved to `fixtures/smoke-test/translation_matrix_<direction>.json`.
 
 ## fp32 parity summary
 
@@ -127,6 +145,7 @@ After upload, set bundle paths in [local-voice-chat `translation-models.ts`](htt
 | `decoder_with_past` dynamic axes + mask in graph | Fixed |
 | Fast tokenizer SPM ≠ dict IDs | Fixed — `src/02_build_fast_tokenizers.py` |
 | `model.generate()` broken | Workaround — manual greedy loop in `src/03_validate_parity.py` |
+| Cross-attention skipped in step 2+ | Fixed — `src/it2_onnx_wrappers.py` |
 
 Full list: [EXPORT_ISSUES.md](./EXPORT_ISSUES.md)
 

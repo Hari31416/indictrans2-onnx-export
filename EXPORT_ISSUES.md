@@ -190,12 +190,29 @@ make upload-indic-indic HF_ORG=your-org
 
 ---
 
+## 16. Cross-attention skipped in decoder during step 2+
+
+**Symptom:** ONNX model outputs correct translation for the first step but outputs repetitive or drifted garbage at steps 2+.
+
+**Root cause:** In the wrapper `IndicTransDecoderWithPastWrapper`, `encoder_hidden_states` was passed as `None` to the decoder module to signify autoregressive run. Inside AI4Bharat's custom `modeling_indictrans.py`, there is a check `if encoder_hidden_states is not None:` surrounding the cross-attention block. Passing `None` caused the exporter to completely skip compilation of the cross-attention block in the ONNX graph.
+
+**Why validation passed before:** The validation script `03_validate_parity.py` manual PyTorch greedy decoding loop had the exact same bug where it passed `None` for `encoder_hidden_states` at step 1+, so both paths generated the exact same incorrect translations, achieving 100% false-positive parity.
+
+**Fix:** Update the wrapper to construct a dummy `encoder_hidden_states` tensor (matching the encoder sequence length dynamically) and pass the full 4-element `past_key_values` cache. Also update the validation script's manual PyTorch decode path similarly. This triggers the cross-attention block to compile and correctly use the cached cross-attention key/value states at runtime.
+
+**Files:** `src/it2_onnx_wrappers.py`, `src/03_validate_parity.py`
+
+---
+
 | File                                | Role                                            |
 | ----------------------------------- | ----------------------------------------------- |
 | `src/01_export_encoder_decoder.py`  | Manual ONNX export (encoder + 2 decoder graphs) |
 | `src/02_build_fast_tokenizers.py`   | SpmConverter + dict remap + validation          |
 | `src/03_validate_parity.py`         | Greedy decode parity (PyTorch vs ONNX)          |
 | `src/04_quantize_int8.py`           | Optional INT8 quantization                      |
+| `src/05_upload_hf.py`               | Model card README generator and HF Hub uploader |
+| `src/generate_translation_matrix.py`| Multi-language smoke-test matrix generator      |
+| `src/test_hf_models.py`             | Inference test downloading directly from HF     |
 | `src/it2_onnx_wrappers.py`          | PyTorch wrappers matching naklitechie I/O       |
-| `fixtures/*-golden.jsonl`       | Direction-specific parity fixtures              |
-| `fixtures/parity-report-*.json` | Validation results                              |
+| `fixtures/smoke-test/`              | Direction-specific test sentences and matrices  |
+| `fixtures/parity-report-*.json`     | Validation results                              |

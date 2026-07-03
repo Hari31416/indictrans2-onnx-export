@@ -81,7 +81,7 @@ class IndicTransDecoderWrapper(nn.Module):
 
 
 class IndicTransDecoderWithPastWrapper(nn.Module):
-    """Autoregressive steps 2..N — past KV in/out, no encoder_hidden_states input."""
+    """Autoregressive steps 2..N — past KV in/out, uses dummy encoder hidden states to trigger cross-attention."""
 
     def __init__(self, decoder: nn.Module, lm_head: nn.Module, num_layers: int) -> None:
         super().__init__()
@@ -96,26 +96,29 @@ class IndicTransDecoderWithPastWrapper(nn.Module):
         *past_flat: torch.Tensor,
     ) -> tuple[torch.Tensor, ...]:
         past_key_values = _unflatten_past(past_flat)
-        # HF decoder expects 2-tuple past when encoder_hidden_states is omitted
-        hf_past = tuple((layer[0], layer[1]) for layer in past_key_values)
+        
+        # Construct dummy encoder hidden states with matching sequence length to bypass projection
+        batch_size = input_ids.shape[0]
+        encoder_seq_len = encoder_attention_mask.shape[1]
+        embed_dim = getattr(self.decoder, "embed_dim", 512)
+        dummy_encoder_hidden_states = torch.zeros(
+            batch_size,
+            encoder_seq_len,
+            embed_dim,
+            dtype=torch.float32,
+            device=input_ids.device
+        )
 
         out = self.decoder(
             input_ids=input_ids,
             attention_mask=None,
-            encoder_hidden_states=None,
+            encoder_hidden_states=dummy_encoder_hidden_states,
             encoder_attention_mask=encoder_attention_mask,
-            past_key_values=hf_past,
+            past_key_values=past_key_values,
             use_cache=True,
         )
         logits = self.lm_head(out.last_hidden_state)
         # Keep encoder_attention_mask in the ONNX graph (cross-attn mask for cached KV)
         logits = logits + encoder_attention_mask.sum() * 0.0
 
-        # Merge updated decoder KV with encoder cross-attn KV carried from input past
-        combined: list[tuple[torch.Tensor, ...]] = []
-        for i, layer_out in enumerate(out.past_key_values):
-            dec_k, dec_v = layer_out
-            enc_k, enc_v = past_key_values[i][2], past_key_values[i][3]
-            combined.append((dec_k, dec_v, enc_k, enc_v))
-
-        return (logits, *_flatten_past(tuple(combined)))
+        return (logits, *_flatten_past(out.past_key_values))
