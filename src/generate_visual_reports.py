@@ -191,43 +191,61 @@ def generate_language_plots(data):
             ax.set_ylim(0, 115)
             ax.legend(loc="lower left", frameon=True)
         else:
-            # We draw 3 subplots: one for Exact Match %, one for SacreBLEU score, and one for chrF score.
-            # In each subplot, the columns are the precision formats (FP16, INT8, Q4F16)
+            # Draw a beautiful 1-row, 3-column Cleveland Dot Plot for multi-language outputs (en-indic, indic-indic)
             metrics_keys = ["token_exact_rate", "sacrebleu_bleu", "sacrebleu_chrf"]
             metrics_titles = ["Exact Match Rate (%)", "SacreBLEU Score", "chrF Score"]
+            colors = {"fp16": "#3b82f6", "int8": "#10b981", "q4f16": "#ef4444"}
             
-            fig, axes = plt.subplots(1, 3, figsize=(17, 10))
+            # Calculate average score per language across all formats to sort them
+            avg_scores = {}
+            for lang in languages:
+                scores = []
+                for p in available_prec:
+                    m = dir_data[p]["metrics_by_language"].get(lang, {})
+                    scores.append(m.get("token_exact_rate", 0.0))
+                    scores.append(m.get("sacrebleu_bleu", 0.0))
+                    scores.append(m.get("sacrebleu_chrf", 0.0))
+                avg_scores[lang] = np.mean(scores)
+
+            # Sort languages (highest average performance first)
+            sorted_languages = sorted(languages, key=lambda l: avg_scores[l], reverse=True)
+            
+            fig, axes = plt.subplots(1, 3, figsize=(18, 11))
             fig.suptitle(f"Language-Level Performance Comparison ({direction.upper()})", fontsize=16, fontweight="bold", y=0.98)
             
             for idx, key in enumerate(metrics_keys):
                 ax = axes[idx]
-                matrix = []
-                for lang in languages:
-                    row = []
+                y_pos = np.arange(len(sorted_languages))
+                
+                # Draw horizontal line for each language to connect the dots
+                for y_idx, lang in enumerate(sorted_languages):
+                    x_vals = []
                     for p in available_prec:
-                        m = dir_data[p]["metrics_by_language"].get(lang, {})
-                        val = m.get(key, 0.0)
-                        row.append(val)
-                    matrix.append(row)
+                        val = dir_data[p]["metrics_by_language"].get(lang, {}).get(key, 0.0)
+                        x_vals.append(val)
+                    ax.plot([min(x_vals), max(x_vals)], [y_pos[y_idx], y_pos[y_idx]], color="#d1d5db", linestyle="-", linewidth=1.5, zorder=1)
                     
-                show_cbar = (idx == 2)
-                sns.heatmap(
-                    matrix,
-                    annot=True,
-                    fmt=".1f",
-                    xticklabels=[p.upper() for p in available_prec],
-                    yticklabels=languages if idx == 0 else False,
-                    cmap="RdYlGn",
-                    vmin=40,
-                    vmax=100,
-                    cbar=show_cbar,
-                    cbar_kws={'label': 'Score / Percentage'} if show_cbar else None,
-                    ax=ax
-                )
-                ax.set_title(metrics_titles[idx], fontsize=12, fontweight="semibold")
-                ax.set_xlabel("Precision Format", fontsize=10)
+                # Plot the dots
+                for p in available_prec:
+                    x_vals = []
+                    for lang in sorted_languages:
+                        val = dir_data[p]["metrics_by_language"].get(lang, {}).get(key, 0.0)
+                        x_vals.append(val)
+                    ax.scatter(x_vals, y_pos, color=colors[p], label=p.upper(), s=70, edgecolors="black", linewidths=0.5, zorder=2)
+                    
+                ax.set_title(metrics_titles[idx], fontsize=13, fontweight="semibold")
+                ax.set_yticks(y_pos)
+                ax.set_yticklabels(sorted_languages if idx == 0 else [])
+                ax.set_xlabel("Value", fontsize=11)
+                ax.set_xlim(25, 105) # Keep scale uniform and focused on the active range
                 if idx == 0:
-                    ax.set_ylabel("Language Code", fontsize=12)
+                    ax.set_ylabel("Language Code", fontsize=13)
+                if idx == 2:
+                    ax.legend(title="Precision Format", loc="lower left", frameon=True)
+                    
+            # Invert y axis for all subplots so highest average score is at the top
+            for ax in axes:
+                ax.invert_yaxis()
             
         plt.tight_layout()
         out_png = FIXTURES_DIR / f"{direction.replace('-', '_')}_languages.png"
