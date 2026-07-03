@@ -31,6 +31,7 @@ jobs:
       - name: Build site
         run: |
           mkdir -p dist
+          touch dist/.nojekyll
           cp onnx-components.html dist/index.html
           cp onnx-components.html dist/onnx-components.html
 
