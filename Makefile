@@ -117,11 +117,11 @@ capture-fixtures-en-indic: setup ## Capture golden fixtures (en→indic)
 		--pytorch-model $(EN_INDIC_MODEL) \
 		--capture-fixtures $(EN_INDIC_FIXTURES)
 
-upload-en-indic: ## Upload fp32 bundle to Hugging Face
-	huggingface-cli upload $(HF_ORG)/indictrans2-en-indic-dist-200M-ONNX \
-		$(EN_INDIC_OUT) \
-		--repo-type model \
-		--exclude ".git/*"
+upload-en-indic: setup ## Upload fp32 bundle to Hugging Face
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(EN_INDIC_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-en-indic-dist-200M-ONNX \
+		--commit-message "$(COMMIT_MESSAGE)"
 
 en-indic: export-en-indic tokenizers-en-indic validate-en-indic ## Full en→indic pipeline (steps 1–3)
 
@@ -155,11 +155,11 @@ capture-fixtures-indic-en: setup ## Capture golden fixtures (indic→en)
 		--pytorch-model $(INDIC_EN_MODEL) \
 		--capture-fixtures $(INDIC_EN_FIXTURES)
 
-upload-indic-en: ## Upload fp32 bundle to Hugging Face
-	huggingface-cli upload $(HF_ORG)/indictrans2-indic-en-dist-200M-ONNX \
-		$(INDIC_EN_OUT) \
-		--repo-type model \
-		--exclude ".git/*"
+upload-indic-en: setup ## Upload fp32 bundle to Hugging Face
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(INDIC_EN_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-indic-en-dist-200M-ONNX \
+		--commit-message "$(COMMIT_MESSAGE)"
 
 indic-en: export-indic-en tokenizers-indic-en validate-indic-en ## Full indic→en pipeline (steps 1–3)
 
@@ -193,11 +193,11 @@ capture-fixtures-indic-indic: setup ## Capture golden fixtures (indic→indic)
 		--pytorch-model $(INDIC_INDIC_MODEL) \
 		--capture-fixtures $(INDIC_INDIC_FIXTURES)
 
-upload-indic-indic: ## Upload fp32 bundle to Hugging Face
-	huggingface-cli upload $(HF_ORG)/indictrans2-indic-indic-dist-320M-ONNX \
-		$(INDIC_INDIC_OUT) \
-		--repo-type model \
-		--exclude ".git/*"
+upload-indic-indic: setup ## Upload fp32 bundle to Hugging Face
+	$(PYTHON) src/05_upload_hf.py \
+		--model-dir $(INDIC_INDIC_OUT) \
+		--repo-id $(HF_ORG)/indictrans2-indic-indic-dist-320M-ONNX \
+		--commit-message "$(COMMIT_MESSAGE)"
 
 indic-indic: export-indic-indic tokenizers-indic-indic validate-indic-indic ## Full indic→indic pipeline (steps 1–3)
 
