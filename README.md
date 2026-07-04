@@ -48,6 +48,8 @@ source .venv/bin/activate
 
 ## Export targets
 
+### 200M/320M Models (Distilled)
+
 | Direction   | PyTorch base model                            | HF output repo (`HF_ORG`)                      | fp32 status   |
 | ----------- | --------------------------------------------- | ---------------------------------------------- | ------------- |
 | en→indic    | `ai4bharat/indictrans2-en-indic-dist-200M`    | `{org}/indictrans2-en-indic-dist-200M-ONNX`    | ✅ validated  |
@@ -55,6 +57,14 @@ source .venv/bin/activate
 | indic→indic | `ai4bharat/indictrans2-indic-indic-dist-320M` | `{org}/indictrans2-indic-indic-dist-320M-ONNX` | ✅ validated  |
 
 Reference I/O layout: [naklitechie/indictrans2-en-indic-dist-200M-ONNX](https://huggingface.co/naklitechie/indictrans2-en-indic-dist-200M-ONNX)
+
+### 1B Models (Full)
+
+| Direction   | PyTorch base model                    | HF output repo (`HF_ORG`)              | fp32 status   |
+| ----------- | ------------------------------------- | -------------------------------------- | ------------- |
+| en→indic    | `ai4bharat/indictrans2-en-indic-1B`    | `{org}/indictrans2-en-indic-1B-ONNX`    | ✅ validated  |
+| indic→en    | `ai4bharat/indictrans2-indic-en-1B`    | `{org}/indictrans2-indic-en-1B-ONNX`    | ✅ validated  |
+| indic→indic | `ai4bharat/indictrans2-indic-indic-1B` | `{org}/indictrans2-indic-indic-1B-ONNX` | ✅ validated  |
 
 See also:
 
@@ -139,7 +149,7 @@ Input sentences are loaded from `fixtures/smoke-test/test_sentences_<lang>.json`
 | indic-en | 264 | 100.0% | 100.0% | 1.22 GB | 37.85s |
 | indic-indic | 264 | 100.0% | 100.0% | 1.91 GB | 52.34s |
 
-### Quantization Benchmarks
+### Quantization Benchmarks (200M/320M Models)
 
 Compared against the FP32 ONNX oracle on the same 264 golden fixtures.
 
@@ -155,14 +165,38 @@ Compared against the FP32 ONNX oracle on the same 264 golden fixtures.
 | indic-indic | INT8 | 78.41% | 79.17% | 497.1 MB | 65.0ms | 40.3ms | 1.612x |
 | indic-indic | Q4F16 | 56.06% | 57.58% | 711.6 MB | 64.1ms | 65.3ms | 0.983x |
 
+### Quantization Benchmarks (1B Models)
+
+Compared against the FP32 ONNX oracle on the same 264 golden fixtures.
+
+| Direction | Format | Token Match | Text Match | Model Size | FP32 Latency | Quant Latency | Speedup |
+| - | - | - | - | - | - | - | - |
+| en-indic | FP16 | 99.73% | 99.73% | 3.36 GB | 244.4ms | 259.8ms | 0.941x |
+| en-indic | INT8 | 89.64% | 89.73% | 1.71 GB | 244.4ms | 112.6ms | 2.228x |
+| en-indic | Q4F16 | 82.27% | 82.36% | 1.71 GB | 244.4ms | 143.3ms | 1.673x |
+| indic-en | FP16 | 99.91% | 99.91% | 2.84 GB | 171.8ms | 180.5ms | 0.952x |
+| indic-en | INT8 | 94.18% | 94.18% | 1.45 GB | 171.8ms | 76.4ms | 2.196x |
+| indic-en | Q4F16 | 87.55% | 87.55% | 1.19 GB | 171.8ms | 85.5ms | 1.962x |
+| indic-indic | FP16 | 99.82% | 99.82% | 3.55 GB | 251.7ms | 270.4ms | 0.931x |
+| indic-indic | INT8 | 84.36% | 84.36% | 1.82 GB | 251.7ms | 109.5ms | 2.292x |
+| indic-indic | Q4F16 | 73.73% | 73.73% | 1.90 GB | 251.7ms | 151.0ms | 1.666x |
+
+> [!NOTE]
+> **Quantization Performance of 1B vs 200M Models**: Larger models possess greater representation capacity and are significantly more robust to quantization. While the 200M/320M model formats experience notable accuracy drops under INT8 and Q4F16 (e.g., indic-indic exact token match drops to 73.0% and 44.9%), the 1B configurations maintain exceptionally high parity (exact token match of 84.4% for INT8 and 73.7% for Q4F16 on indic-indic, and up to 94.2% for INT8 on indic-en).
+
 ### Detailed Benchmarks & Visualizations
 
-Detailed language-level and category-level charts and tables for all quantization tiers are available in **[BENCHMARKS.md](./BENCHMARKS.md)**.
+Detailed language-level and category-level charts and tables for all quantization tiers are available in:
+- **[BENCHMARKS.md (200M/320M Models)](./BENCHMARKS.md)**
+- **[BENCHMARKS_1B.md (1B Models)](./BENCHMARKS_1B.md)**
 
 For direction-specific visualizations, see:
-- **[EN-INDIC Benchmarks](./BENCHMARKS.md#en-indic-model-performance)** (Plots: [Overall](./fixtures/en_indic_overall.png), [Languages](./fixtures/en_indic_languages.png), [Categories](./fixtures/en_indic_categories.png))
-- **[INDIC-EN Benchmarks](./BENCHMARKS.md#indic-en-model-performance)** (Plots: [Overall](./fixtures/indic_en_overall.png), [Languages](./fixtures/indic_en_languages.png), [Categories](./fixtures/indic_en_categories.png))
-- **[INDIC-INDIC Benchmarks](./BENCHMARKS.md#indic-indic-model-performance)** (Plots: [Overall](./fixtures/indic_indic_overall.png), [Languages](./fixtures/indic_indic_languages.png), [Categories](./fixtures/indic_indic_categories.png))
+- **[EN-INDIC Benchmarks (200M)](./BENCHMARKS.md#en-indic-model-performance)** (Plots: [Overall](./fixtures/en_indic_overall.png), [Languages](./fixtures/en_indic_languages.png), [Categories](./fixtures/en_indic_categories.png))
+- **[EN-INDIC Benchmarks (1B)](./BENCHMARKS_1B.md#en-indic-model-performance)** (Plots: [Overall](./fixtures/en_indic_1b_overall.png), [Languages](./fixtures/en_indic_1b_languages.png), [Categories](./fixtures/en_indic_1b_categories.png))
+- **[INDIC-EN Benchmarks (200M)](./BENCHMARKS.md#indic-en-model-performance)** (Plots: [Overall](./fixtures/indic_en_overall.png), [Languages](./fixtures/indic_en_languages.png), [Categories](./fixtures/indic_en_categories.png))
+- **[INDIC-EN Benchmarks (1B)](./BENCHMARKS_1B.md#indic-en-model-performance)** (Plots: [Overall](./fixtures/indic_en_1b_overall.png), [Languages](./fixtures/indic_en_1b_languages.png), [Categories](./fixtures/indic_en_1b_categories.png))
+- **[INDIC-INDIC Benchmarks (320M)](./BENCHMARKS.md#indic-indic-model-performance)** (Plots: [Overall](./fixtures/indic_indic_overall.png), [Languages](./fixtures/indic_indic_languages.png), [Categories](./fixtures/indic_indic_categories.png))
+- **[INDIC-INDIC Benchmarks (1B)](./BENCHMARKS_1B.md#indic-indic-model-performance)** (Plots: [Overall](./fixtures/indic_indic_1b_overall.png), [Languages](./fixtures/indic_indic_1b_languages.png), [Categories](./fixtures/indic_indic_1b_categories.png))
 
 ## Known issues (fp32)
 

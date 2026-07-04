@@ -5,6 +5,7 @@ markdown report (BENCHMARKS.md) from JSON benchmark files in fixtures/.
 
 import json
 import logging
+import argparse
 from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -29,10 +30,11 @@ COLORS = {
     "q4f16": "#f59e0b",  # Amber/Orange
 }
 
-def get_model_size_mb(direction: str, precision: str) -> float:
+def get_model_size_mb(direction: str, precision: str, is_1b: bool = False) -> float:
     """Get the size of the ONNX model directory in MB, or fallback if not present."""
     suffix = f"-{precision}" if precision != "fp32" else ""
-    folder_name = f"{direction}-onnx{suffix}"
+    folder_suffix = "-1b" if is_1b else ""
+    folder_name = f"{direction}{folder_suffix}-onnx{suffix}"
     path = SCRATCH_DIR / folder_name
     
     if path.is_dir():
@@ -40,20 +42,28 @@ def get_model_size_mb(direction: str, precision: str) -> float:
         return total_bytes / (1024 * 1024)
         
     # Fallback to standard sizes in case scratch has been cleared or models not present
-    fallbacks = {
-        "en-indic": {"fp32": 1740.0, "fp16": 892.0, "int8": 452.9, "q4f16": 623.3},
-        "indic-en": {"fp32": 1220.0, "fp16": 627.2, "int8": 319.7, "q4f16": 358.6},
-        "indic-indic": {"fp32": 1910.0, "fp16": 980.2, "int8": 497.1, "q4f16": 711.6},
-    }
+    if is_1b:
+        fallbacks = {
+            "en-indic": {"fp32": 6804.0, "fp16": 3402.0, "int8": 1701.0, "q4f16": 850.5},
+            "indic-en": {"fp32": 5000.0, "fp16": 2500.0, "int8": 1250.0, "q4f16": 625.0},
+            "indic-indic": {"fp32": 7200.0, "fp16": 3600.0, "int8": 1800.0, "q4f16": 900.0},
+        }
+    else:
+        fallbacks = {
+            "en-indic": {"fp32": 1740.0, "fp16": 892.0, "int8": 452.9, "q4f16": 623.3},
+            "indic-en": {"fp32": 1220.0, "fp16": 627.2, "int8": 319.7, "q4f16": 358.6},
+            "indic-indic": {"fp32": 1910.0, "fp16": 980.2, "int8": 497.1, "q4f16": 711.6},
+        }
     return fallbacks.get(direction, {}).get(precision, 0.0)
 
-def load_all_data():
+def load_all_data(is_1b: bool = False):
     """Load benchmark reports from fixtures."""
     data = {}
     for direction in DIRECTIONS:
         data[direction] = {}
         for precision in PRECISIONS:
-            filepath = FIXTURES_DIR / f"benchmark-{direction}-{precision}.json"
+            suffix_1b = "-1b" if is_1b else ""
+            filepath = FIXTURES_DIR / f"benchmark-{direction}{suffix_1b}-{precision}.json"
             if filepath.exists():
                 try:
                     with open(filepath, encoding="utf-8") as f:
@@ -80,7 +90,7 @@ def load_all_data():
             }
     return data
 
-def generate_overall_plots(data):
+def generate_overall_plots(data, is_1b: bool = False):
     """Generate overall size, accuracy, and latency speedup plots for each direction."""
     sns.set_theme(style="whitegrid")
     
@@ -89,7 +99,8 @@ def generate_overall_plots(data):
             continue
             
         fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-        fig.suptitle(f"IndicTrans2 {direction.upper()} - Quantization Tradeoffs", fontsize=16, fontweight="bold", fontfamily="sans-serif", y=0.98)
+        title_suffix = " 1B" if is_1b else ""
+        fig.suptitle(f"IndicTrans2 {direction.upper()}{title_suffix} - Quantization Tradeoffs", fontsize=16, fontweight="bold", fontfamily="sans-serif", y=0.98)
         
         # Data preparation
         labels = []
@@ -100,7 +111,7 @@ def generate_overall_plots(data):
         for p in ALL_PRECISIONS:
             if p in data[direction]:
                 labels.append(p.upper())
-                sizes.append(get_model_size_mb(direction, p))
+                sizes.append(get_model_size_mb(direction, p, is_1b=is_1b))
                 token_rates.append(data[direction][p]["token_exact_rate"])
                 text_rates.append(data[direction][p]["text_exact_rate"])
                     
@@ -112,7 +123,8 @@ def generate_overall_plots(data):
         ax_size.set_ylabel("Size (MB)")
         for bar in bars:
             yval = bar.get_height()
-            ax_size.text(bar.get_x() + bar.get_width()/2.0, yval + 20, f"{yval:.1f} MB", ha='center', va='bottom', fontsize=9, fontweight="bold")
+            offset = max(sizes) * 0.02
+            ax_size.text(bar.get_x() + bar.get_width()/2.0, yval + offset, f"{yval:.1f} MB" if yval < 1000 else f"{yval/1024:.2f} GB", ha='center', va='bottom', fontsize=9, fontweight="bold")
         ax_size.set_ylim(0, max(sizes) * 1.15)
         
         # 2. Token & Text Match Rate Chart
@@ -138,12 +150,13 @@ def generate_overall_plots(data):
             ax_acc.text(bar.get_x() + bar.get_width()/2.0, yval + 1, f"{yval:.1f}%", ha='center', va='bottom', fontsize=8, rotation=90)
             
         plt.tight_layout()
-        out_png = FIXTURES_DIR / f"{direction.replace('-', '_')}_overall.png"
+        out_suffix = "_1b" if is_1b else ""
+        out_png = FIXTURES_DIR / f"{direction.replace('-', '_')}{out_suffix}_overall.png"
         plt.savefig(out_png, dpi=150)
         plt.close()
         logger.info("Generated overall chart → %s", out_png)
 
-def generate_language_plots(data):
+def generate_language_plots(data, is_1b: bool = False):
     """Generate detailed language-level exact match plots for each direction."""
     sns.set_theme(style="whitegrid")
     
@@ -164,7 +177,8 @@ def generate_language_plots(data):
         if len(languages) == 1:
             # Draw a clean bar chart showing all three metrics (Match %, BLEU, chrF) for single-language output (indic-en)
             fig, ax = plt.subplots(figsize=(8, 5))
-            ax.set_title(f"Translation Quality Breakdown ({direction.upper()})", fontsize=14, fontweight="bold", pad=15)
+            title_suffix = " 1B" if is_1b else ""
+            ax.set_title(f"Translation Quality Breakdown ({direction.upper()}{title_suffix})", fontsize=14, fontweight="bold", pad=15)
             x = np.arange(len(available_prec))
             
             rates = []
@@ -211,7 +225,8 @@ def generate_language_plots(data):
             sorted_languages = sorted(languages, key=lambda l: avg_scores[l], reverse=True)
             
             fig, axes = plt.subplots(1, 3, figsize=(18, 11))
-            fig.suptitle(f"Language-Level Performance Comparison ({direction.upper()})", fontsize=16, fontweight="bold", y=0.98)
+            title_suffix = " 1B" if is_1b else ""
+            fig.suptitle(f"Language-Level Performance Comparison ({direction.upper()}{title_suffix})", fontsize=16, fontweight="bold", y=0.98)
             
             for idx, key in enumerate(metrics_keys):
                 ax = axes[idx]
@@ -248,12 +263,13 @@ def generate_language_plots(data):
                 ax.invert_yaxis()
             
         plt.tight_layout()
-        out_png = FIXTURES_DIR / f"{direction.replace('-', '_')}_languages.png"
+        out_suffix = "_1b" if is_1b else ""
+        out_png = FIXTURES_DIR / f"{direction.replace('-', '_')}{out_suffix}_languages.png"
         plt.savefig(out_png, dpi=150)
         plt.close()
         logger.info("Generated language-level chart → %s", out_png)
 
-def generate_category_plots(data):
+def generate_category_plots(data, is_1b: bool = False):
     """Generate category-level plots comparing match rates."""
     sns.set_theme(style="whitegrid")
     
@@ -270,7 +286,8 @@ def generate_category_plots(data):
         categories = sorted(list(categories))
         
         fig, ax = plt.subplots(figsize=(8, 5))
-        ax.set_title(f"SacreBLEU Score by Category ({direction.upper()})", fontsize=14, fontweight="bold", pad=15)
+        title_suffix = " 1B" if is_1b else ""
+        ax.set_title(f"SacreBLEU Score by Category ({direction.upper()}{title_suffix})", fontsize=14, fontweight="bold", pad=15)
         
         x = np.arange(len(categories))
         width = 0.25
@@ -295,19 +312,24 @@ def generate_category_plots(data):
         ax.legend(title="Precision Format", loc="lower left", frameon=True)
         
         plt.tight_layout()
-        out_png = FIXTURES_DIR / f"{direction.replace('-', '_')}_categories.png"
+        out_suffix = "_1b" if is_1b else ""
+        out_png = FIXTURES_DIR / f"{direction.replace('-', '_')}{out_suffix}_categories.png"
         plt.savefig(out_png, dpi=150)
         plt.close()
         logger.info("Generated category-level chart → %s", out_png)
 
-def generate_markdown_report(data):
+def generate_markdown_report(data, is_1b: bool = False):
     """Build the final BENCHMARKS.md report with markdown tables and embedded charts."""
     content = []
-    content.append("# IndicTrans2 ONNX Quantization & Parity Benchmarks")
+    title_suffix = " 1B" if is_1b else ""
+    content.append(f"# IndicTrans2{title_suffix} ONNX Quantization & Parity Benchmarks")
     content.append("")
     content.append("This document provides detailed performance, accuracy, and model size reports for the exported and quantized IndicTrans2 ONNX bundles.")
     content.append("Benchmarks are computed against the **FP32 ONNX Oracle** (which matches the PyTorch model at ≥ 99.0% token parity) on direction-specific evaluation fixtures.")
     content.append("")
+    
+    out_suffix = "_1b" if is_1b else ""
+    
     for direction in DIRECTIONS:
         if not data[direction]:
             continue
@@ -318,7 +340,7 @@ def generate_markdown_report(data):
         content.append("")
         
         # Embed overall plot
-        overall_img = f"./fixtures/{direction.replace('-', '_')}_overall.png"
+        overall_img = f"./fixtures/{direction.replace('-', '_')}{out_suffix}_overall.png"
         content.append(f"![{direction.upper()} Overall Tradeoffs]({overall_img})")
         content.append("")
         
@@ -330,7 +352,7 @@ def generate_markdown_report(data):
             if p not in data[direction]:
                 continue
             item = data[direction][p]
-            size_mb = get_model_size_mb(direction, p)
+            size_mb = get_model_size_mb(direction, p, is_1b=is_1b)
             
             # Format model size
             if size_mb >= 1000:
@@ -355,7 +377,7 @@ def generate_markdown_report(data):
         # Language-level comparisons
         content.append("### Language-Level Performance")
         content.append("")
-        lang_img = f"./fixtures/{direction.replace('-', '_')}_languages.png"
+        lang_img = f"./fixtures/{direction.replace('-', '_')}{out_suffix}_languages.png"
         content.append(f"![{direction.upper()} Language Breakdown]({lang_img})")
         content.append("")
         
@@ -389,7 +411,7 @@ def generate_markdown_report(data):
         # Category-level comparisons
         content.append("### Category-Level Performance")
         content.append("")
-        cat_img = f"./fixtures/{direction.replace('-', '_')}_categories.png"
+        cat_img = f"./fixtures/{direction.replace('-', '_')}{out_suffix}_categories.png"
         content.append(f"![{direction.upper()} Category Breakdown]({cat_img})")
         content.append("")
         
@@ -418,17 +440,24 @@ def generate_markdown_report(data):
             
         content.append("---")
     
-    OUTPUT_MD.write_text("\n".join(content), encoding="utf-8")
-    logger.info("Generated markdown report → %s", OUTPUT_MD)
+    output_md = Path("BENCHMARKS_1B.md") if is_1b else Path("BENCHMARKS.md")
+    output_md.write_text("\n".join(content), encoding="utf-8")
+    logger.info("Generated markdown report → %s", output_md)
 
 def main():
     """Main execution block."""
-    logger.info("Starting visual report generation...")
-    data = load_all_data()
-    generate_overall_plots(data)
-    generate_language_plots(data)
-    generate_category_plots(data)
-    generate_markdown_report(data)
+    parser = argparse.ArgumentParser(description="Generate visual reports and markdown summary.")
+    parser.add_argument("--model-size", choices=["200m", "1b"], default="200m", help="Model size to generate reports for (default: 200m)")
+    args = parser.parse_args()
+    
+    is_1b = (args.model_size == "1b")
+    
+    logger.info("Starting visual report generation for %s models...", "1B" if is_1b else "200M/320M")
+    data = load_all_data(is_1b=is_1b)
+    generate_overall_plots(data, is_1b=is_1b)
+    generate_language_plots(data, is_1b=is_1b)
+    generate_category_plots(data, is_1b=is_1b)
+    generate_markdown_report(data, is_1b=is_1b)
     logger.info("Visual report generation completed successfully!")
 
 if __name__ == "__main__":

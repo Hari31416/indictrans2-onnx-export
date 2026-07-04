@@ -142,3 +142,5 @@ Benchmarks are computed against the **FP32 ONNX Oracle** (which matches the PyTo
 | **Lexicon**  | 100.00%    | 100.00    | 71.59%     | 86.13     | 41.67%      | 65.16      |
 | **Numerals** | 100.00%    | 100.00    | 73.11%     | 86.45     | 48.11%      | 75.42      |
 | **Politics** | 99.65%     | 99.95     | 78.32%     | 89.03     | 48.25%      | 69.49      |
+
+---

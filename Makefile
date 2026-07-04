@@ -84,7 +84,7 @@ INDIC_INDIC_BENCH_INT8  := fixtures/benchmark-indic-indic-int8.json
 INDIC_INDIC_BENCH_FP16  := fixtures/benchmark-indic-indic-fp16.json
 INDIC_INDIC_BENCH_Q4F16 := fixtures/benchmark-indic-indic-q4f16.json
 
-.PHONY: help setup install clean clean-all preview reports \
+.PHONY: help setup install clean clean-all preview reports reports-1b \
 	export-en-indic tokenizers-en-indic validate-en-indic quantize-en-indic \
 	convert-fp16-en-indic quantize-q4f16-en-indic \
 	benchmark-int8-en-indic benchmark-fp16-en-indic benchmark-q4f16-en-indic \
@@ -98,7 +98,10 @@ INDIC_INDIC_BENCH_Q4F16 := fixtures/benchmark-indic-indic-q4f16.json
 	benchmark-int8-indic-indic benchmark-fp16-indic-indic benchmark-q4f16-indic-indic \
 	capture-fixtures-indic-indic upload-indic-indic indic-indic \
 	quantize-all quantize-int8-all convert-fp16-all quantize-q4f16-all \
-	benchmark-all benchmark-int8-all benchmark-fp16-all benchmark-q4f16-all
+	benchmark-all benchmark-int8-all benchmark-fp16-all benchmark-q4f16-all \
+	quantize-1b-all quantize-int8-1b-all convert-fp16-1b-all quantize-q4f16-1b-all \
+	benchmark-1b-all benchmark-int8-1b-all benchmark-fp16-1b-all benchmark-q4f16-1b-all
+
 
 help: ## Show available targets
 	@echo "IndicTrans2 ONNX export — make targets"
@@ -476,6 +479,27 @@ benchmark-q4f16-all: benchmark-q4f16-en-indic benchmark-q4f16-indic-en benchmark
 
 upload-all: upload-en-indic-all upload-indic-en-all upload-indic-indic-all ## Upload all 12 model bundles (3 directions x 4 precision variants)
 
+# ── Batch Operations 1B ───────────────────────────────────────────────────────
+
+quantize-1b-all: quantize-int8-1b-all convert-fp16-1b-all quantize-q4f16-1b-all ## Run all quantization/conversion variants for all 1B directions
+
+quantize-int8-1b-all: quantize-en-indic-1b quantize-indic-en-1b quantize-indic-indic-1b ## Run INT8 quantization for all 1B directions
+
+convert-fp16-1b-all: convert-fp16-en-indic-1b convert-fp16-indic-en-1b convert-fp16-indic-indic-1b ## Run FP16 conversion for all 1B directions
+
+quantize-q4f16-1b-all: quantize-q4f16-en-indic-1b quantize-q4f16-indic-en-1b quantize-q4f16-indic-indic-1b ## Run Q4F16 quantization for all 1B directions
+
+benchmark-1b-all: benchmark-int8-1b-all benchmark-fp16-1b-all benchmark-q4f16-1b-all ## Benchmark all 1B directions for INT8, FP16, and Q4F16
+
+benchmark-int8-1b-all: benchmark-int8-en-indic-1b benchmark-int8-indic-en-1b benchmark-int8-indic-indic-1b ## Run INT8 benchmarks for all 1B directions
+
+benchmark-fp16-1b-all: benchmark-fp16-en-indic-1b benchmark-fp16-indic-en-1b benchmark-fp16-indic-indic-1b ## Run FP16 benchmarks for all 1B directions
+
+benchmark-q4f16-1b-all: benchmark-q4f16-en-indic-1b benchmark-q4f16-indic-en-1b benchmark-q4f16-indic-indic-1b ## Run Q4F16 benchmarks for all 1B directions
+
+upload-1b-all: upload-en-indic-1b-all upload-indic-en-1b-all upload-indic-indic-1b-all ## Upload all 12 1B model bundles (3 directions x 4 precision variants)
+
+
 # ── 1B Models Pipeline ────────────────────────────────────────────────────────
 
 # en→indic 1B
@@ -759,8 +783,6 @@ upload-indic-indic-1b-q4f16: setup ## Upload q4f16 bundle (indic→indic 1B)
 
 upload-indic-indic-1b-all: upload-indic-indic-1b-fp32 upload-indic-indic-1b-int8 upload-indic-indic-1b-fp16 upload-indic-indic-1b-q4f16 ## Upload all precision variants (indic→indic 1B)
 
-upload-1b-all: upload-en-indic-1b-all upload-indic-en-1b-all upload-indic-indic-1b-all ## Upload all 12 1B model bundles (3 directions x 4 precisions)
-
 readmes-1b: setup ## Generate READMEs for all 1B models (dry-run mode)
 	$(PYTHON) src/v2/dry_run_generate_readmes.py
 
@@ -784,3 +806,6 @@ preview: ## Serve onnx-components.html locally
 
 reports: setup ## Generate benchmark reports and plots (overall, language, and category levels)
 	$(PYTHON) src/generate_visual_reports.py
+
+reports-1b: setup ## Generate benchmark reports and plots for 1B models (overall, language, and category levels)
+	$(PYTHON) src/generate_visual_reports.py --model-size 1b
