@@ -16,9 +16,7 @@ indictrans2-onnx-export/
 ├── fixtures/            # golden sentences + parity reports (committed)
 ├── scratch/             # fp32 ONNX bundles (gitignored — upload to HF)
 ├── Makefile             # pipeline targets
-├── pyproject.toml       # Python deps (uv)
-├── EXPORT_ISSUES.md     # fp32 export blockers and fixes
-└── ROADMAP.md           # fp16 / int8 / bf16 / q4f16 plan
+└── pyproject.toml       # Python deps (uv)
 ```
 
 ## Prerequisites
@@ -66,11 +64,6 @@ Reference I/O layout: [naklitechie/indictrans2-en-indic-dist-200M-ONNX](https://
 | indic→en    | `ai4bharat/indictrans2-indic-en-1B`    | `{org}/indictrans2-indic-en-1B-ONNX`    | ✅ validated  |
 | indic→indic | `ai4bharat/indictrans2-indic-indic-1B` | `{org}/indictrans2-indic-indic-1B-ONNX` | ✅ validated  |
 
-See also:
-
-- [EXPORT_ISSUES.md](./EXPORT_ISSUES.md) — problems hit during fp32 export and fixes
-- [ROADMAP.md](./ROADMAP.md) — planned fp16, int8, bf16, q4f16 work
-
 ## Pipeline
 
 Override paths with env vars, e.g. `make export-indic-en HF_ORG=my-org`.
@@ -106,8 +99,6 @@ PyTorch vs ONNX greedy decode on direction-specific fixtures. **Pass criteria:**
 ```bash
 make quantize-indic-en
 ```
-
-See [ROADMAP.md](./ROADMAP.md) for fp16 / q4f16 plans — not implemented yet.
 
 ### 5. Upload to Hugging Face
 
@@ -197,18 +188,6 @@ For direction-specific visualizations, see:
 - **[INDIC-EN Benchmarks (1B)](./BENCHMARKS_1B.md#indic-en-model-performance)** (Plots: [Overall](./fixtures/indic_en_1b_overall.png), [Languages](./fixtures/indic_en_1b_languages.png), [Categories](./fixtures/indic_en_1b_categories.png))
 - **[INDIC-INDIC Benchmarks (320M)](./BENCHMARKS.md#indic-indic-model-performance)** (Plots: [Overall](./fixtures/indic_indic_overall.png), [Languages](./fixtures/indic_indic_languages.png), [Categories](./fixtures/indic_indic_categories.png))
 - **[INDIC-INDIC Benchmarks (1B)](./BENCHMARKS_1B.md#indic-indic-model-performance)** (Plots: [Overall](./fixtures/indic_indic_1b_overall.png), [Languages](./fixtures/indic_indic_1b_languages.png), [Categories](./fixtures/indic_indic_1b_categories.png))
-
-## Known issues (fp32)
-
-| Issue | Status |
-| ----- | ------ |
-| Optimum unsupported for IndicTrans | Fixed — `src/01_export_encoder_decoder.py` |
-| `decoder_with_past` dynamic axes + mask in graph | Fixed |
-| Fast tokenizer SPM ≠ dict IDs | Fixed — `src/02_build_fast_tokenizers.py` |
-| `model.generate()` broken | Workaround — manual greedy loop in `src/03_validate_parity.py` |
-| Cross-attention skipped in step 2+ | Fixed — `src/it2_onnx_wrappers.py` |
-
-Full list: [EXPORT_ISSUES.md](./EXPORT_ISSUES.md)
 
 ## Fixtures
 
