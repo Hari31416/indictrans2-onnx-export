@@ -19,6 +19,15 @@ indictrans2-onnx-export/
 └── pyproject.toml       # Python deps (uv)
 ```
 
+> [!TIP]
+>Try out the translation models directly in your browser:
+>
+>- **Hugging Face Space**: [indictrans2-onnx-browser-demo](https://huggingface.co/spaces/hari31416/indictrans2-onnx-browser-demo)
+>- **GitHub Pages**: [indictrans2-onnx-browser-demo](https://hari31416.github.io/indictrans2-onnx-browser-demo/)
+>
+>The code is available in [scratch/browser-demo](https://github.com/Hari31416/indictrans2-onnx-browser-demo). The application loads ONNX models on-demand and runs execution client-side via WebGPU or WebAssembly.
+
+
 ## Prerequisites
 
 - Python 3.11+
