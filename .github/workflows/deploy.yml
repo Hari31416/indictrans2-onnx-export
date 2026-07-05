@@ -41,6 +41,7 @@ jobs:
         with:
           node-version: 22
           cache: 'pnpm'
+          cache-dependency-path: 'dashboard/pnpm-lock.yaml'
 
       - name: Install Dependencies & Build Dashboard
         run: |
