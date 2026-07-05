@@ -92,7 +92,7 @@ export function BenchmarkTab() {
       setError(null)
       const scaleStr = scale === '1b' ? '1b-' : ''
       const filename = `benchmark-${direction}-${scaleStr}${quantization}.json`
-      const url = `./fixtures/${filename}`
+      const url = `${import.meta.env.BASE_URL}fixtures/${filename}`
 
       try {
         const response = await fetch(url)
