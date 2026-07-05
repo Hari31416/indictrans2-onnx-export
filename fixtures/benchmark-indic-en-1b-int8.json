@@ -1,0 +1,897 @@
+{
+  "label": "int8",
+  "oracle": "scratch/indic-en-1b-onnx",
+  "cmp_dir": "scratch/indic-en-1b-onnx-int8",
+  "total_fixtures": 1100,
+  "token_exact_rate": 94.18,
+  "text_exact_rate": 94.18,
+  "token_exact_count": 1036,
+  "text_exact_count": 1036,
+  "sacrebleu_bleu": 97.94,
+  "sacrebleu_chrf": 98.9,
+  "fp32_avg_latency_ms": 167.8,
+  "cmp_avg_latency_ms": 76.4,
+  "speedup_vs_fp32": 2.196,
+  "fp32_tokens_per_sec": 69.5,
+  "cmp_tokens_per_sec": 152.6,
+  "sacrebleu_bleu_mixed": 97.94,
+  "sacrebleu_chrf_mixed": 98.9,
+  "metrics_by_language": {
+    "eng_Latn": {
+      "total_fixtures": 1100,
+      "token_exact_rate": 94.18,
+      "text_exact_rate": 94.18,
+      "token_exact_count": 1036,
+      "text_exact_count": 1036,
+      "sacrebleu_bleu": 97.94,
+      "sacrebleu_chrf": 98.9,
+      "fp32_avg_latency_ms": 167.8,
+      "cmp_avg_latency_ms": 76.4,
+      "speedup_vs_fp32": 2.196,
+      "fp32_tokens_per_sec": 69.5,
+      "cmp_tokens_per_sec": 152.6
+    }
+  },
+  "metrics_by_category": {
+    "generic": {
+      "total_fixtures": 286,
+      "token_exact_rate": 91.61,
+      "text_exact_rate": 91.61,
+      "token_exact_count": 262,
+      "text_exact_count": 262,
+      "sacrebleu_bleu": 96.78,
+      "sacrebleu_chrf": 98.33,
+      "fp32_avg_latency_ms": 162.5,
+      "cmp_avg_latency_ms": 74.4,
+      "speedup_vs_fp32": 2.184,
+      "fp32_tokens_per_sec": 69.4,
+      "cmp_tokens_per_sec": 151.7
+    },
+    "lexicon": {
+      "total_fixtures": 264,
+      "token_exact_rate": 91.29,
+      "text_exact_rate": 91.29,
+      "token_exact_count": 241,
+      "text_exact_count": 241,
+      "sacrebleu_bleu": 97.2,
+      "sacrebleu_chrf": 98.56,
+      "fp32_avg_latency_ms": 175.3,
+      "cmp_avg_latency_ms": 79.5,
+      "speedup_vs_fp32": 2.204,
+      "fp32_tokens_per_sec": 69.6,
+      "cmp_tokens_per_sec": 153.2
+    },
+    "numerals": {
+      "total_fixtures": 264,
+      "token_exact_rate": 97.35,
+      "text_exact_rate": 97.35,
+      "token_exact_count": 257,
+      "text_exact_count": 257,
+      "sacrebleu_bleu": 99.2,
+      "sacrebleu_chrf": 99.74,
+      "fp32_avg_latency_ms": 172.9,
+      "cmp_avg_latency_ms": 78.5,
+      "speedup_vs_fp32": 2.203,
+      "fp32_tokens_per_sec": 69.4,
+      "cmp_tokens_per_sec": 152.9
+    },
+    "politics": {
+      "total_fixtures": 286,
+      "token_exact_rate": 96.5,
+      "text_exact_rate": 96.5,
+      "token_exact_count": 276,
+      "text_exact_count": 276,
+      "sacrebleu_bleu": 98.45,
+      "sacrebleu_chrf": 98.99,
+      "fp32_avg_latency_ms": 161.3,
+      "cmp_avg_latency_ms": 73.6,
+      "speedup_vs_fp32": 2.191,
+      "fp32_tokens_per_sec": 69.7,
+      "cmp_tokens_per_sec": 152.7
+    }
+  },
+  "mismatches": [
+    {
+      "index": 22,
+      "fixture": {
+        "text": "কনচাৰ্টটোত তেওঁ এটা সুন্দৰ গীত গাইছিল।",
+        "src_lang": "asm_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        52,
+        12163,
+        13,
+        712,
+        1208,
+        10,
+        5,
+        13196,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        157,
+        12163,
+        13,
+        712,
+        1208,
+        10,
+        5,
+        13196,
+        4,
+        2
+      ],
+      "fp32_text": "He sang a beautiful song in the concert.",
+      "int8_text": "She sang a beautiful song in the concert.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 23,
+      "fixture": {
+        "text": "সাগৰ সুৰক্ষিত কৰিবলৈ আমি প্লাষ্টিকৰ আৱৰ্জনা হ্ৰাস কৰিব লাগে।",
+        "src_lang": "asm_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        472,
+        1592,
+        5,
+        14503,
+        6,
+        59,
+        100,
+        1566,
+        2779,
+        2735,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        472,
+        1592,
+        5,
+        5772,
+        6,
+        59,
+        100,
+        1566,
+        2779,
+        2735,
+        4,
+        2
+      ],
+      "fp32_text": "To protect the oceans, we should reduce plastic waste.",
+      "int8_text": "To protect the ocean, we should reduce plastic waste.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 36,
+      "fixture": {
+        "text": "শিশুসকলে উদ্যানখনত খেলিছে।",
+        "src_lang": "asm_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        1798,
+        1031,
+        10,
+        5,
+        2784,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        1798,
+        21,
+        1031,
+        10,
+        5,
+        2784,
+        4,
+        2
+      ],
+      "fp32_text": "Children playing in the park.",
+      "int8_text": "Children are playing in the park.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 46,
+      "fixture": {
+        "text": "চিকিৎসালয়খনে 24 ঘণ্টা জৰুৰীকালীন চিকিৎসা সেৱা প্ৰদান কৰে।",
+        "src_lang": "asm_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        290,
+        1543,
+        12416,
+        8538,
+        2556,
+        706,
+        604,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        290,
+        1543,
+        12416,
+        8538,
+        2556,
+        706,
+        510,
+        4,
+        2
+      ],
+      "fp32_text": "The hospital provides 24-hour emergency medical care.",
+      "int8_text": "The hospital provides 24-hour emergency medical services.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 62,
+      "fixture": {
+        "text": "কৃত্রিম বুদ্ধিমত্তা শিক্ষার ক্ষেত্রকে বদলে দিচ্ছে।",
+        "src_lang": "ben_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        13772,
+        3980,
+        12,
+        17381,
+        5,
+        640,
+        1171,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        13772,
+        3980,
+        12,
+        2246,
+        5,
+        640,
+        1171,
+        4,
+        2
+      ],
+      "fp32_text": "Artificial intelligence is transforming the education sector.",
+      "int8_text": "Artificial intelligence is changing the education sector.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 82,
+      "fixture": {
+        "text": "সপ্তাহান্তে বন্ধুদের সঙ্গে ফুটবল খেলতে সে উপভোগ করে।",
+        "src_lang": "ben_Beng",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        52,
+        10326,
+        1031,
+        2270,
+        31,
+        61,
+        508,
+        25,
+        16939,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        52,
+        10326,
+        1031,
+        2270,
+        31,
+        61,
+        508,
+        25,
+        5,
+        16939,
+        4,
+        2
+      ],
+      "fp32_text": "He enjoys playing football with his friends on weekends.",
+      "int8_text": "He enjoys playing football with his friends on the weekends.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 100,
+      "fixture": {
+        "text": "गोख्रै मुगा गाबनि लोमसाया आलसिया सैमानि सायावजों बारलाङो।",
+        "src_lang": "brx_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        1181,
+        3878,
+        12011,
+        5682,
+        111,
+        5,
+        713,
+        16633,
+        2633,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        45,
+        2835,
+        3878,
+        13792,
+        5682,
+        111,
+        5,
+        713,
+        16633,
+        2633,
+        4,
+        2
+      ],
+      "fp32_text": "The fast brown fur passes over the lazy dog.",
+      "int8_text": "A quick brown mist passes over the lazy dog.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 143,
+      "fixture": {
+        "text": "कम्पानिया मोनसे लोगोआरि आरो हेफाजाबारि खामानि मावनाय थासारि होयो।",
+        "src_lang": "brx_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        318,
+        1543,
+        13,
+        2685,
+        9,
+        10924,
+        390,
+        1230,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        318,
+        1688,
+        13,
+        2685,
+        9,
+        10924,
+        390,
+        1230,
+        4,
+        2
+      ],
+      "fp32_text": "The company provides a friendly and cooperative working environment.",
+      "int8_text": "The company offers a friendly and cooperative working environment.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 189,
+      "fixture": {
+        "text": "महिमानें दे औने शा पैह्लें तुसें गी घर दी सफाई करनी चाहिदी।",
+        "src_lang": "doi_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        86,
+        100,
+        1164,
+        5,
+        343,
+        212,
+        5,
+        3303,
+        4966,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        86,
+        100,
+        1164,
+        5,
+        343,
+        212,
+        3303,
+        4966,
+        4,
+        2
+      ],
+      "fp32_text": "You should clean the house before the guests arrive.",
+      "int8_text": "You should clean the house before guests arrive.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 200,
+      "fixture": {
+        "text": "ઝડપી ભુરો શિયાળ આળસુ કૂતરા પર કૂદી પડે છે.",
+        "src_lang": "guj_Gujr",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        45,
+        1181,
+        3878,
+        20475,
+        21468,
+        25,
+        13,
+        713,
+        16633,
+        2633,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        45,
+        1181,
+        3878,
+        20475,
+        21468,
+        111,
+        13,
+        713,
+        16633,
+        2633,
+        4,
+        2
+      ],
+      "fp32_text": "A fast brown fox jumps on a lazy dog.",
+      "int8_text": "A fast brown fox jumps over a lazy dog.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 223,
+      "fixture": {
+        "text": "આપણે સમુદ્રની સુરક્ષા માટે પ્લાસ્ટિકનો કચરો ઘટાડવો જોઈએ.",
+        "src_lang": "guj_Gujr",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        75,
+        205,
+        1566,
+        2779,
+        2735,
+        8,
+        1592,
+        5,
+        14503,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        75,
+        205,
+        1566,
+        2779,
+        2735,
+        8,
+        1592,
+        5,
+        5772,
+        4,
+        2
+      ],
+      "fp32_text": "We must reduce plastic waste to protect the oceans.",
+      "int8_text": "We must reduce plastic waste to protect the ocean.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 224,
+      "fixture": {
+        "text": "તે કોલેજમાં બિઝનેસ એડમિનિસ્ટ્રેશનનો અભ્યાસ કરે છે.",
+        "src_lang": "guj_Gujr",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        52,
+        12,
+        3480,
+        309,
+        1786,
+        38,
+        5,
+        1574,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        52,
+        12,
+        3480,
+        309,
+        1786,
+        10,
+        1574,
+        4,
+        2
+      ],
+      "fp32_text": "He is studying business administration at the college.",
+      "int8_text": "He is studying business administration in college.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 236,
+      "fixture": {
+        "text": "બાળકો બગીચામાં રમી રહ્યા છે.",
+        "src_lang": "guj_Gujr",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        1798,
+        1031,
+        10,
+        5,
+        2784,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        1798,
+        21,
+        1031,
+        10,
+        5,
+        2784,
+        4,
+        2
+      ],
+      "fp32_text": "Children playing in the park.",
+      "int8_text": "Children are playing in the park.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 247,
+      "fixture": {
+        "text": "તે પોતાની કાર લઈને ઓફિસ ગયો.",
+        "src_lang": "guj_Gujr",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        52,
+        12180,
+        61,
+        410,
+        8,
+        5,
+        804,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        52,
+        307,
+        61,
+        410,
+        8,
+        5,
+        804,
+        4,
+        2
+      ],
+      "fp32_text": "He drove his car to the office.",
+      "int8_text": "He took his car to the office.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 268,
+      "fixture": {
+        "text": "वह एक प्रौद्योगिकी कंपनी में सॉफ्टवेयर इंजीनियर के रूप में काम करता है।",
+        "src_lang": "hin_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "numerals"
+      },
+      "fp32_tokens": [
+        2,
+        52,
+        732,
+        37,
+        13,
+        1471,
+        6056,
+        16,
+        13,
+        839,
+        318,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        52,
+        732,
+        37,
+        13,
+        1471,
+        6056,
+        10,
+        13,
+        839,
+        318,
+        4,
+        2
+      ],
+      "fp32_text": "He works as a software engineer for a technology company.",
+      "int8_text": "He works as a software engineer in a technology company.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 295,
+      "fixture": {
+        "text": "उन्हें खाली समय में उपन्यास पढ़ना पसंद है।",
+        "src_lang": "hin_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        52,
+        3477,
+        8,
+        534,
+        9584,
+        10,
+        61,
+        341,
+        66,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        52,
+        3477,
+        8,
+        534,
+        9584,
+        10,
+        61,
+        11811,
+        66,
+        4,
+        2
+      ],
+      "fp32_text": "He likes to read novels in his free time.",
+      "int8_text": "He likes to read novels in his spare time.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 309,
+      "fixture": {
+        "text": "ಪ್ರಧಾನಿಯವರು ದೂರದರ್ಶನದಲ್ಲಿ ರಾಷ್ಟ್ರವನ್ನುದ್ದೇಶಿಸಿ ಭಾಷಣ ಮಾಡಿದರು.",
+        "src_lang": "kan_Knda",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        216,
+        95,
+        3438,
+        5,
+        1204,
+        25,
+        2112,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        216,
+        95,
+        3438,
+        5,
+        1204,
+        25,
+        315,
+        4660,
+        8584,
+        4,
+        2
+      ],
+      "fp32_text": "The Prime Minister addressed the nation on television.",
+      "int8_text": "The Prime Minister addressed the nation on Doordarshan.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 350,
+      "fixture": {
+        "text": "تیز بھورا لومش چھ سست کتا ہس پؠٹھ ژلان۔",
+        "src_lang": "kas_Arab",
+        "tgt_lang": "eng_Latn",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        5824,
+        3878,
+        20475,
+        1081,
+        451,
+        40,
+        5,
+        713,
+        16633,
+        2633,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        5824,
+        3878,
+        20475,
+        1081,
+        451,
+        40,
+        5,
+        3704,
+        2633,
+        4,
+        2
+      ],
+      "fp32_text": "The sharp brown fox runs away from the lazy dog.",
+      "int8_text": "The sharp brown fox runs away from the slow dog.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 359,
+      "fixture": {
+        "text": "وزیر اعظمن کوٚر ٹی وی یس پؠٹھ قومس خطاب۔",
+        "src_lang": "kas_Arab",
+        "tgt_lang": "eng_Latn",
+        "category": "politics"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        216,
+        95,
+        3438,
+        5,
+        1204,
+        25,
+        980,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        216,
+        95,
+        3438,
+        5,
+        1204,
+        10,
+        13,
+        22318,
+        1157,
+        4,
+        2
+      ],
+      "fp32_text": "The Prime Minister addressed the nation on TV.",
+      "int8_text": "The Prime Minister addressed the nation in a televised address.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 381,
+      "fixture": {
+        "text": "میوزیم چھ بوموار پؠٹھ رؠتہٕ وارس تام سیاحن خٲطرٕ یلہٕ۔",
+        "src_lang": "kas_Arab",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        15,
+        4199,
+        12,
+        583,
+        8,
+        3830,
+        597,
+        3089,
+        6,
+        1599,
+        4,
+        2
+      ],
+      "int8_tokens": [
+        2,
+        15,
+        4199,
+        12,
+        583,
+        8,
+        3830,
+        597,
+        3089,
+        4,
+        2
+      ],
+      "fp32_text": "The museum is open to visitors until Tuesday, February.",
+      "int8_text": "The museum is open to visitors until Tuesday.",
+      "tokens_match": false,
+      "text_match": false
+    }
+  ]
+}

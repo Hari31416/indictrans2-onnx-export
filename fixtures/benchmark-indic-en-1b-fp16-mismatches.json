@@ -1,0 +1,39 @@
+[
+  {
+    "index": 197,
+    "fixture": {
+      "text": "ओह् अपनी गाड़ी लेई दफतर तक्कर गेआ।",
+      "src_lang": "doi_Deva",
+      "tgt_lang": "eng_Latn",
+      "category": "lexicon"
+    },
+    "fp32_tokens": [
+      2,
+      52,
+      307,
+      61,
+      410,
+      8,
+      5,
+      804,
+      4,
+      2
+    ],
+    "fp16_tokens": [
+      2,
+      52,
+      12180,
+      61,
+      410,
+      8,
+      5,
+      804,
+      4,
+      2
+    ],
+    "fp32_text": "He took his car to the office.",
+    "fp16_text": "He drove his car to the office.",
+    "tokens_match": false,
+    "text_match": false
+  }
+]

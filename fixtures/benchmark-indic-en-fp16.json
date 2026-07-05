@@ -1,0 +1,135 @@
+{
+  "label": "fp16",
+  "oracle": "scratch/indic-en-onnx",
+  "cmp_dir": "scratch/indic-en-onnx-fp16",
+  "total_fixtures": 1100,
+  "token_exact_rate": 99.91,
+  "text_exact_rate": 99.91,
+  "token_exact_count": 1099,
+  "text_exact_count": 1099,
+  "sacrebleu_bleu": 99.98,
+  "sacrebleu_chrf": 100.0,
+  "fp32_avg_latency_ms": 41.4,
+  "cmp_avg_latency_ms": 47.6,
+  "speedup_vs_fp32": 0.872,
+  "fp32_tokens_per_sec": 282.1,
+  "cmp_tokens_per_sec": 245.9,
+  "sacrebleu_bleu_mixed": 99.98,
+  "sacrebleu_chrf_mixed": 100.0,
+  "metrics_by_language": {
+    "eng_Latn": {
+      "total_fixtures": 1100,
+      "token_exact_rate": 99.91,
+      "text_exact_rate": 99.91,
+      "token_exact_count": 1099,
+      "text_exact_count": 1099,
+      "sacrebleu_bleu": 99.98,
+      "sacrebleu_chrf": 100.0,
+      "fp32_avg_latency_ms": 41.4,
+      "cmp_avg_latency_ms": 47.6,
+      "speedup_vs_fp32": 0.872,
+      "fp32_tokens_per_sec": 282.1,
+      "cmp_tokens_per_sec": 245.9
+    }
+  },
+  "metrics_by_category": {
+    "generic": {
+      "total_fixtures": 286,
+      "token_exact_rate": 100.0,
+      "text_exact_rate": 100.0,
+      "token_exact_count": 286,
+      "text_exact_count": 286,
+      "sacrebleu_bleu": 100.0,
+      "sacrebleu_chrf": 100.0,
+      "fp32_avg_latency_ms": 39.9,
+      "cmp_avg_latency_ms": 45.8,
+      "speedup_vs_fp32": 0.871,
+      "fp32_tokens_per_sec": 280.8,
+      "cmp_tokens_per_sec": 244.7
+    },
+    "lexicon": {
+      "total_fixtures": 264,
+      "token_exact_rate": 99.62,
+      "text_exact_rate": 99.62,
+      "token_exact_count": 263,
+      "text_exact_count": 263,
+      "sacrebleu_bleu": 99.91,
+      "sacrebleu_chrf": 99.98,
+      "fp32_avg_latency_ms": 43.3,
+      "cmp_avg_latency_ms": 49.6,
+      "speedup_vs_fp32": 0.874,
+      "fp32_tokens_per_sec": 282.9,
+      "cmp_tokens_per_sec": 247.2
+    },
+    "numerals": {
+      "total_fixtures": 264,
+      "token_exact_rate": 100.0,
+      "text_exact_rate": 100.0,
+      "token_exact_count": 264,
+      "text_exact_count": 264,
+      "sacrebleu_bleu": 100.0,
+      "sacrebleu_chrf": 100.0,
+      "fp32_avg_latency_ms": 42.6,
+      "cmp_avg_latency_ms": 48.8,
+      "speedup_vs_fp32": 0.874,
+      "fp32_tokens_per_sec": 282.7,
+      "cmp_tokens_per_sec": 247.1
+    },
+    "politics": {
+      "total_fixtures": 286,
+      "token_exact_rate": 100.0,
+      "text_exact_rate": 100.0,
+      "token_exact_count": 286,
+      "text_exact_count": 286,
+      "sacrebleu_bleu": 100.0,
+      "sacrebleu_chrf": 100.0,
+      "fp32_avg_latency_ms": 40.1,
+      "cmp_avg_latency_ms": 46.3,
+      "speedup_vs_fp32": 0.867,
+      "fp32_tokens_per_sec": 281.9,
+      "cmp_tokens_per_sec": 244.4
+    }
+  },
+  "mismatches": [
+    {
+      "index": 577,
+      "fixture": {
+        "text": "पुस्तके शेल्फवर वर्णानुक्रमानुसार मांडण्यात आली आहेत.",
+        "src_lang": "mar_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        6220,
+        21,
+        6109,
+        18574,
+        1924,
+        25,
+        5,
+        16736,
+        4,
+        2
+      ],
+      "fp16_tokens": [
+        2,
+        15,
+        1042,
+        21,
+        6109,
+        18574,
+        1924,
+        25,
+        5,
+        16736,
+        4,
+        2
+      ],
+      "fp32_text": "Books are arranged alphabetically on the shelf.",
+      "fp16_text": "The books are arranged alphabetically on the shelf.",
+      "tokens_match": false,
+      "text_match": false
+    }
+  ]
+}

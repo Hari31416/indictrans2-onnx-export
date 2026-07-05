@@ -1,0 +1,42 @@
+[
+  {
+    "index": 577,
+    "fixture": {
+      "text": "पुस्तके शेल्फवर वर्णानुक्रमानुसार मांडण्यात आली आहेत.",
+      "src_lang": "mar_Deva",
+      "tgt_lang": "eng_Latn",
+      "category": "lexicon"
+    },
+    "fp32_tokens": [
+      2,
+      6220,
+      21,
+      6109,
+      18574,
+      1924,
+      25,
+      5,
+      16736,
+      4,
+      2
+    ],
+    "fp16_tokens": [
+      2,
+      15,
+      1042,
+      21,
+      6109,
+      18574,
+      1924,
+      25,
+      5,
+      16736,
+      4,
+      2
+    ],
+    "fp32_text": "Books are arranged alphabetically on the shelf.",
+    "fp16_text": "The books are arranged alphabetically on the shelf.",
+    "tokens_match": false,
+    "text_match": false
+  }
+]

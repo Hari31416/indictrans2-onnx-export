@@ -1,0 +1,32 @@
+[
+  {
+    "source": "यह एक परीक्षण वाक्य है।",
+    "translations": {
+      "eng_Latn": "This is a test sentence."
+    }
+  },
+  {
+    "source": "चुनाव में कौन जीतेगा?",
+    "translations": {
+      "eng_Latn": "Who will win the election?"
+    }
+  },
+  {
+    "source": "कृपया 9876543210 पर एक एस. एम. एस. भेजें।",
+    "translations": {
+      "eng_Latn": "Please send an SMS to 9876543210."
+    }
+  },
+  {
+    "source": "संसद ने एक नया विधेयक पारित किया।",
+    "translations": {
+      "eng_Latn": "Parliament passed a new bill."
+    }
+  },
+  {
+    "source": "जीवन के लिए पानी आवश्यक है।",
+    "translations": {
+      "eng_Latn": "Water is essential for life."
+    }
+  }
+]

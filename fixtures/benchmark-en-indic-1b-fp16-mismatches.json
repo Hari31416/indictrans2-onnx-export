@@ -1,0 +1,134 @@
+[
+  {
+    "index": 324,
+    "fixture": {
+      "text": "He is studying business administration at the college.",
+      "src_lang": "eng_Latn",
+      "tgt_lang": "kan_Knda",
+      "category": "generic"
+    },
+    "fp32_tokens": [
+      2,
+      2618,
+      43014,
+      8918,
+      50992,
+      16736,
+      26221,
+      1581,
+      18270,
+      182,
+      10189,
+      4,
+      2
+    ],
+    "fp16_tokens": [
+      2,
+      2618,
+      43014,
+      1997,
+      7710,
+      121,
+      2038,
+      16410,
+      4,
+      2
+    ],
+    "fp32_text": "ಆತ ಕಾಲೇಜಿನಲ್ಲಿ ಬಿಸಿನೆಸ್ ಅಡ್ಮಿನಿಸ್ಟ್ರೇಷನ್ ಓದುತ್ತಿದ್ದಾನೆ.",
+    "fp16_text": "ಆತ ಕಾಲೇಜಿನಲ್ಲಿ ವ್ಯವಹಾರ ಆಡಳಿತವನ್ನು ಅಧ್ಯಯನ ಮಾಡುತ್ತಿದ್ದಾರೆ.",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
+    "index": 927,
+    "fixture": {
+      "text": "The books are arranged on the shelf in alphabetical order.",
+      "src_lang": "eng_Latn",
+      "tgt_lang": "snd_Arab",
+      "category": "lexicon"
+    },
+    "fp32_tokens": [
+      2,
+      57701,
+      54,
+      52155,
+      44825,
+      15090,
+      280,
+      24402,
+      614,
+      54961,
+      8475,
+      1443,
+      24402,
+      29469,
+      5341,
+      7890,
+      2
+    ],
+    "fp16_tokens": [
+      2,
+      57701,
+      54,
+      54961,
+      8475,
+      1443,
+      52155,
+      44825,
+      15090,
+      280,
+      24402,
+      614,
+      24402,
+      29469,
+      5341,
+      7890,
+      2
+    ],
+    "fp32_text": "ڪتابن کی الفابیٽ جی ترتیب ۾ شیلف تی ترتیب ڏنو ویو آھی",
+    "fp16_text": "ڪتابن کی شیلف تی الفابیٽ جی ترتیب ۾ ترتیب ڏنو ویو آھی",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
+    "index": 1099,
+    "fixture": {
+      "text": "She graduated from university with honors.",
+      "src_lang": "eng_Latn",
+      "tgt_lang": "urd_Arab",
+      "category": "politics"
+    },
+    "fp32_tokens": [
+      2,
+      248,
+      251,
+      13487,
+      108,
+      39355,
+      42,
+      1048,
+      67295,
+      419,
+      70,
+      2
+    ],
+    "fp16_tokens": [
+      2,
+      3699,
+      251,
+      39355,
+      42,
+      1048,
+      13487,
+      108,
+      67295,
+      419,
+      70,
+      2
+    ],
+    "fp32_text": "اس نے یونیورسٹی سے اعزاز کے ساتھ گریجویشن کیا۔",
+    "fp16_text": "انہوں نے اعزاز کے ساتھ یونیورسٹی سے گریجویشن کیا۔",
+    "tokens_match": false,
+    "text_match": false
+  }
+]
