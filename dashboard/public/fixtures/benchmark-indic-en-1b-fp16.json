@@ -1,0 +1,132 @@
+{
+  "label": "fp16",
+  "oracle": "scratch/indic-en-1b-onnx",
+  "cmp_dir": "scratch/indic-en-1b-onnx-fp16",
+  "total_fixtures": 1100,
+  "token_exact_rate": 99.91,
+  "text_exact_rate": 99.91,
+  "token_exact_count": 1099,
+  "text_exact_count": 1099,
+  "sacrebleu_bleu": 99.98,
+  "sacrebleu_chrf": 99.99,
+  "fp32_avg_latency_ms": 171.8,
+  "cmp_avg_latency_ms": 180.5,
+  "speedup_vs_fp32": 0.952,
+  "fp32_tokens_per_sec": 67.9,
+  "cmp_tokens_per_sec": 64.6,
+  "sacrebleu_bleu_mixed": 99.98,
+  "sacrebleu_chrf_mixed": 99.99,
+  "metrics_by_language": {
+    "eng_Latn": {
+      "total_fixtures": 1100,
+      "token_exact_rate": 99.91,
+      "text_exact_rate": 99.91,
+      "token_exact_count": 1099,
+      "text_exact_count": 1099,
+      "sacrebleu_bleu": 99.98,
+      "sacrebleu_chrf": 99.99,
+      "fp32_avg_latency_ms": 171.8,
+      "cmp_avg_latency_ms": 180.5,
+      "speedup_vs_fp32": 0.952,
+      "fp32_tokens_per_sec": 67.9,
+      "cmp_tokens_per_sec": 64.6
+    }
+  },
+  "metrics_by_category": {
+    "generic": {
+      "total_fixtures": 286,
+      "token_exact_rate": 100.0,
+      "text_exact_rate": 100.0,
+      "token_exact_count": 286,
+      "text_exact_count": 286,
+      "sacrebleu_bleu": 100.0,
+      "sacrebleu_chrf": 100.0,
+      "fp32_avg_latency_ms": 166.0,
+      "cmp_avg_latency_ms": 174.6,
+      "speedup_vs_fp32": 0.951,
+      "fp32_tokens_per_sec": 67.9,
+      "cmp_tokens_per_sec": 64.6
+    },
+    "lexicon": {
+      "total_fixtures": 264,
+      "token_exact_rate": 99.62,
+      "text_exact_rate": 99.62,
+      "token_exact_count": 263,
+      "text_exact_count": 263,
+      "sacrebleu_bleu": 99.92,
+      "sacrebleu_chrf": 99.94,
+      "fp32_avg_latency_ms": 179.3,
+      "cmp_avg_latency_ms": 188.6,
+      "speedup_vs_fp32": 0.951,
+      "fp32_tokens_per_sec": 68.1,
+      "cmp_tokens_per_sec": 64.7
+    },
+    "numerals": {
+      "total_fixtures": 264,
+      "token_exact_rate": 100.0,
+      "text_exact_rate": 100.0,
+      "token_exact_count": 264,
+      "text_exact_count": 264,
+      "sacrebleu_bleu": 100.0,
+      "sacrebleu_chrf": 100.0,
+      "fp32_avg_latency_ms": 177.1,
+      "cmp_avg_latency_ms": 186.4,
+      "speedup_vs_fp32": 0.95,
+      "fp32_tokens_per_sec": 67.7,
+      "cmp_tokens_per_sec": 64.4
+    },
+    "politics": {
+      "total_fixtures": 286,
+      "token_exact_rate": 100.0,
+      "text_exact_rate": 100.0,
+      "token_exact_count": 286,
+      "text_exact_count": 286,
+      "sacrebleu_bleu": 100.0,
+      "sacrebleu_chrf": 100.0,
+      "fp32_avg_latency_ms": 165.8,
+      "cmp_avg_latency_ms": 173.5,
+      "speedup_vs_fp32": 0.956,
+      "fp32_tokens_per_sec": 67.8,
+      "cmp_tokens_per_sec": 64.8
+    }
+  },
+  "mismatches": [
+    {
+      "index": 197,
+      "fixture": {
+        "text": "ओह् अपनी गाड़ी लेई दफतर तक्कर गेआ।",
+        "src_lang": "doi_Deva",
+        "tgt_lang": "eng_Latn",
+        "category": "lexicon"
+      },
+      "fp32_tokens": [
+        2,
+        52,
+        307,
+        61,
+        410,
+        8,
+        5,
+        804,
+        4,
+        2
+      ],
+      "fp16_tokens": [
+        2,
+        52,
+        12180,
+        61,
+        410,
+        8,
+        5,
+        804,
+        4,
+        2
+      ],
+      "fp32_text": "He took his car to the office.",
+      "fp16_text": "He drove his car to the office.",
+      "tokens_match": false,
+      "text_match": false
+    }
+  ]
+}
