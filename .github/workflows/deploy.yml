@@ -1,34 +1,22 @@
-name: Deploy Notes to GitHub Pages
+name: Deploy Dashboard
 
 on:
-  # Trigger deployment on push to the main publishing branch
   push:
-    branches: ["main"]
-  # Allow manual trigger from the GitHub Actions tab
+    branches:
+      - main
+    paths:
+      - 'dashboard/**'
   workflow_dispatch:
 
-# Set directory permissions required for secure OpenID Connect token authentication
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Prevent simultaneous redundant deployment executions
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
-env:
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+  contents: write
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Install pnpm
@@ -43,19 +31,14 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: 'dashboard/pnpm-lock.yaml'
 
-      - name: Install Dependencies & Build Dashboard
-        run: |
-          pnpm --dir dashboard install
-          pnpm --dir dashboard build
+      - name: Install dependencies
+        run: pnpm --dir dashboard install --no-frozen-lockfile
 
-      - name: Configure GitHub Pages Hosting Environment
-        uses: actions/configure-pages@v5
+      - name: Build
+        run: pnpm --dir dashboard run build
 
-      - name: Upload Static Portal Files Artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          path: 'dashboard/dist'
-
-      - name: Deploy Live Artifact Payload to Target Environment
-        id: deployment
-        uses: actions/deploy-pages@v4
+          folder: dashboard/dist
+          branch: gh-pages
