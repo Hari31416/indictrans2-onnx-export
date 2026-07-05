@@ -3,6 +3,7 @@ import { OverviewTab } from '@/components/OverviewTab'
 import { BenchmarkTab } from '@/components/BenchmarkTab'
 import { MismatchTab } from '@/components/MismatchTab'
 import { BlogTab } from '@/components/BlogTab'
+import { LiveBenchmarkTab } from '@/components/LiveBenchmarkTab'
 import { LayoutDashboard, Activity, AlertTriangle, BookOpen, Volume2, Cpu, ShieldAlert, Wrench } from 'lucide-react'
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -23,6 +24,7 @@ type TabType =
   | 'overview'
   | 'benchmarks'
   | 'mismatches'
+  | 'live-benchmark'
   | 'doc-overview'
   | 'doc-architecture'
   | 'doc-export'
@@ -34,6 +36,7 @@ export default function App() {
   const dashboardItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'benchmarks', label: 'Detailed Benchmarks', icon: Activity },
+    { id: 'live-benchmark', label: 'Live Latency', icon: Cpu },
     { id: 'mismatches', label: 'Mismatch Explorer', icon: AlertTriangle }
   ] as const
 
@@ -129,6 +132,7 @@ export default function App() {
         <main className="flex-1 p-6 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
           {activeTab === 'overview' && <OverviewTab />}
           {activeTab === 'benchmarks' && <BenchmarkTab />}
+          {activeTab === 'live-benchmark' && <LiveBenchmarkTab />}
           {activeTab === 'mismatches' && <MismatchTab />}
           {activeTab.startsWith('doc-') && <BlogTab activeSection={activeTab as any} />}
         </main>

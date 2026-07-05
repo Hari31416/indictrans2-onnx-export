@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@huggingface/transformers": "3.0.2",
+    "onnxruntime-web": "1.21.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },

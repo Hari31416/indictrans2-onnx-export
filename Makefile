@@ -84,7 +84,7 @@ INDIC_INDIC_BENCH_INT8  := fixtures/benchmark-indic-indic-int8.json
 INDIC_INDIC_BENCH_FP16  := fixtures/benchmark-indic-indic-fp16.json
 INDIC_INDIC_BENCH_Q4F16 := fixtures/benchmark-indic-indic-q4f16.json
 
-.PHONY: help setup install clean clean-all preview reports reports-1b \
+.PHONY: help setup install clean clean-all preview reports reports-1b live-report \
 	export-en-indic tokenizers-en-indic validate-en-indic quantize-en-indic \
 	convert-fp16-en-indic quantize-q4f16-en-indic \
 	benchmark-int8-en-indic benchmark-fp16-en-indic benchmark-q4f16-en-indic \
@@ -809,3 +809,6 @@ reports: setup ## Generate benchmark reports and plots (overall, language, and c
 
 reports-1b: setup ## Generate benchmark reports and plots for 1B models (overall, language, and category levels)
 	$(PYTHON) src/generate_visual_reports.py --model-size 1b
+
+live-report: setup ## Generate live browser benchmark reports and plots
+	$(PYTHON) src/generate_live_reports.py
