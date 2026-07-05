@@ -136,7 +136,7 @@ function CodeBlock({ code, label }: { code: string; label: string }) {
     setTimeout(() => setCopied(false), 2000)
   }
   return (
-    <div className="border border-white/5 rounded-lg overflow-hidden bg-zinc-950/40 my-4 font-mono text-xs">
+    <div className="border border-white/5 rounded-lg overflow-hidden bg-zinc-950/40 my-4 font-mono text-xs md:text-sm">
       <div className="flex items-center justify-between px-4 py-2 border-b border-white/5 bg-zinc-900/40">
         <span className="text-zinc-500 font-sans text-[10px] uppercase tracking-wider">{label}</span>
         <button onClick={handleCopy} className="text-zinc-400 hover:text-teal-400 transition flex items-center gap-1">
@@ -153,7 +153,7 @@ function CodeBlock({ code, label }: { code: string; label: string }) {
           )}
         </button>
       </div>
-      <pre className="p-4 overflow-x-auto text-zinc-300 text-[11px] leading-relaxed"><code>{code}</code></pre>
+      <pre className="p-4 overflow-x-auto text-zinc-300 text-xs md:text-sm leading-relaxed"><code>{code}</code></pre>
     </div>
   )
 }
@@ -185,8 +185,8 @@ function InteractiveQuiz({
   const isCorrect = selected === correctIndex
 
   return (
-    <div className="border border-white/5 rounded-xl p-5 bg-zinc-900/20 space-y-4 font-sans text-xs">
-      <div className="font-semibold text-zinc-200 text-sm">{question}</div>
+    <div className="border border-white/5 rounded-xl p-5 bg-zinc-900/20 space-y-4 font-sans text-sm">
+      <div className="font-semibold text-zinc-200 text-sm md:text-base">{question}</div>
       <div className="flex flex-col gap-2">
         {options.map((opt, idx) => {
           let optStyle = 'border-white/5 hover:border-zinc-700 bg-zinc-900/35 text-zinc-300'
@@ -207,7 +207,7 @@ function InteractiveQuiz({
               key={idx}
               disabled={submitted}
               onClick={() => setSelected(idx)}
-              className={`w-full text-left p-3 rounded-lg border text-xs transition-all ${optStyle}`}
+              className={`w-full text-left p-3 rounded-lg border text-xs md:text-sm transition-all ${optStyle}`}
             >
               {opt}
             </button>
@@ -219,12 +219,12 @@ function InteractiveQuiz({
         <button
           disabled={selected === null}
           onClick={() => setSubmitted(true)}
-          className="px-4 py-2 bg-teal-600 hover:bg-teal-500 disabled:opacity-40 disabled:hover:bg-teal-600 text-zinc-950 font-bold text-xs rounded-lg transition"
+          className="px-4 py-2 bg-teal-600 hover:bg-teal-500 disabled:opacity-40 disabled:hover:bg-teal-600 text-zinc-950 font-bold text-xs md:text-sm rounded-lg transition"
         >
           Submit Answer
         </button>
       ) : (
-        <div className="p-4 rounded-lg bg-zinc-950/40 border border-white/5 space-y-2">
+        <div className="p-4 rounded-lg bg-zinc-950/40 border border-white/5 space-y-2 text-xs md:text-sm">
           {isCorrect ? (
             <div className="text-teal-400 font-semibold">✓ Correct! {correctFeedback}</div>
           ) : (
@@ -263,11 +263,11 @@ export function OnnxComponentsBlog() {
   const sizeText = sizeGb >= 1 ? sizeGb.toFixed(2) + ' GB' : Math.round(sizeGb * 1024) + ' MB'
 
   return (
-    <div className="space-y-8 font-sans text-sm text-zinc-300 leading-relaxed max-w-4xl mx-auto">
+    <div className="space-y-8 font-sans text-sm md:text-base text-zinc-300 leading-relaxed max-w-4xl mx-auto">
       
       {/* 1. What ONNX actually is */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">What ONNX actually is</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">What ONNX actually is</h2>
         <p>
           A trained PyTorch model is a graph of operations expressed in PyTorch's Python API.
           You cannot run that graph directly inside a browser or in a generic C++ runtime without
@@ -281,7 +281,7 @@ export function OnnxComponentsBlog() {
           a list of <strong className="text-zinc-100 font-bold">initializers</strong> (the trained weight tensors), and metadata
           describing inputs, outputs, and the <strong className="text-zinc-100 font-bold">opset</strong> version. The opset is the
           dialect of operators the graph uses. This bundle targets opset 17, which
-          <code className="text-teal-400 bg-teal-500/5 px-1 py-0.5 rounded font-mono text-xs">onnxruntime-web</code> 1.21 and later supports in the browser.
+          <code className="text-teal-400 bg-teal-500/5 px-1.5 py-0.5 rounded font-mono text-xs md:text-sm">onnxruntime-web</code> 1.21 and later supports in the browser.
         </p>
         <p>
           A separate program called a <strong className="text-zinc-100 font-bold">runtime</strong> loads the protobuf and executes the
@@ -300,7 +300,7 @@ export function OnnxComponentsBlog() {
         </p>
 
         <div className="bg-teal-500/5 border border-teal-500/10 p-5 rounded-lg">
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs md:text-sm text-zinc-400">
             The export pipeline this article describes lives in this repository. It exports the AI4Bharat
             IndicTrans2 translation models into browser-ready ONNX bundles. Each bundle can be consumed by client-side browser translation wrappers. Every component below comes from that real pipeline.
           </p>
@@ -308,7 +308,7 @@ export function OnnxComponentsBlog() {
 
         {/* Terminology Flashcards */}
         <div className="space-y-3 pt-2">
-          <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-widest">ONNX Terminology Guide</h4>
+          <h4 className="text-xs md:text-sm font-bold text-zinc-400 uppercase tracking-widest">ONNX Terminology Guide</h4>
           <p className="text-xs text-zinc-500">Click any card to check its definition.</p>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -323,10 +323,10 @@ export function OnnxComponentsBlog() {
                   {!isFlipped ? (
                     <div className="space-y-1">
                       <span className="text-[9px] font-bold text-teal-400 uppercase tracking-widest block">Concept</span>
-                      <span className="text-xs font-bold text-zinc-100">{t.title}</span>
+                      <span className="text-xs md:text-sm font-bold text-zinc-100">{t.title}</span>
                     </div>
                   ) : (
-                    <div className="text-[10px] text-zinc-300 leading-tight">
+                    <div className="text-[10px] md:text-xs text-zinc-300 leading-tight">
                       {t.desc}
                     </div>
                   )}
@@ -339,8 +339,8 @@ export function OnnxComponentsBlog() {
 
       {/* 2. The model you start with */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">The model you start with</h2>
-        <h3 className="text-sm font-bold text-zinc-200">Encoder, decoder, and autoregression</h3>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">The model you start with</h2>
+        <h3 className="text-base md:text-lg font-bold text-zinc-200">Encoder, decoder, and autoregression</h3>
         <p>
           IndicTrans2 is a <strong className="text-zinc-100 font-bold">sequence-to-sequence</strong> transformer. It translates a
           source sentence into a target sentence. The model has two halves. The
@@ -391,9 +391,9 @@ export function OnnxComponentsBlog() {
           <span className="text-[10px] text-zinc-500 mt-2">Autoregressive decoding: The encoder runs once. The decoder runs repeatedly, fed its own previous output, until it emits the end of sentence token.</span>
         </div>
 
-        <h3 className="text-sm font-bold text-zinc-200">IndicTrans2 architecture constants</h3>
+        <h3 className="text-base md:text-lg font-bold text-zinc-200">IndicTrans2 architecture constants</h3>
         <p>
-          The export scripts hardcode a few constants that must match the model's <code className="text-teal-400 font-mono text-xs">config.json</code>. 
+          The export scripts hardcode a few constants that must match the model's <code className="text-teal-400 font-mono text-xs md:text-sm">config.json</code>. 
           For the en to indic 200M model, the encoder and decoder each have 18 layers. Each layer has 8 attention heads. 
           The embedding dimension is 512, so each head has dimension 64. These numbers drive the shape of every past and present KV tensor 
           in the exported graphs.
@@ -408,8 +408,8 @@ export function OnnxComponentsBlog() {
 
       {/* 3. Why one model becomes three graphs */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">Why one model becomes three graphs</h2>
-        <h3 className="text-sm font-bold text-zinc-200">The KV cache problem</h3>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">Why one model becomes three graphs</h2>
+        <h3 className="text-base md:text-lg font-bold text-zinc-200">The KV cache problem</h3>
         <p>
           Naive autoregressive decoding recomputes the full decoder forward pass for every new
           token. To generate token N, the decoder reprocesses tokens 1 through N minus 1. That is
@@ -431,14 +431,14 @@ export function OnnxComponentsBlog() {
           is why a single PyTorch decoder becomes two ONNX graphs, and the encoder becomes a third.
         </p>
 
-        <h3 className="text-sm font-bold text-zinc-200">The split</h3>
+        <h3 className="text-base md:text-lg font-bold text-zinc-200">The split</h3>
         <p>
-          The export script <code className="text-teal-400 font-mono text-xs">01_export_encoder_decoder.py</code> produces exactly three ONNX
+          The export script <code className="text-teal-400 font-mono text-xs md:text-sm">01_export_encoder_decoder.py</code> produces exactly three ONNX
           files. Each has a distinct job and a distinct input and output contract.
         </p>
 
         <div className="overflow-x-auto border border-white/5 rounded-lg my-3">
-          <table className="w-full border-collapse text-left text-xs font-mono">
+          <table className="w-full border-collapse text-left text-sm font-mono">
             <thead>
               <tr className="bg-zinc-900/60 text-zinc-400 border-b border-white/5 font-sans font-semibold">
                 <th className="p-3">File</th>
@@ -494,11 +494,11 @@ export function OnnxComponentsBlog() {
 
       {/* 4. The encoder graph */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">The encoder graph</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">The encoder graph</h2>
         <p>
           The encoder graph is the simplest of the three. It takes the source token ids and an
           attention mask, and returns the contextual embedding for every source token. It runs once
-          per sentence. Its output, <code className="text-teal-400 font-mono text-xs">last_hidden_state</code>, is what the decoder attends to
+          per sentence. Its output, <code className="text-teal-400 font-mono text-xs md:text-sm">last_hidden_state</code>, is what the decoder attends to
           through cross attention.
         </p>
         <p>
@@ -558,9 +558,9 @@ export function OnnxComponentsBlog() {
 
       {/* 5. The decoder (first step) graph */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">The decoder (first step) graph</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">The decoder (first step) graph</h2>
         <p>
-          <code className="text-teal-400 font-mono text-xs">decoder_model.onnx</code> handles the first generation step. It receives the start
+          <code className="text-teal-400 font-mono text-xs md:text-sm">decoder_model.onnx</code> handles the first generation step. It receives the start
           token and the full encoder output, and it produces two things: the logits used to pick the
           first real token, and the complete initial KV cache that every later step will carry.
         </p>
@@ -604,9 +604,9 @@ export function OnnxComponentsBlog() {
 
       {/* 6. The decoder_with_past graph */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">The decoder_with_past graph</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">The decoder_with_past graph</h2>
         <p>
-          <code className="text-teal-400 font-mono text-xs">decoder_with_past_model.onnx</code> is the workhorse. It runs for every step after
+          <code className="text-teal-400 font-mono text-xs md:text-sm">decoder_with_past_model.onnx</code> is the workhorse. It runs for every step after
           the first. It receives the previous token, the encoder attention mask, and the full cache
           from the prior step. It returns updated logits and an updated cache with one more entry
           appended to the decoder self attention portion.
@@ -616,7 +616,7 @@ export function OnnxComponentsBlog() {
           broken translations in earlier exports.
         </p>
 
-        <h3 className="text-sm font-bold text-zinc-200">The dummy encoder hidden states trick</h3>
+        <h3 className="text-base md:text-lg font-bold text-zinc-200">The dummy encoder hidden states trick</h3>
         <p>
           The AI4Bharat modeling code guards cross attention with a check: <em className="italic text-zinc-400 font-serif">if
           encoder_hidden_states is not None, run cross attention.</em> During step 2 and later, the
@@ -633,7 +633,7 @@ export function OnnxComponentsBlog() {
           reads from the cached keys and values, and the dummy states are projected away.
         </p>
 
-        <h3 className="text-sm font-bold text-zinc-200">The zero-cost mask dependency</h3>
+        <h3 className="text-base md:text-lg font-bold text-zinc-200">The zero-cost mask dependency</h3>
         <p>
           The ONNX optimizer noticed that <code className="text-zinc-400 font-mono">encoder_attention_mask</code> appeared unused inside
           the wrapper's forward path, because the cached cross attention already incorporated the
@@ -681,7 +681,7 @@ logits = logits + encoder_attention_mask.sum() * 0.0`}
 
       {/* 7. The KV cache details */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">The KV cache: four tensors per layer</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">The KV cache: four tensors per layer</h2>
         <p>
           Every decoder layer contributes four cache tensors. Two belong to self attention and grow
           each step. Two belong to cross attention and stay fixed at the encoder sequence length.
@@ -689,7 +689,7 @@ logits = logits + encoder_attention_mask.sum() * 0.0`}
         </p>
 
         <div className="overflow-x-auto border border-white/5 rounded-lg my-3">
-          <table className="w-full border-collapse text-left text-xs font-mono">
+          <table className="w-full border-collapse text-left text-sm font-mono">
             <thead>
               <tr className="bg-zinc-900/60 text-zinc-400 border-b border-white/5 font-sans font-semibold">
                 <th className="p-3">Tensor</th>
@@ -769,7 +769,7 @@ logits = logits + encoder_attention_mask.sum() * 0.0`}
         <div>
           <div className="flex items-center gap-2 text-teal-400 mb-1">
             <Play size={16} />
-            <h4 className="text-sm font-bold uppercase tracking-wider">Decode step simulator</h4>
+            <h4 className="text-sm md:text-base font-bold uppercase tracking-wider">Decode step simulator</h4>
           </div>
           <p className="text-xs text-zinc-400 font-sans">Step through the first few generation steps to see how the three graphs cooperate and how the cache grows. The example uses a 5 token source sentence.</p>
         </div>
@@ -791,20 +791,20 @@ logits = logits + encoder_attention_mask.sum() * 0.0`}
         </div>
 
         {/* Content Card */}
-        <div className="bg-zinc-900/60 border border-white/5 rounded-lg p-5 space-y-4 font-mono text-xs">
+        <div className="bg-zinc-900/60 border border-white/5 rounded-lg p-5 space-y-4 font-mono text-xs md:text-sm">
           <div className="flex items-center justify-between border-b border-white/5 pb-2">
             <span className="text-zinc-400 font-sans font-bold">Step {simStep + 1}: {activeStep.title}</span>
-            <span className="text-[10px] bg-teal-500/10 border border-teal-500/20 text-teal-400 px-2 py-0.5 rounded uppercase tracking-wider font-semibold">
+            <span className="text-[10px] bg-teal-500/10 border border-teal-500/20 text-teal-400 px-2 py-0.5 rounded uppercase tracking-wider font-semibold font-sans">
               {activeStep.graph}
             </span>
           </div>
 
-          <p className="text-zinc-300 font-sans text-xs leading-relaxed">{activeStep.desc}</p>
+          <p className="text-zinc-300 font-sans text-xs md:text-sm leading-relaxed">{activeStep.desc}</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-[10px] md:text-xs">
             <div className="space-y-1 bg-zinc-950/40 p-3 rounded border border-white/5">
-              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Inputs (in)</span>
-              <ul className="list-disc pl-4 space-y-1 text-zinc-400 font-mono text-[10px]">
+              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block font-sans">Inputs (in)</span>
+              <ul className="list-disc pl-4 space-y-1 text-zinc-400">
                 {activeStep.inputs.map((inp, idx) => (
                   <li key={idx}>{inp}</li>
                 ))}
@@ -812,8 +812,8 @@ logits = logits + encoder_attention_mask.sum() * 0.0`}
             </div>
 
             <div className="space-y-1 bg-zinc-950/40 p-3 rounded border border-white/5">
-              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Outputs (out)</span>
-              <ul className="list-disc pl-4 space-y-1 text-zinc-400 font-mono text-[10px]">
+              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block font-sans">Outputs (out)</span>
+              <ul className="list-disc pl-4 space-y-1 text-zinc-400">
                 {activeStep.outputs.map((out, idx) => (
                   <li key={idx}>{out}</li>
                 ))}
@@ -821,24 +821,24 @@ logits = logits + encoder_attention_mask.sum() * 0.0`}
             </div>
           </div>
 
-          <div className="p-3 bg-teal-500/5 border border-teal-500/10 rounded text-[10px] text-teal-300 font-sans">
+          <div className="p-3 bg-teal-500/5 border border-teal-500/10 rounded text-xs text-teal-300 font-sans">
             {activeStep.cache}
           </div>
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-between items-center pt-2">
+        <div className="flex justify-between items-center pt-2 font-sans">
           <button
             onClick={() => setSimStep((s) => Math.max(0, s - 1))}
             disabled={simStep === 0}
-            className="flex items-center gap-1 text-xs text-zinc-400 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed transition font-semibold"
+            className="flex items-center gap-1 text-xs md:text-sm text-zinc-400 hover:text-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed transition font-semibold"
           >
             <ArrowLeft size={14} /> Back
           </button>
           <button
             onClick={() => setSimStep((s) => Math.min(simSteps.length - 1, s + 1))}
             disabled={simStep === simSteps.length - 1}
-            className="flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 disabled:opacity-30 disabled:cursor-not-allowed transition font-semibold"
+            className="flex items-center gap-1 text-xs md:text-sm text-teal-400 hover:text-teal-300 disabled:opacity-30 disabled:cursor-not-allowed transition font-semibold"
           >
             Next <ArrowRight size={14} />
           </button>
@@ -847,7 +847,7 @@ logits = logits + encoder_attention_mask.sum() * 0.0`}
 
       {/* 9. External data sidecars */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">External data sidecars</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">External data sidecars</h2>
         <p>
           An ONNX protobuf has a hard practical size limit around 2 GB because of the 32 bit
           message size cap in the protobuf format. The decoder weights for the 200M model approach
@@ -886,7 +886,7 @@ logits = logits + encoder_attention_mask.sum() * 0.0`}
           the same directory.
         </p>
 
-        <div className="bg-teal-500/5 border border-teal-500/10 p-5 rounded-lg text-xs leading-relaxed text-zinc-400">
+        <div className="bg-teal-500/5 border border-teal-500/10 p-5 rounded-lg text-xs md:text-sm leading-relaxed text-zinc-400">
           If you upload a bundle to Hugging Face without the <code className="text-zinc-300 font-mono">.onnx.data</code> sidecars,
           the runtime will fail to load the decoders. Treat each <code className="text-zinc-300 font-mono">.onnx</code> plus its
           <code className="text-zinc-300 font-mono">.onnx.data</code> as an inseparable pair.
@@ -895,14 +895,14 @@ logits = logits + encoder_attention_mask.sum() * 0.0`}
 
       {/* 10. Tokenizers */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">Tokenizers: the other half of the bundle</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">Tokenizers: the other half of the bundle</h2>
         <p>
           The ONNX graphs only know about integer token ids. Turning raw text into ids and ids back
           into text is the job of the tokenizer, which ships as a separate set of files in the same
           bundle. For IndicTrans2 this is where most of the export difficulty lives.
         </p>
 
-        <h3 className="text-sm font-bold text-zinc-200" id="slow-vs-fast">Slow versus fast</h3>
+        <h3 className="text-base md:text-lg font-bold text-zinc-200" id="slow-vs-fast">Slow versus fast</h3>
         <p>
           The original model ships a <strong className="text-zinc-100 font-bold">slow tokenizer</strong> implemented in Python, the file
           <code className="text-zinc-400 font-mono">tokenization_indictrans.py</code>, loaded through <code className="text-zinc-400 font-mono">trust_remote_code=True</code>.
@@ -914,12 +914,12 @@ logits = logits + encoder_attention_mask.sum() * 0.0`}
           The browser needs a <strong className="text-zinc-100 font-bold">fast tokenizer</strong>, the single file format
           <code className="text-zinc-400 font-mono">tokenizer.json</code> understood by the Rust <code className="text-zinc-400 font-mono">tokenizers</code> library and by
           onnxruntime-web's tokenizer support. The build script
-          <code className="text-teal-400 font-mono text-xs">02_build_fast_tokenizers.py</code> converts the SentencePiece models into
+          <code className="text-teal-400 font-mono text-xs md:text-sm">02_build_fast_tokenizers.py</code> converts the SentencePiece models into
           <code className="text-zinc-400 font-mono">tokenizer_src.json</code> and <code className="text-zinc-400 font-mono">tokenizer_tgt.json</code> using the Hugging Face
           <code className="text-zinc-400 font-mono">SpmConverter</code>.
         </p>
 
-        <h3 className="text-sm font-bold text-zinc-200" id="dict-remap">Why the dict remap is necessary</h3>
+        <h3 className="text-base md:text-lg font-bold text-zinc-200" id="dict-remap">Why the dict remap is necessary</h3>
         <p>
           The conversion is not a one step copy. <code className="text-zinc-400 font-mono">SpmConverter</code> assigns token ids using
           SentencePiece's native indexing, which does not match the Fairseq dictionary ids the model
@@ -947,7 +947,7 @@ fast["post_processor"] = EOS_POST_PROCESSOR`}
         />
 
         <p>
-          A small <code className="text-teal-400 font-mono text-xs">tokenizer_meta.json</code> file records <code className="text-zinc-400 font-mono">src_dict_size</code>,
+          A small <code className="text-teal-400 font-mono text-xs md:text-sm">tokenizer_meta.json</code> file records <code className="text-zinc-400 font-mono">src_dict_size</code>,
           <code className="text-zinc-400 font-mono">tgt_dict_size</code>, and <code className="text-zinc-400 font-mono">unk_id: 3</code>. The runtime uses these to clamp
           any id greater than or equal to the dict size down to the unknown token. This guards
           against the fast tokenizer emitting ids for vocabulary entries the model never trained on.
@@ -959,7 +959,7 @@ fast["post_processor"] = EOS_POST_PROCESSOR`}
           tokenizer recognizes those tags and maps them to their dict ids.
         </p>
 
-        <h3 className="text-sm font-bold text-zinc-200" id="two-tokenizers">Why two tokenizers</h3>
+        <h3 className="text-base md:text-lg font-bold text-zinc-200" id="two-tokenizers">Why two tokenizers</h3>
         <p>
           Source and target use separate vocabularies, separate SentencePiece models, and separate
           dictionaries. The source side encodes input text in the source script. The target side
@@ -986,7 +986,7 @@ fast["post_processor"] = EOS_POST_PROCESSOR`}
 
       {/* 11. Config files */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">Config files</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">Config files</h2>
         <p>
           Two json files carry model level configuration into the bundle.
           <code className="text-zinc-400 font-mono">config.json</code> holds the architecture constants, layer counts, head counts,
@@ -1012,9 +1012,9 @@ fast["post_processor"] = EOS_POST_PROCESSOR`}
 
       {/* 12. Greedy decode loop */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">Putting it together: the greedy decode loop</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">Putting it together: the greedy decode loop</h2>
         <p>
-          The validation script <code className="text-teal-400 font-mono text-xs">03_validate_parity.py</code> contains the cleanest statement
+          The validation script <code className="text-teal-400 font-mono text-xs md:text-sm">03_validate_parity.py</code> contains the cleanest statement
           of how all the components cooperate. It runs the same greedy loop against both the PyTorch
           model and the three ONNX sessions and compares the emitted token ids. The pass bar is 99
           percent token exact match. All three directions hit 100 percent on their fixtures.
@@ -1077,11 +1077,11 @@ for step in range(max_new_tokens):
 
       {/* 13. Quantization */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">Quantization: a second tier</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">Quantization: a second tier</h2>
         <p>
           The fp32 bundles are large. The en to indic bundle is about 1.7 GB. For low bandwidth or
           mobile deployments, the pipeline offers an optional INT8 tier built by
-          <code className="text-teal-400 font-mono text-xs">04_quantize_int8.py</code>. It runs <strong className="text-zinc-100 font-bold">dynamic quantization</strong> on the
+          <code className="text-teal-400 font-mono text-xs md:text-sm">04_quantize_int8.py</code>. It runs <strong className="text-zinc-100 font-bold">dynamic quantization</strong> on the
           weights of all three graphs, leaving activations in floating point.
         </p>
         <p>
@@ -1114,7 +1114,7 @@ for step in range(max_new_tokens):
           <div>
             <div className="flex items-center gap-2 text-teal-400 mb-1">
               <Database size={16} />
-              <h4 className="text-sm font-bold uppercase tracking-wider">Precision tradeoff calculator</h4>
+              <h4 className="text-sm md:text-base font-bold uppercase tracking-wider font-sans">Precision tradeoff calculator</h4>
             </div>
             <p className="text-xs text-zinc-400">Adjust the precision tier to see the estimated bundle size and quality outcome for the en to indic 200M model.</p>
           </div>
@@ -1136,17 +1136,17 @@ for step in range(max_new_tokens):
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans text-xs md:text-sm">
             <div className="bg-zinc-900/60 border border-white/5 p-4 rounded-lg space-y-1">
-              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Estimated Bundle Size</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Estimated Bundle Size</span>
               <span className="text-zinc-100 font-mono font-bold text-lg">{sizeText}</span>
             </div>
             <div className="bg-zinc-900/60 border border-white/5 p-4 rounded-lg space-y-1">
-              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Expected Text Parity</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Expected Text Parity</span>
               <span className="text-zinc-100 font-mono font-bold text-lg">{activePrecision.parity}</span>
             </div>
             <div className="bg-zinc-900/60 border border-white/5 p-4 rounded-lg space-y-1">
-              <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Runtime Target</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Runtime Target</span>
               <span className="text-zinc-100 font-sans font-semibold text-xs py-1.5 block">{activePrecision.target}</span>
             </div>
           </div>
@@ -1157,8 +1157,8 @@ for step in range(max_new_tokens):
 
           {/* Calculator formula info */}
           <details className="formula-details border border-white/5 rounded-lg p-3 bg-zinc-900/10 cursor-pointer">
-            <summary className="formula-summary text-xs text-zinc-400 font-semibold focus:outline-none select-none">How are these values calculated?</summary>
-            <div className="mt-3 text-xs text-zinc-400 leading-relaxed font-sans space-y-2 cursor-auto" onClick={(e) => e.stopPropagation()}>
+            <summary className="formula-summary text-xs text-zinc-400 font-semibold focus:outline-none select-none font-sans">How are these values calculated?</summary>
+            <div className="mt-3 text-xs md:text-sm text-zinc-400 leading-relaxed font-sans space-y-2 cursor-auto" onClick={(e) => e.stopPropagation()}>
               <p>
                 The size estimate starts from the measured fp32 en to indic bundle size of 1.7 GB and
                 applies a reduction ratio per tier. fp16 halves the weight bytes, giving roughly 0.5
@@ -1190,7 +1190,7 @@ size_gb = max(FP32_BASE_GB * RATIO[tier] * 0.94 + OVERHEAD_GB, OVERHEAD_GB)`}
 
       {/* 14. Manifest Explorer */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">The full bundle manifest</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">The full bundle manifest</h2>
         <p>
           Click any file in the exported en to indic bundle to see what it is, why it is needed, and
           its real size on disk. This is the complete set of components that ship together.
@@ -1204,7 +1204,7 @@ size_gb = max(FP32_BASE_GB * RATIO[tier] * 0.94 + OVERHEAD_GB, OVERHEAD_GB)`}
                 key={file.name}
                 type="button"
                 onClick={() => setSelectedFile(file)}
-                className={`w-full text-left p-3 text-xs transition-all flex flex-col gap-1 ${
+                className={`w-full text-left p-3 text-xs md:text-sm transition-all flex flex-col gap-1 ${
                   selectedFile.name === file.name
                     ? 'bg-teal-500/10 text-teal-300'
                     : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-zinc-200'
@@ -1214,7 +1214,7 @@ size_gb = max(FP32_BASE_GB * RATIO[tier] * 0.94 + OVERHEAD_GB, OVERHEAD_GB)`}
                   <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: roleColors[file.role] }}></span>
                   <span className="font-mono font-bold truncate">{file.name}</span>
                 </div>
-                <div className="text-[10px] text-zinc-500 flex justify-between">
+                <div className="text-[10px] md:text-xs text-zinc-500 flex justify-between">
                   <span>{file.role}</span>
                   <span>{file.size}</span>
                 </div>
@@ -1238,7 +1238,7 @@ size_gb = max(FP32_BASE_GB * RATIO[tier] * 0.94 + OVERHEAD_GB, OVERHEAD_GB)`}
                   {selectedFile.role}
                 </span>
               </div>
-              <p className="text-zinc-300 text-xs leading-relaxed">{selectedFile.desc}</p>
+              <p className="text-zinc-300 text-xs md:text-sm leading-relaxed">{selectedFile.desc}</p>
             </div>
             <div className="text-[10px] text-zinc-500 flex justify-between pt-3 border-t border-white/5 mt-4">
               <span>Size on disk: <strong className="text-zinc-400">{selectedFile.size}</strong></span>
@@ -1255,7 +1255,7 @@ size_gb = max(FP32_BASE_GB * RATIO[tier] * 0.94 + OVERHEAD_GB, OVERHEAD_GB)`}
           load it end to end.
         </p>
 
-        <div className="bg-teal-500/5 border border-teal-500/10 p-5 rounded-lg text-xs leading-relaxed text-zinc-400">
+        <div className="bg-teal-500/5 border border-teal-500/10 p-5 rounded-lg text-xs md:text-sm leading-relaxed text-zinc-400 font-sans">
           The pipeline validates the bundle before it ships. The parity check runs the same
           greedy decode loop against PyTorch and ONNX, compares token ids, and requires 99
           percent exact match. All three directions pass at 100 percent. The committed parity

@@ -139,23 +139,23 @@ export function BlogTab({ activeSection }: BlogTabProps) {
       
       {activeSection === 'doc-overview' && (
         <div className="space-y-6">
-          <h3 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">Project Overview & Mission</h3>
-          <p className="text-sm text-zinc-300 leading-relaxed font-sans">
+          <h3 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">Project Overview & Mission</h3>
+          <p className="text-sm md:text-base text-zinc-300 leading-relaxed font-sans">
             The goal of this repository is to export and optimize all three directions of the state-of-the-art 
             <strong className="text-zinc-100 font-bold"> IndicTrans2</strong> translation model into browser-ready, highly compressed 
             <strong className="text-zinc-100 font-bold"> ONNX bundles</strong>. This enables client-side, completely private, local machine translations across 22 Scheduled Indian languages directly in web applications (using WebGPU or WebAssembly).
           </p>
 
           <div className="bg-teal-500/5 border border-teal-500/10 p-5 rounded-lg space-y-2">
-            <h4 className="text-xs font-bold text-teal-400 uppercase tracking-wider font-sans">Models Exported & Handled</h4>
-            <ul className="text-xs text-zinc-400 list-disc pl-5 space-y-1">
+            <h4 className="text-xs md:text-sm font-bold text-teal-400 uppercase tracking-wider font-sans">Models Exported & Handled</h4>
+            <ul className="text-sm text-zinc-400 list-disc pl-5 space-y-1">
               <li><strong className="text-zinc-300">en→indic</strong> (dist-200M base & 1B large versions) — Translate English inputs to Indic languages.</li>
               <li><strong className="text-zinc-300">indic→en</strong> (dist-200M base & 1B large versions) — Translate Indic inputs back to English.</li>
               <li><strong className="text-zinc-300">indic→indic</strong> (dist-320M base & 1B large versions) — Translate between various Indic languages directly.</li>
             </ul>
           </div>
 
-          <p className="text-sm text-zinc-300 leading-relaxed font-sans">
+          <p className="text-sm md:text-base text-zinc-300 leading-relaxed font-sans">
             Through precision compression techniques (FP16, INT8, and 4-bit weight-only quantization), we reduce the memory footprints 
             of the largest models by up to 74%, while maintaining high translation parity (retaining BLEU scores above 90% of the baseline oracle).
           </p>
@@ -168,8 +168,8 @@ export function BlogTab({ activeSection }: BlogTabProps) {
 
       {activeSection === 'doc-export' && (
         <div className="space-y-6">
-          <h3 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">The ONNX Export Journey</h3>
-          <p className="text-sm text-zinc-300 leading-relaxed font-sans">
+          <h3 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">The ONNX Export Journey</h3>
+          <p className="text-sm md:text-base text-zinc-300 leading-relaxed font-sans">
             Exporting a custom architecture like IndicTrans2 involves resolving numerous PyTorch tracer, tokenizer mappings, and shape mismatch constraints. 
             Below is the comprehensive list of the 16 issues found and solved:
           </p>
@@ -181,19 +181,19 @@ export function BlogTab({ activeSection }: BlogTabProps) {
                   onClick={() => toggleIssue(issue.id)}
                   className="w-full flex items-center justify-between p-4 bg-zinc-950/40 hover:bg-zinc-900/60 transition text-left"
                 >
-                  <span className="text-xs font-bold text-zinc-200">
+                  <span className="text-sm font-bold text-zinc-200">
                     Issue #{issue.id}: {issue.title}
                   </span>
                   {expandedIssue === issue.id ? <ChevronDown size={14} className="text-zinc-500" /> : <ChevronRight size={14} className="text-zinc-500" />}
                 </button>
                 {expandedIssue === issue.id && (
-                  <div className="p-4 border-t border-white/5 bg-zinc-950/10 space-y-2 text-xs">
+                  <div className="p-4 border-t border-white/5 bg-zinc-950/10 space-y-3 text-sm">
                     <div>
-                      <span className="font-bold text-rose-400 uppercase tracking-wider text-[9px] block">Symptom / Root Cause</span>
+                      <span className="font-bold text-rose-400 uppercase tracking-wider text-[10px] block">Symptom / Root Cause</span>
                       <p className="text-zinc-400 mt-1">{issue.symptom}</p>
                     </div>
                     <div className="pt-2 border-t border-white/5">
-                      <span className="font-bold text-teal-400 uppercase tracking-wider text-[9px] block">Resolution</span>
+                      <span className="font-bold text-teal-400 uppercase tracking-wider text-[10px] block">Resolution</span>
                       <p className="text-zinc-300 mt-1">{issue.fix}</p>
                     </div>
                   </div>
@@ -206,28 +206,28 @@ export function BlogTab({ activeSection }: BlogTabProps) {
 
       {activeSection === 'doc-quantization' && (
         <div className="space-y-6">
-          <h3 className="text-xl font-bold text-zinc-100 border-b border-white/5 pb-2">Quantization Challenges & Resolutions</h3>
+          <h3 className="text-xl md:text-2xl font-bold text-zinc-100 border-b border-white/5 pb-2">Quantization Challenges & Resolutions</h3>
           
           <div className="space-y-6">
             <div className="space-y-2">
-              <h4 className="text-sm font-bold text-zinc-200">1. Bias Tensor Type Mismatches (Float16)</h4>
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans">
+              <h4 className="text-base font-bold text-zinc-200">1. Bias Tensor Type Mismatches (Float16)</h4>
+              <p className="text-sm text-zinc-300 leading-relaxed font-sans">
                 During FP16 conversion via `onnxconverter-common`, bias vectors added directly to linear outputs remained stored as float32 in graph initializers. 
                 When loaded in ONNX Runtime, the session initialization crashed due to mixed-type inputs in the `Add` operators.
               </p>
-              <div className="p-3 bg-zinc-950/60 rounded border border-white/5 font-mono text-[10px] text-zinc-300">
+              <div className="p-3 bg-zinc-950/60 rounded border border-white/5 font-mono text-xs md:text-sm text-zinc-300 leading-relaxed">
                 <span className="text-rose-400">// Resolution: Use ONNX Runtime's internal converter and force fp16 conversion</span><br />
                 ort_fp16(model_fp32, force_fp16_initializers=True, disable_shape_infer=True)
               </div>
             </div>
 
             <div className="space-y-2">
-              <h4 className="text-sm font-bold text-zinc-200">2. Accuracy Level and CPU Drift (Q4F16)</h4>
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans">
+              <h4 className="text-base font-bold text-zinc-200">2. Accuracy Level and CPU Drift (Q4F16)</h4>
+              <p className="text-sm text-zinc-300 leading-relaxed font-sans">
                 Weight-only 4-bit quantized formats (`q4f16`) showed massive quality degradation (token parity falling to 62%) on standard CPUs. 
                 Investigation showed ONNX Runtime falls back to an unoptimized float16 activation kernel on CPU execution paths.
               </p>
-              <div className="p-3 bg-zinc-950/60 rounded border border-white/5 font-mono text-[10px] text-zinc-300">
+              <div className="p-3 bg-zinc-950/60 rounded border border-white/5 font-mono text-xs md:text-sm text-zinc-300 leading-relaxed">
                 <span className="text-teal-400">// Resolution: Switch accuracy_level = 4 (uses int32 accumulation fallback for CPU)</span><br />
                 quantizer = MatMulNBitsQuantizer(bits=4, accuracy_level=4, block_size=16)
               </div>
@@ -238,7 +238,7 @@ export function BlogTab({ activeSection }: BlogTabProps) {
               <div>
                 <div className="flex items-center gap-2 text-teal-400 mb-1">
                   <Database size={16} />
-                  <h4 className="text-sm font-bold uppercase tracking-wider">Precision Tradeoff Calculator</h4>
+                  <h4 className="text-sm md:text-base font-bold uppercase tracking-wider">Precision Tradeoff Calculator</h4>
                 </div>
                 <p className="text-xs text-zinc-400 font-sans">Slide the precision tier to compare estimated bundle size and expected text parity for the en-indic 200M model.</p>
               </div>
@@ -264,15 +264,15 @@ export function BlogTab({ activeSection }: BlogTabProps) {
               {/* Outputs display */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans">
                 <div className="bg-zinc-900/60 border border-white/5 p-4 rounded-lg space-y-1">
-                  <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Estimated Bundle Size</span>
+                  <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Estimated Bundle Size</span>
                   <span className="text-zinc-100 font-mono font-bold text-lg">{activePrecision.size}</span>
                 </div>
                 <div className="bg-zinc-900/60 border border-white/5 p-4 rounded-lg space-y-1">
-                  <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Expected Text Parity</span>
+                  <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Expected Text Parity</span>
                   <span className="text-zinc-100 font-mono font-bold text-lg">{activePrecision.parity}</span>
                 </div>
                 <div className="bg-zinc-900/60 border border-white/5 p-4 rounded-lg space-y-1">
-                  <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Target Execution EP</span>
+                  <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Target Execution EP</span>
                   <span className="text-zinc-100 font-sans font-semibold text-xs py-1.5 block">{activePrecision.target}</span>
                 </div>
               </div>
@@ -283,12 +283,12 @@ export function BlogTab({ activeSection }: BlogTabProps) {
             </div>
 
             <div className="space-y-2">
-              <h4 className="text-sm font-bold text-zinc-200">3. Analysis of Remaining Mismatches</h4>
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans">
+              <h4 className="text-base font-bold text-zinc-200">3. Analysis of Remaining Mismatches</h4>
+              <p className="text-sm text-zinc-300 leading-relaxed font-sans">
                 Detailed inspection of residual mismatches reveals that they represent semantically valid grammatical variations, 
                 rather than structural translation errors. For example:
               </p>
-              <ul className="list-disc pl-5 text-xs text-zinc-400 space-y-1 font-sans">
+              <ul className="list-disc pl-5 text-sm text-zinc-400 space-y-1 font-sans">
                 <li>FP32 translated "Who will win the election?" as `चुनाव कौन जीतेगा?`.</li>
                 <li>Q4F16 translated it as `चुनाव में कौन जीतेगा?` (which adds the valid postposition "में" meaning "in the election").</li>
               </ul>
