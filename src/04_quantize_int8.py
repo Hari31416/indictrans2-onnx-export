@@ -24,10 +24,21 @@ ONNX_FILES = (
 )
 
 
+def _use_external_data_format(src: Path) -> bool:
+    """True when the source graph already uses a .onnx.data weight sidecar."""
+    return src.with_suffix(src.suffix + ".data").exists()
+
+
 def quantize_int8(input_dir: Path, output_dir: Path) -> None:
+    import onnx
     from onnxruntime.quantization import QuantType, quantize_dynamic
 
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    # ORT shape inference cannot infer types for some attention MatMul outputs
+    # in exported transformer graphs (e.g. 1B encoder); DefaultTensorType is the
+    # documented fallback when preprocessing / symbolic infer also fails.
+    extra_options = {"DefaultTensorType": onnx.TensorProto.FLOAT}
 
     for name in ONNX_FILES:
         src = input_dir / name
@@ -35,12 +46,15 @@ def quantize_int8(input_dir: Path, output_dir: Path) -> None:
             raise FileNotFoundError(f"Missing {src}")
 
         dst = output_dir / name
+        use_external = _use_external_data_format(src)
         logger.info("Quantizing %s → %s", name, dst)
         quantize_dynamic(
             model_input=str(src),
             model_output=str(dst),
             weight_type=QuantType.QInt8,
             per_channel=True,
+            use_external_data_format=use_external,
+            extra_options=extra_options,
         )
 
     # Tokenizer and config files are byte-identical to fp32

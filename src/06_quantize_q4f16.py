@@ -35,7 +35,7 @@ import logging
 import shutil
 from pathlib import Path
 
-from onnx_bundle_optimize import finalize_bundle_layout
+from onnx_bundle_optimize import ensure_bundle_graphs_loadable, finalize_bundle_layout
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -147,6 +147,8 @@ def quantize_q4f16(
     exclude_substrings: tuple[str, ...],
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    ensure_bundle_graphs_loadable(input_dir)
 
     for name in ONNX_FILES:
         src = input_dir / name
