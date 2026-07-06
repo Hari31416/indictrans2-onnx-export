@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IndicTrans2 ONNX Browser Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.21.0/dist/ort.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-zinc-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <div class="text-center space-y-3">
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-teal-400">
+        IndicTrans2 ONNX Browser Lab
+      </h1>
+      <p class="text-zinc-400 max-w-2xl mx-auto text-sm sm:text-base">
+        Load a local ONNX export bundle from <code class="text-teal-300/90">scratch/</code> and run translation
+        in the browser with WebGPU or WASM. Use this to verify exports before publishing to Hugging Face.
+      </p>
+      <p class="text-zinc-500 text-xs">
+        Based on the
+        <a href="https://github.com/Hari31416/indictrans2-onnx-browser-demo" class="text-teal-400 hover:text-teal-300 underline" target="_blank" rel="noreferrer">browser demo</a>
+        inference loop.
+      </p>
+    </div>
+
+    <!-- Bundle loader -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 glow-card space-y-6">
+      <h2 class="text-xl font-bold text-zinc-100">Load ONNX Bundle</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-zinc-400">Translation direction</label>
+          <select id="model-direction" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-zinc-200 focus:outline-none focus:border-teal-500">
+            <option value="en-indic">English → Indic</option>
+            <option value="indic-en">Indic → English</option>
+            <option value="indic-indic">Indic → Indic</option>
+          </select>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-zinc-400">Execution provider</label>
+          <select id="ort-provider" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-zinc-200 focus:outline-none focus:border-teal-500">
+            <option value="webgpu">WebGPU (accelerated)</option>
+            <option value="wasm">WASM (CPU fallback)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="quantization-warning" class="hidden bg-amber-950/40 border border-amber-900/60 rounded-lg p-4 text-xs text-amber-400">
+        <span class="font-bold text-amber-300">Note:</span>
+        INT8 / Q4F16 bundles often produce bad output on WebGPU. Prefer WASM for quantized exports.
+      </div>
+
+      <!-- Local folder -->
+      <div class="space-y-3 border border-zinc-800 rounded-lg p-4 bg-zinc-950/40">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm font-semibold text-zinc-200">Option A — Local folder</h3>
+            <p class="text-xs text-zinc-500 mt-1">Select an export directory (e.g. <code class="text-zinc-400">scratch/en-indic-onnx</code>).</p>
+          </div>
+          <label class="inline-flex items-center justify-center px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-medium rounded-lg cursor-pointer transition">
+            Choose folder
+            <input id="bundle-folder" type="file" webkitdirectory directory multiple class="hidden">
+          </label>
+        </div>
+        <p id="folder-summary" class="text-xs text-zinc-500">No folder selected yet.</p>
+        <div id="file-inventory" class="grid grid-cols-1 sm:grid-cols-2 gap-1"></div>
+        <button id="btn-load-folder" disabled class="w-full py-2.5 px-4 bg-teal-600 hover:bg-teal-500 disabled:opacity-40 disabled:pointer-events-none text-white text-sm font-semibold rounded-lg transition">
+          Load from folder
+        </button>
+      </div>
+
+      <!-- Local HTTP URL -->
+      <div class="space-y-3 border border-zinc-800 rounded-lg p-4 bg-zinc-950/40">
+        <div>
+          <h3 class="text-sm font-semibold text-zinc-200">Option B — Local HTTP URL</h3>
+          <p class="text-xs text-zinc-500 mt-1">
+            Serve the bundle with a static server, then paste the base URL. Useful for very large sidecar files.
+          </p>
+        </div>
+        <input id="bundle-url" type="url" placeholder="http://127.0.0.1:8000/scratch/en-indic-onnx"
+          class="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-200 focus:outline-none focus:border-teal-500 placeholder-zinc-600">
+        <button id="btn-load-url" class="w-full py-2.5 px-4 border border-teal-700 hover:bg-teal-950/40 text-teal-300 text-sm font-semibold rounded-lg transition">
+          Load from URL
+        </button>
+      </div>
+
+      <div class="text-xs text-zinc-500 bg-zinc-950/60 border border-zinc-800/60 rounded-lg p-3 space-y-1">
+        <p class="font-medium text-zinc-400">Required files in the bundle folder:</p>
+        <p class="font-mono text-[11px] leading-relaxed text-zinc-500">
+          encoder_model.onnx, decoder_model.onnx, decoder_with_past_model.onnx,
+          tokenizer_src.json, tokenizer_tgt.json, tokenizer_meta.json, generation_config.json
+          (+ any <span class="text-zinc-400">*.onnx.data</span> sidecars)
+        </p>
+      </div>
+
+      <button id="btn-unload" disabled class="px-6 py-2.5 border border-zinc-800 hover:bg-zinc-850 text-zinc-400 text-sm font-semibold rounded-lg transition disabled:opacity-40 disabled:pointer-events-none">
+        Unload model
+      </button>
+    </div>
+
+    <!-- Playground -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 glow-card space-y-6">
+      <h2 class="text-xl font-bold text-zinc-100 flex items-center gap-2">
+        Translation Playground
+        <span id="badge-status" class="px-2 py-0.5 text-xs font-semibold bg-red-950 text-red-400 border border-red-900 rounded-full">
+          Disconnected
+        </span>
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <label class="text-sm font-medium text-zinc-400">Source</label>
+            <select id="src-lang" disabled class="bg-zinc-950 border border-zinc-800 rounded-md p-1.5 text-xs text-zinc-300 disabled:opacity-50"></select>
+          </div>
+          <textarea id="src-text" disabled placeholder="Type text to translate…"
+            class="w-full h-40 bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-zinc-200 focus:outline-none focus:border-teal-500 resize-none placeholder-zinc-600 disabled:opacity-50"></textarea>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <label class="text-sm font-medium text-zinc-400">Target</label>
+            <select id="tgt-lang" disabled class="bg-zinc-950 border border-zinc-800 rounded-md p-1.5 text-xs text-zinc-300 disabled:opacity-50"></select>
+          </div>
+          <div class="relative h-40">
+            <textarea id="tgt-text" readonly placeholder="Translation appears here…"
+              class="w-full h-full bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-zinc-300 resize-none placeholder-zinc-600"></textarea>
+            <div id="translation-loader" class="hidden absolute inset-0 bg-zinc-950/70 rounded-lg flex items-center justify-center">
+              <span class="w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <button id="btn-translate" disabled class="py-3 px-8 bg-teal-600 hover:bg-teal-500 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:pointer-events-none text-white font-semibold rounded-lg transition">
+          Translate
+        </button>
+
+        <div id="metrics" class="hidden grid grid-cols-3 gap-4 text-center">
+          <div class="bg-zinc-950 border border-zinc-800 px-3 py-1.5 rounded-lg">
+            <div class="text-[10px] text-zinc-500 font-bold uppercase">Load</div>
+            <div id="metric-load" class="text-sm font-bold text-zinc-300">-</div>
+          </div>
+          <div class="bg-zinc-950 border border-zinc-800 px-3 py-1.5 rounded-lg">
+            <div class="text-[10px] text-zinc-500 font-bold uppercase">Speed</div>
+            <div id="metric-speed" class="text-sm font-bold text-zinc-300">-</div>
+          </div>
+          <div class="bg-zinc-950 border border-zinc-800 px-3 py-1.5 rounded-lg">
+            <div class="text-[10px] text-zinc-500 font-bold uppercase">Total</div>
+            <div id="metric-total" class="text-sm font-bold text-zinc-300">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading progress -->
+    <div id="loading-card" class="hidden bg-zinc-900 border border-zinc-800 rounded-xl p-6 glow-card space-y-4">
+      <div id="loading-header" class="flex justify-between items-center cursor-pointer select-none">
+        <div class="space-y-1">
+          <h3 class="text-md font-bold text-zinc-200 flex items-center gap-2">
+            Loading bundle
+            <span id="loading-summary-badge" class="hidden px-2 py-0.5 text-[10px] font-semibold bg-emerald-950/60 text-emerald-400 border border-emerald-900/60 rounded-full">Done</span>
+          </h3>
+          <p id="loading-notes" class="text-xs text-zinc-400"></p>
+        </div>
+        <svg id="chevron-icon" class="w-5 h-5 text-zinc-500 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+      <div id="loading-body" class="space-y-4 border-t border-zinc-800/50 pt-4">
+        <div id="progress-container" class="space-y-3"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

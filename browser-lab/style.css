@@ -1,0 +1,29 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #09090b;
+}
+
+.glow-card {
+  box-shadow: 0 0 20px 0 rgba(20, 184, 166, 0.05);
+  transition: all 0.3s ease;
+}
+
+.glow-card:hover {
+  box-shadow: 0 0 25px 0 rgba(20, 184, 166, 0.1);
+}
+
+.file-chip {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.file-chip.ok {
+  color: #34d399;
+}
+
+.file-chip.missing {
+  color: #f87171;
+}
+
+.file-chip.optional {
+  color: #a1a1aa;
+}
