@@ -13,8 +13,9 @@ against fp32 ONNX avoids reloading the heavy PyTorch model for every precision.
 Metrics reported per sentence and in aggregate:
   - token_exact_rate : fraction of fixtures where decoded token IDs are identical
   - text_exact_rate  : fraction where post-processed text strings are identical
-  - avg_latency_ms   : mean wall-clock time per sentence (ORT CPU, greedy loop)
+  - avg_latency_ms   : mean amortized wall-clock time per sentence (ORT CPU, greedy loop)
   - tokens_per_sec   : output tokens / total decode time
+  - sentences_per_sec: fixtures / total decode time (batch-amortized when batch_size > 1)
 
 Usage:
   # Compare fp16 vs fp32 (same direction):
@@ -41,7 +42,6 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -49,10 +49,10 @@ from typing import Any
 import numpy as np
 import sacrebleu
 
+from it2_inference import DecodeOutput, greedy_decode_onnx
+
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
-
-MAX_NEW_TOKENS = 128
 
 
 @dataclass
@@ -82,148 +82,11 @@ def load_fixtures(path: Path) -> list[Fixture]:
     return fixtures
 
 
-def _past_feed(past_outputs: list[np.ndarray], num_layers: int) -> dict[str, np.ndarray]:
-    feed: dict[str, np.ndarray] = {}
-    for i in range(num_layers):
-        base = i * 4
-        feed[f"past_key_values.{i}.decoder.key"] = past_outputs[base]
-        feed[f"past_key_values.{i}.decoder.value"] = past_outputs[base + 1]
-        feed[f"past_key_values.{i}.encoder.key"] = past_outputs[base + 2]
-        feed[f"past_key_values.{i}.encoder.value"] = past_outputs[base + 3]
-    return feed
-
-
-def _make_sessions(onnx_dir: Path) -> tuple[Any, Any, Any]:
-    """Load the three ONNX inference sessions for a bundle directory."""
-    import onnxruntime as ort
-
-    opts = ort.SessionOptions()
-    opts.log_severity_level = 3  # suppress ORT INFO spam
-
-    enc = ort.InferenceSession(
-        str(onnx_dir / "encoder_model.onnx"), sess_options=opts
-    )
-    dec = ort.InferenceSession(
-        str(onnx_dir / "decoder_model.onnx"), sess_options=opts
-    )
-    dec_past = ort.InferenceSession(
-        str(onnx_dir / "decoder_with_past_model.onnx"), sess_options=opts
-    )
-    return enc, dec, dec_past
-
-
-@dataclass
-class DecodeResult:
-    token_ids: list[int]
-    text: str
-    latency_ms: float  # wall-clock for greedy loop (excl. tokenization)
-    n_output_tokens: int  # tokens produced (incl. EOS)
-
-
-def _greedy_decode_onnx(
-    onnx_dir: Path,
-    fixtures: list[Fixture],
-    pytorch_model: str,
-) -> list[DecodeResult]:
-    """Run greedy decode on an ONNX bundle, return decoded results + timing."""
-    import onnxruntime as ort
-    from tokenizers import Tokenizer
-    from transformers import AutoTokenizer
-
-    from IndicTransToolkit import IndicProcessor
-
-    meta = json.loads((onnx_dir / "tokenizer_meta.json").read_text(encoding="utf-8"))
-    src_tok = Tokenizer.from_file(str(onnx_dir / "tokenizer_src.json"))
-    slow_tok = AutoTokenizer.from_pretrained(pytorch_model, trust_remote_code=True)
-    ip = IndicProcessor(inference=True)
-
-    enc, dec, dec_past = _make_sessions(onnx_dir)
-    num_layers = (len(dec.get_outputs()) - 1) // 4
-
-    gen_cfg: dict[str, Any] = {}
-    gen_config_path = onnx_dir / "generation_config.json"
-    if gen_config_path.exists():
-        gen_cfg = json.loads(gen_config_path.read_text(encoding="utf-8"))
-
-    decoder_start_id = int(gen_cfg.get("decoder_start_token_id", 2))
-    eos_id = int(gen_cfg.get("eos_token_id", 2))
-
-    results: list[DecodeResult] = []
-
-    for fx in fixtures:
-        if hasattr(ip, "_placeholder_entity_maps"):
-            ip._placeholder_entity_maps.queue.clear()
-
-        batch = ip.preprocess_batch([fx.text], src_lang=fx.src_lang, tgt_lang=fx.tgt_lang)
-        prefixed = batch[0]
-        encoded = src_tok.encode(prefixed)
-        input_ids_list = [
-            i if i < meta["src_dict_size"] else meta["unk_id"] for i in encoded.ids
-        ]
-        input_ids = np.array([input_ids_list], dtype=np.int64)
-        attn_mask = np.array([encoded.attention_mask], dtype=np.int64)
-
-        t_start = time.perf_counter()
-
-        enc_out = enc.run(["last_hidden_state"], {
-            "input_ids": input_ids,
-            "attention_mask": attn_mask,
-        })[0]
-
-        decoder_input_ids = np.array([[decoder_start_id]], dtype=np.int64)
-        output_ids = [decoder_start_id]
-        past_outputs: list[np.ndarray] | None = None
-
-        for step in range(MAX_NEW_TOKENS):
-            if step == 0:
-                dec_out = dec.run(None, {
-                    "input_ids": decoder_input_ids,
-                    "encoder_hidden_states": enc_out,
-                    "encoder_attention_mask": attn_mask,
-                })
-            else:
-                dec_out = dec_past.run(None, {
-                    "input_ids": decoder_input_ids,
-                    "encoder_attention_mask": attn_mask,
-                    **_past_feed(past_outputs, num_layers),
-                })
-
-            logits = dec_out[0]
-            past_outputs = list(dec_out[1:])
-            next_id = int(np.argmax(logits[0, -1, :]))
-            output_ids.append(next_id)
-            if next_id == eos_id:
-                break
-            decoder_input_ids = np.array([[next_id]], dtype=np.int64)
-
-        latency_ms = (time.perf_counter() - t_start) * 1000.0
-
-        safe_ids = [i if i < meta["tgt_dict_size"] else meta["unk_id"] for i in output_ids]
-        with slow_tok.as_target_tokenizer():
-            decoded = slow_tok.batch_decode(
-                [safe_ids],
-                skip_special_tokens=True,
-                clean_up_tokenization_spaces=True,
-            )
-        text = ip.postprocess_batch(decoded, lang=fx.tgt_lang)[0]
-
-        results.append(
-            DecodeResult(
-                token_ids=output_ids,
-                text=text,
-                latency_ms=latency_ms,
-                n_output_tokens=len(output_ids),
-            )
-        )
-
-    return results
-
-
 def calculate_group_metrics(
     indices: list[int],
     fixtures: list[Fixture],
-    fp32_results: list[DecodeResult],
-    cmp_results: list[DecodeResult],
+    fp32_results: list[DecodeOutput],
+    cmp_results: list[DecodeOutput],
 ) -> dict[str, Any]:
     """Calculate all standard metrics for a subset of results specified by indices."""
     if not indices:
@@ -280,6 +143,8 @@ def calculate_group_metrics(
         "speedup_vs_fp32": round(total_fp32_latency / total_cmp_latency, 3) if total_cmp_latency else 0.0,
         "fp32_tokens_per_sec": round(total_fp32_tokens / (total_fp32_latency / 1000), 1) if total_fp32_latency else 0.0,
         "cmp_tokens_per_sec": round(total_cmp_tokens / (total_cmp_latency / 1000), 1) if total_cmp_latency else 0.0,
+        "fp32_sentences_per_sec": round(n / (total_fp32_latency / 1000), 2) if total_fp32_latency else 0.0,
+        "cmp_sentences_per_sec": round(n / (total_cmp_latency / 1000), 2) if total_cmp_latency else 0.0,
     }
 
 
@@ -289,16 +154,29 @@ def benchmark(
     fixtures: list[Fixture],
     pytorch_model: str,
     label: str,
+    batch_size: int,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """Compare cmp_dir (fp16/q4f16/int8) against fp32_dir as oracle.
 
     Returns a tuple of (report_dict, full_mismatches_list).
     """
     logger.info("=== Decoding with fp32 oracle: %s ===", fp32_dir)
-    fp32_results = _greedy_decode_onnx(fp32_dir, fixtures, pytorch_model)
+    fp32_results = greedy_decode_onnx(
+        fp32_dir,
+        fixtures,
+        pytorch_model=pytorch_model,
+        batch_size=batch_size,
+        measure_latency=True,
+    )
 
     logger.info("=== Decoding with %s: %s ===", label, cmp_dir)
-    cmp_results = _greedy_decode_onnx(cmp_dir, fixtures, pytorch_model)
+    cmp_results = greedy_decode_onnx(
+        cmp_dir,
+        fixtures,
+        pytorch_model=pytorch_model,
+        batch_size=batch_size,
+        measure_latency=True,
+    )
 
     mismatches: list[dict[str, Any]] = []
 
@@ -320,7 +198,6 @@ def benchmark(
     n = len(fixtures)
     overall_metrics = calculate_group_metrics(list(range(n)), fixtures, fp32_results, cmp_results)
 
-    # Breakdown by language
     by_lang: dict[str, list[int]] = {}
     for i, fx in enumerate(fixtures):
         by_lang.setdefault(fx.tgt_lang, []).append(i)
@@ -329,7 +206,6 @@ def benchmark(
     for lang, indices in sorted(by_lang.items()):
         metrics_by_language[lang] = calculate_group_metrics(indices, fixtures, fp32_results, cmp_results)
 
-    # Breakdown by category
     by_cat: dict[str, list[int]] = {}
     for i, fx in enumerate(fixtures):
         by_cat.setdefault(fx.category, []).append(i)
@@ -338,10 +214,9 @@ def benchmark(
     for cat, indices in sorted(by_cat.items()):
         metrics_by_category[cat] = calculate_group_metrics(indices, fixtures, fp32_results, cmp_results)
 
-    # Compute median BLEU/ChrF across target languages
     lang_bleus = [m["sacrebleu_bleu"] for m in metrics_by_language.values()]
     lang_chrfs = [m["sacrebleu_chrf"] for m in metrics_by_language.values()]
-    
+
     overall_metrics["sacrebleu_bleu_mixed"] = overall_metrics["sacrebleu_bleu"]
     overall_metrics["sacrebleu_chrf_mixed"] = overall_metrics["sacrebleu_chrf"]
     overall_metrics["sacrebleu_bleu"] = round(float(np.median(lang_bleus)), 2) if lang_bleus else 0.0
@@ -351,13 +226,13 @@ def benchmark(
         "label": label,
         "oracle": str(fp32_dir),
         "cmp_dir": str(cmp_dir),
+        "batch_size": batch_size,
         **overall_metrics,
         "metrics_by_language": metrics_by_language,
         "metrics_by_category": metrics_by_category,
         "mismatches": mismatches[:20],
     }
 
-    # Log overall summary
     logger.info(
         "[%s] token exact: %d/%d (%.1f%%)  text exact: %d/%d (%.1f%%)",
         label,
@@ -381,14 +256,16 @@ def benchmark(
         report["speedup_vs_fp32"],
     )
     logger.info(
-        "[%s] throughput: fp32=%.1f tok/s  %s=%.1f tok/s",
+        "[%s] throughput: fp32=%.1f tok/s  %s=%.1f tok/s  sentences/s: fp32=%.2f  %s=%.2f",
         label,
         report["fp32_tokens_per_sec"],
         label,
         report["cmp_tokens_per_sec"],
+        report["fp32_sentences_per_sec"],
+        label,
+        report["cmp_sentences_per_sec"],
     )
 
-    # Log markdown breakdown tables
     logger.info("\n=== Target Language Breakdown ===")
     logger.info(f"| Language | Count | Token Match % | Text Match % | BLEU | ChrF | Latency (ms) (FP32 / {label}) | Speedup |")
     logger.info("| --- | --- | --- | --- | --- | --- | --- | --- |")
@@ -484,6 +361,12 @@ def main() -> None:
         type=Path,
         help="Output JSON report path",
     )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=16,
+        help="Inference batch size for fixtures sharing the same language pair (default: 16)",
+    )
     args = parser.parse_args()
 
     fixtures = load_fixtures(args.fixtures)
@@ -495,6 +378,7 @@ def main() -> None:
         fixtures=fixtures,
         pytorch_model=args.pytorch_model,
         label=args.label,
+        batch_size=args.batch_size,
     )
 
     args.report.parent.mkdir(parents=True, exist_ok=True)
@@ -503,7 +387,6 @@ def main() -> None:
     )
     logger.info("Report written → %s", args.report)
 
-    # Save full mismatches list to a sidecar file if any exist
     if mismatches:
         mismatches_path = args.report.with_name(args.report.stem + "-mismatches.json")
         mismatches_path.write_text(
