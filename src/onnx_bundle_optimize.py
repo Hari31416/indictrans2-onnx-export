@@ -27,14 +27,65 @@ BUNDLE_GRAPH_FILES = (
     "decoder_with_past_model.onnx",
 )
 DEFAULT_EXTERNALIZE_THRESHOLD_MB = 100
+# Protobuf hard limit is 2 GiB; save externally well before that.
+EXTERNAL_SAVE_THRESHOLD_BYTES = 512 * 1024 * 1024
 
 
 def _load_model(onnx_path: Path) -> ModelProto:
     return onnx.load(str(onnx_path), load_external_data=True)
 
 
+def _initializer_raw_bytes(model: ModelProto) -> int:
+    return sum(len(init.raw_data) for init in model.graph.initializer if init.raw_data)
+
+
+def _external_locations(model: ModelProto) -> set[str]:
+    locs: set[str] = set()
+    for init in model.graph.initializer:
+        for entry in init.external_data:
+            if entry.key == "location" and entry.value:
+                locs.add(entry.value)
+    return locs
+
+
 def _save_model(model: ModelProto, onnx_path: Path) -> None:
-    save_model(model, str(onnx_path))
+    """Save an ONNX model, using a .onnx.data sidecar when weights are large."""
+    data_path = onnx_path.with_suffix(onnx_path.suffix + ".data")
+    base_dir = onnx_path.parent
+    locs = _external_locations(model)
+
+    if locs:
+        # Weights already live in a sidecar on disk (e.g. decoder_shared.onnx.data).
+        if all((base_dir / loc).is_file() for loc in locs):
+            save_model(model, str(onnx_path), save_as_external_data=False)
+            return
+        # External metadata set but blob missing — materialise on save.
+        if data_path.exists():
+            data_path.unlink()
+        save_model(
+            model,
+            str(onnx_path),
+            save_as_external_data=True,
+            all_tensors_to_one_file=True,
+            location=data_path.name,
+            size_threshold=INLINE_WEIGHT_THRESHOLD,
+        )
+        return
+
+    if _initializer_raw_bytes(model) >= EXTERNAL_SAVE_THRESHOLD_BYTES:
+        if data_path.exists():
+            data_path.unlink()
+        save_model(
+            model,
+            str(onnx_path),
+            save_as_external_data=True,
+            all_tensors_to_one_file=True,
+            location=data_path.name,
+            size_threshold=INLINE_WEIGHT_THRESHOLD,
+        )
+        return
+
+    save_model(model, str(onnx_path), save_as_external_data=False)
 
 
 def _initializer_map(model: ModelProto) -> dict[str, TensorProto]:
@@ -196,27 +247,44 @@ def simplify_onnx_graph(onnx_path: Path) -> ModelProto:
 
     before = len(_load_model(onnx_path).graph.node)
     optimized_path = onnx_path.with_suffix(".optimized.onnx")
-    data_name = onnx_path.with_suffix(onnx_path.suffix + ".data").name
+    optimized_data_path = optimized_path.with_suffix(optimized_path.suffix + ".data")
+    final_data_path = onnx_path.with_suffix(onnx_path.suffix + ".data")
+    use_external = final_data_path.exists() or onnx_path.stat().st_size > 100 * 1024 * 1024
+
+    for stale in (optimized_path, optimized_data_path):
+        if stale.exists():
+            stale.unlink()
 
     try:
         optimize_by_onnxruntime(
             onnx_model=str(onnx_path),
             optimized_model_path=str(optimized_path),
             opt_level=99,
-            save_as_external_data=True,
-            external_data_filename=data_name,
+            save_as_external_data=use_external,
+            external_data_filename=optimized_data_path.name,
         )
     except Exception as exc:
         logger.warning("ORT graph optimization failed for %s: %s", onnx_path.name, exc)
-        if optimized_path.exists():
-            optimized_path.unlink()
+        for stale in (optimized_path, optimized_data_path):
+            if stale.exists():
+                stale.unlink()
         return _load_model(onnx_path)
 
     if not optimized_path.exists():
         logger.warning("ORT optimizer produced no output for %s", onnx_path.name)
         return _load_model(onnx_path)
 
-    optimized_path.replace(onnx_path)
+    # ORT must not write into the live *.onnx.data sidecar — it truncates the file
+    # before all weights are read, leaving a 0-byte sidecar and broken external refs.
+    model = onnx.load(str(optimized_path), load_external_data=True)
+    if final_data_path.exists():
+        final_data_path.unlink()
+
+    _save_model(model, onnx_path)
+
+    optimized_path.unlink(missing_ok=True)
+    optimized_data_path.unlink(missing_ok=True)
+
     model = _load_model(onnx_path)
     after = len(model.graph.node)
     logger.info("Graph simplified %s: %d → %d nodes", onnx_path.name, before, after)
@@ -248,20 +316,19 @@ def externalize_if_large(onnx_path: Path, size_threshold_mb: int = 100) -> bool:
 def _tensor_raw_bytes(tensor: TensorProto, base_dir: Path) -> bytes:
     if tensor.external_data:
         info = {entry.key: entry.value for entry in tensor.external_data}
-        data_file = base_dir / info.get("location", "")
-        offset = int(info.get("offset", 0))
-        length = int(info.get("length", 0))
-        with data_file.open("rb") as handle:
-            handle.seek(offset)
-            return handle.read(length)
+        location = info.get("location", "")
+        if location:
+            data_file = base_dir / location
+            offset = int(info.get("offset", 0))
+            length = int(info.get("length", 0))
+            with data_file.open("rb") as handle:
+                handle.seek(offset)
+                return handle.read(length)
 
     if tensor.raw_data:
         return bytes(tensor.raw_data)
 
-    load_external_data_for_tensor(tensor, str(base_dir))
-    if tensor.raw_data:
-        return bytes(tensor.raw_data)
-
+    # Quantized graphs may store scalar scale/zero-point in typed fields only.
     return numpy_helper.to_array(tensor).tobytes()
 
 
@@ -376,6 +443,22 @@ def optimize_export_bundle(output_dir: Path, *, externalize_threshold_mb: int = 
         simplify_onnx_graph(encoder)
 
     finalize_bundle_layout(output_dir, externalize_threshold_mb=externalize_threshold_mb)
+
+
+def ensure_bundle_graphs_loadable(output_dir: Path) -> None:
+    """Verify each bundle graph can load external weights (fails fast on stale sidecar refs)."""
+    for name in BUNDLE_GRAPH_FILES:
+        path = output_dir / name
+        if not path.exists():
+            continue
+        try:
+            onnx.load(str(path), load_external_data=True)
+        except Exception as exc:
+            raise RuntimeError(
+                f"Cannot load external weights for {path.name} in {output_dir}. "
+                "Re-run the fp16 conversion step (or re-export the fp32 bundle) to "
+                "regenerate a consistent sidecar layout."
+            ) from exc
 
 
 def finalize_bundle_layout(
