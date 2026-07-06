@@ -13,6 +13,7 @@ UV            ?= uv
 SCRATCH       ?= ./scratch
 HF_ORG        ?= hari31416
 ONNX_OPSET    ?= 17
+EVAL_BATCH_SIZE ?= 16
 
 EN_INDIC_MODEL    := ai4bharat/indictrans2-en-indic-dist-200M
 INDIC_EN_MODEL    := ai4bharat/indictrans2-indic-en-dist-200M
@@ -111,6 +112,7 @@ help: ## Show available targets
 	@echo "  make clean                  Remove scratch ONNX artifacts"
 	@echo "  make clean-all              Remove scratch + .venv"
 	@echo "  make preview                Local preview of the ONNX components guide"
+	@echo "  make browser-lab            Serve local ONNX bundle tester (port 8010)"
 	@echo "  make reports                Generate benchmark reports and plots (overall, language, and category levels)"
 	@echo "  make quantize-all           Quantize all 3 models to both INT8 & Q4F16 (incl. FP16)"
 	@echo "  make benchmark-all          Evaluate/benchmark all variants (INT8, FP16, Q4F16)"
@@ -183,7 +185,8 @@ validate-en-indic: setup ## Validate ONNX parity (en→indic)
 		--onnx-dir $(EN_INDIC_OUT) \
 		--pytorch-model $(EN_INDIC_MODEL) \
 		--fixtures $(EN_INDIC_FIXTURES) \
-		--report $(EN_INDIC_REPORT)
+		--report $(EN_INDIC_REPORT) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 quantize-en-indic: setup ## INT8 quantize fp32 bundle (en→indic)
 	$(PYTHON) src/04_quantize_int8.py \
@@ -241,7 +244,8 @@ benchmark-int8-en-indic: setup ## Benchmark INT8 vs fp32 oracle (en→indic)
 		--fixtures  $(EN_INDIC_FIXTURES) \
 		--pytorch-model $(EN_INDIC_MODEL) \
 		--label int8 \
-		--report $(EN_INDIC_BENCH_INT8)
+		--report $(EN_INDIC_BENCH_INT8) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-fp16-en-indic: setup ## Benchmark fp16 vs fp32 oracle (en→indic)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -250,7 +254,8 @@ benchmark-fp16-en-indic: setup ## Benchmark fp16 vs fp32 oracle (en→indic)
 		--fixtures  $(EN_INDIC_FIXTURES) \
 		--pytorch-model $(EN_INDIC_MODEL) \
 		--label fp16 \
-		--report $(EN_INDIC_BENCH_FP16)
+		--report $(EN_INDIC_BENCH_FP16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-q4f16-en-indic: setup ## Benchmark q4f16 vs fp32 oracle (en→indic)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -259,7 +264,8 @@ benchmark-q4f16-en-indic: setup ## Benchmark q4f16 vs fp32 oracle (en→indic)
 		--fixtures  $(EN_INDIC_FIXTURES) \
 		--pytorch-model $(EN_INDIC_MODEL) \
 		--label q4f16 \
-		--report $(EN_INDIC_BENCH_Q4F16)
+		--report $(EN_INDIC_BENCH_Q4F16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 en-indic: export-en-indic tokenizers-en-indic validate-en-indic ## Full en→indic pipeline (steps 1–3)
 
@@ -281,7 +287,8 @@ validate-indic-en: setup ## Validate ONNX parity (indic→en)
 		--onnx-dir $(INDIC_EN_OUT) \
 		--pytorch-model $(INDIC_EN_MODEL) \
 		--fixtures $(INDIC_EN_FIXTURES) \
-		--report $(INDIC_EN_REPORT)
+		--report $(INDIC_EN_REPORT) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 quantize-indic-en: setup ## INT8 quantize fp32 bundle (indic→en)
 	$(PYTHON) src/04_quantize_int8.py \
@@ -339,7 +346,8 @@ benchmark-int8-indic-en: setup ## Benchmark INT8 vs fp32 oracle (indic→en)
 		--fixtures  $(INDIC_EN_FIXTURES) \
 		--pytorch-model $(INDIC_EN_MODEL) \
 		--label int8 \
-		--report $(INDIC_EN_BENCH_INT8)
+		--report $(INDIC_EN_BENCH_INT8) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-fp16-indic-en: setup ## Benchmark fp16 vs fp32 oracle (indic→en)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -348,7 +356,8 @@ benchmark-fp16-indic-en: setup ## Benchmark fp16 vs fp32 oracle (indic→en)
 		--fixtures  $(INDIC_EN_FIXTURES) \
 		--pytorch-model $(INDIC_EN_MODEL) \
 		--label fp16 \
-		--report $(INDIC_EN_BENCH_FP16)
+		--report $(INDIC_EN_BENCH_FP16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-q4f16-indic-en: setup ## Benchmark q4f16 vs fp32 oracle (indic→en)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -357,7 +366,8 @@ benchmark-q4f16-indic-en: setup ## Benchmark q4f16 vs fp32 oracle (indic→en)
 		--fixtures  $(INDIC_EN_FIXTURES) \
 		--pytorch-model $(INDIC_EN_MODEL) \
 		--label q4f16 \
-		--report $(INDIC_EN_BENCH_Q4F16)
+		--report $(INDIC_EN_BENCH_Q4F16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 indic-en: export-indic-en tokenizers-indic-en validate-indic-en ## Full indic→en pipeline (steps 1–3)
 
@@ -379,7 +389,8 @@ validate-indic-indic: setup ## Validate ONNX parity (indic→indic)
 		--onnx-dir $(INDIC_INDIC_OUT) \
 		--pytorch-model $(INDIC_INDIC_MODEL) \
 		--fixtures $(INDIC_INDIC_FIXTURES) \
-		--report $(INDIC_INDIC_REPORT)
+		--report $(INDIC_INDIC_REPORT) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 quantize-indic-indic: setup ## INT8 quantize fp32 bundle (indic→indic)
 	$(PYTHON) src/04_quantize_int8.py \
@@ -437,7 +448,8 @@ benchmark-int8-indic-indic: setup ## Benchmark INT8 vs fp32 oracle (indic→indi
 		--fixtures  $(INDIC_INDIC_FIXTURES) \
 		--pytorch-model $(INDIC_INDIC_MODEL) \
 		--label int8 \
-		--report $(INDIC_INDIC_BENCH_INT8)
+		--report $(INDIC_INDIC_BENCH_INT8) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-fp16-indic-indic: setup ## Benchmark fp16 vs fp32 oracle (indic→indic)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -446,7 +458,8 @@ benchmark-fp16-indic-indic: setup ## Benchmark fp16 vs fp32 oracle (indic→indi
 		--fixtures  $(INDIC_INDIC_FIXTURES) \
 		--pytorch-model $(INDIC_INDIC_MODEL) \
 		--label fp16 \
-		--report $(INDIC_INDIC_BENCH_FP16)
+		--report $(INDIC_INDIC_BENCH_FP16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-q4f16-indic-indic: setup ## Benchmark q4f16 vs fp32 oracle (indic→indic)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -455,7 +468,8 @@ benchmark-q4f16-indic-indic: setup ## Benchmark q4f16 vs fp32 oracle (indic→in
 		--fixtures  $(INDIC_INDIC_FIXTURES) \
 		--pytorch-model $(INDIC_INDIC_MODEL) \
 		--label q4f16 \
-		--report $(INDIC_INDIC_BENCH_Q4F16)
+		--report $(INDIC_INDIC_BENCH_Q4F16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 indic-indic: export-indic-indic tokenizers-indic-indic validate-indic-indic ## Full indic→indic pipeline (steps 1–3)
 
@@ -520,7 +534,8 @@ validate-en-indic-1b: setup ## Validate ONNX parity (en→indic 1B)
 		--pytorch-model $(EN_INDIC_1B_MODEL) \
 		--fixtures $(EN_INDIC_FIXTURES) \
 		--report $(EN_INDIC_1B_REPORT) \
-		$(if $(SMOKE),--smoke)
+		$(if $(SMOKE),--smoke) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 quantize-en-indic-1b: setup ## INT8 quantize fp32 bundle (en→indic 1B)
 	$(PYTHON) src/04_quantize_int8.py \
@@ -545,7 +560,8 @@ benchmark-int8-en-indic-1b: setup ## Benchmark INT8 vs fp32 oracle (en→indic 1
 		--fixtures  $(EN_INDIC_FIXTURES) \
 		--pytorch-model $(EN_INDIC_1B_MODEL) \
 		--label int8 \
-		--report $(EN_INDIC_1B_BENCH_INT8)
+		--report $(EN_INDIC_1B_BENCH_INT8) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-fp16-en-indic-1b: setup ## Benchmark fp16 vs fp32 oracle (en→indic 1B)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -554,7 +570,8 @@ benchmark-fp16-en-indic-1b: setup ## Benchmark fp16 vs fp32 oracle (en→indic 1
 		--fixtures  $(EN_INDIC_FIXTURES) \
 		--pytorch-model $(EN_INDIC_1B_MODEL) \
 		--label fp16 \
-		--report $(EN_INDIC_1B_BENCH_FP16)
+		--report $(EN_INDIC_1B_BENCH_FP16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-q4f16-en-indic-1b: setup ## Benchmark q4f16 vs fp32 oracle (en→indic 1B)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -563,7 +580,8 @@ benchmark-q4f16-en-indic-1b: setup ## Benchmark q4f16 vs fp32 oracle (en→indic
 		--fixtures  $(EN_INDIC_FIXTURES) \
 		--pytorch-model $(EN_INDIC_1B_MODEL) \
 		--label q4f16 \
-		--report $(EN_INDIC_1B_BENCH_Q4F16)
+		--report $(EN_INDIC_1B_BENCH_Q4F16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 en-indic-1b: export-en-indic-1b tokenizers-en-indic-1b validate-en-indic-1b ## Full en→indic 1B pipeline (steps 1-3)
 
@@ -614,7 +632,8 @@ validate-indic-en-1b: setup ## Validate ONNX parity (indic→en 1B)
 		--pytorch-model $(INDIC_EN_1B_MODEL) \
 		--fixtures $(INDIC_EN_FIXTURES) \
 		--report $(INDIC_EN_1B_REPORT) \
-		$(if $(SMOKE),--smoke)
+		$(if $(SMOKE),--smoke) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 quantize-indic-en-1b: setup ## INT8 quantize fp32 bundle (indic→en 1B)
 	$(PYTHON) src/04_quantize_int8.py \
@@ -639,7 +658,8 @@ benchmark-int8-indic-en-1b: setup ## Benchmark INT8 vs fp32 oracle (indic→en 1
 		--fixtures  $(INDIC_EN_FIXTURES) \
 		--pytorch-model $(INDIC_EN_1B_MODEL) \
 		--label int8 \
-		--report $(INDIC_EN_1B_BENCH_INT8)
+		--report $(INDIC_EN_1B_BENCH_INT8) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-fp16-indic-en-1b: setup ## Benchmark fp16 vs fp32 oracle (indic→en 1B)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -648,7 +668,8 @@ benchmark-fp16-indic-en-1b: setup ## Benchmark fp16 vs fp32 oracle (indic→en 1
 		--fixtures  $(INDIC_EN_FIXTURES) \
 		--pytorch-model $(INDIC_EN_1B_MODEL) \
 		--label fp16 \
-		--report $(INDIC_EN_1B_BENCH_FP16)
+		--report $(INDIC_EN_1B_BENCH_FP16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-q4f16-indic-en-1b: setup ## Benchmark q4f16 vs fp32 oracle (indic→en 1B)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -657,7 +678,8 @@ benchmark-q4f16-indic-en-1b: setup ## Benchmark q4f16 vs fp32 oracle (indic→en
 		--fixtures  $(INDIC_EN_FIXTURES) \
 		--pytorch-model $(INDIC_EN_1B_MODEL) \
 		--label q4f16 \
-		--report $(INDIC_EN_1B_BENCH_Q4F16)
+		--report $(INDIC_EN_1B_BENCH_Q4F16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 indic-en-1b: export-indic-en-1b tokenizers-indic-en-1b validate-indic-en-1b ## Full indic→en 1B pipeline (steps 1-3)
 
@@ -708,7 +730,8 @@ validate-indic-indic-1b: setup ## Validate ONNX parity (indic→indic 1B)
 		--pytorch-model $(INDIC_INDIC_1B_MODEL) \
 		--fixtures $(INDIC_INDIC_FIXTURES) \
 		--report $(INDIC_INDIC_1B_REPORT) \
-		$(if $(SMOKE),--smoke)
+		$(if $(SMOKE),--smoke) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 quantize-indic-indic-1b: setup ## INT8 quantize fp32 bundle (indic→indic 1B)
 	$(PYTHON) src/04_quantize_int8.py \
@@ -733,7 +756,8 @@ benchmark-int8-indic-indic-1b: setup ## Benchmark INT8 vs fp32 oracle (indic→i
 		--fixtures  $(INDIC_INDIC_FIXTURES) \
 		--pytorch-model $(INDIC_INDIC_1B_MODEL) \
 		--label int8 \
-		--report $(INDIC_INDIC_1B_BENCH_INT8)
+		--report $(INDIC_INDIC_1B_BENCH_INT8) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-fp16-indic-indic-1b: setup ## Benchmark fp16 vs fp32 oracle (indic→indic 1B)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -742,7 +766,8 @@ benchmark-fp16-indic-indic-1b: setup ## Benchmark fp16 vs fp32 oracle (indic→i
 		--fixtures  $(INDIC_INDIC_FIXTURES) \
 		--pytorch-model $(INDIC_INDIC_1B_MODEL) \
 		--label fp16 \
-		--report $(INDIC_INDIC_1B_BENCH_FP16)
+		--report $(INDIC_INDIC_1B_BENCH_FP16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 benchmark-q4f16-indic-indic-1b: setup ## Benchmark q4f16 vs fp32 oracle (indic→indic 1B)
 	$(PYTHON) src/07_benchmark_precision.py \
@@ -751,7 +776,8 @@ benchmark-q4f16-indic-indic-1b: setup ## Benchmark q4f16 vs fp32 oracle (indic�
 		--fixtures  $(INDIC_INDIC_FIXTURES) \
 		--pytorch-model $(INDIC_INDIC_1B_MODEL) \
 		--label q4f16 \
-		--report $(INDIC_INDIC_1B_BENCH_Q4F16)
+		--report $(INDIC_INDIC_1B_BENCH_Q4F16) \
+		--batch-size $(EVAL_BATCH_SIZE)
 
 indic-indic-1b: export-indic-indic-1b tokenizers-indic-indic-1b validate-indic-indic-1b ## Full indic→indic 1B pipeline (steps 1-3)
 
@@ -803,6 +829,11 @@ clean-all: clean ## Remove scratch artifacts and Python venv
 preview: ## Serve onnx-components.html locally
 	@echo "Starting local preview server on http://localhost:8000/onnx-components.html..."
 	python3 -m http.server 8000
+
+browser-lab: ## Serve browser-lab/ to test local ONNX bundles
+	@echo "Browser lab: http://127.0.0.1:8010"
+	@echo "Load a bundle from scratch/ via folder picker"
+	cd browser-lab && python3 -m http.server 8010
 
 reports: setup ## Generate benchmark reports and plots (overall, language, and category levels)
 	$(PYTHON) src/generate_visual_reports.py
