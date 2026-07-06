@@ -87,9 +87,9 @@ interface PrecisionTier {
 
 const precisionTiers: PrecisionTier[] = [
   { name: 'fp32', ratio: 1.0, parity: '100% (production)', target: 'WASM / WebGPU', pct: 100 },
-  { name: 'fp16', ratio: 0.5, parity: 'projected ~99% (unmeasured)', target: 'WebGPU (Chrome 121+)', pct: 70 },
-  { name: 'int8', ratio: 0.25, parity: '~80% (preview tier)', target: 'WASM CPU', pct: 45 },
-  { name: 'q4f16', ratio: 0.125, parity: 'projected (unmeasured)', target: 'WebGPU / mobile', pct: 22 }
+  { name: 'fp16', ratio: 0.5, parity: '99.64% (measured)', target: 'WebGPU (Chrome 121+)', pct: 70 },
+  { name: 'int8', ratio: 0.25, parity: '74.36% (200M en→indic)', target: 'WASM CPU', pct: 45 },
+  { name: 'q4f16', ratio: 0.125, parity: '55.18% (200M en→indic)', target: 'WebGPU / mobile', pct: 22 }
 ]
 
 // Manifest files
@@ -257,7 +257,7 @@ export function OnnxComponentsBlog() {
 
   const activeStep = simSteps[simStep]
   const activePrecision = precisionTiers[precisionTier]
-  const FP32_BASE_GB = 1.7
+  const FP32_BASE_GB = 1.06
   const OVERHEAD_GB = 0.09
   const sizeGb = Math.max(FP32_BASE_GB * activePrecision.ratio * 0.94 + OVERHEAD_GB, OVERHEAD_GB)
   const sizeText = sizeGb >= 1 ? sizeGb.toFixed(2) + ' GB' : Math.round(sizeGb * 1024) + ' MB'
@@ -1103,10 +1103,10 @@ for step in range(max_new_tokens):
         />
 
         <p>
-          The tradeoff is real. The reference int8 benchmark hits about 80 percent exact text match,
-          well below the 99 percent bar that fp32 clears. INT8 ships as a separate preview repo with
-          a warning that it is not production quality. The roadmap also lists fp16 and q4f16 as
-          future tiers with better size to quality tradeoffs.
+          The tradeoff is real. On the 200M en→indic bundle, INT8 lands at about 74 percent exact
+          token match and Q4F16 at about 55 percent — well below the 99 percent bar that fp32 and
+          fp16 clear. Larger 1B models quantize much better (e.g. 90% INT8, 82% Q4F16 on en→indic).
+          See <code>BENCHMARKS.md</code> for full tables.
         </p>
 
         {/* Precision Tradeoff Calculator */}
@@ -1160,7 +1160,7 @@ for step in range(max_new_tokens):
             <summary className="formula-summary text-xs text-zinc-400 font-semibold focus:outline-none select-none font-sans">How are these values calculated?</summary>
             <div className="mt-3 text-xs md:text-sm text-zinc-400 leading-relaxed font-sans space-y-2 cursor-auto" onClick={(e) => e.stopPropagation()}>
               <p>
-                The size estimate starts from the measured fp32 en to indic bundle size of 1.7 GB and
+                The size estimate starts from the measured fp32 en→indic bundle size of 1.06 GB and
                 applies a reduction ratio per tier. fp16 halves the weight bytes, giving roughly 0.5
                 times the fp32 size. INT8 reduces 32 bit weights to 8 bit, giving roughly 0.25 times
                 the fp32 size. q4f16 uses 4 bit weights with 16 bit activations, giving roughly 0.125
@@ -1170,7 +1170,7 @@ for step in range(max_new_tokens):
               
               <CodeBlock
                 label="size model"
-                code={`FP32_BASE_GB = 1.7
+                code={`FP32_BASE_GB = 1.06
 OVERHEAD_GB   = 0.09
 RATIO = {"fp32": 1.0, "fp16": 0.5, "int8": 0.25, "q4f16": 0.125}
 size_gb = max(FP32_BASE_GB * RATIO[tier] * 0.94 + OVERHEAD_GB, OVERHEAD_GB)`}
@@ -1179,9 +1179,8 @@ size_gb = max(FP32_BASE_GB * RATIO[tier] * 0.94 + OVERHEAD_GB, OVERHEAD_GB)`}
               <p>
                 The 0.94 factor accounts for the roughly 6 percent of the fp32 bundle that is already
                 non weight data, tokenizer json and configs, which the ratio should not shrink. Parity
-                values come from the measured fp32 result of 100 percent and the documented int8
-                benchmark of about 80 percent. fp16 and q4f16 parity is projected, not yet measured,
-                and marked as such.
+                values come from measured benchmarks in <code>fixtures/benchmark-*.json</code> (fp16
+                ≥99%, 200M en→indic INT8 ~74%, Q4F16 ~55%; 1B tiers score higher).
               </p>
             </div>
           </details>

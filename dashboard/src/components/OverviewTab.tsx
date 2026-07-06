@@ -32,46 +32,46 @@ const summaryData: DirectionMeta[] = [
   {
     name: 'English to Indic (en-indic)',
     scale200: [
-      { format: 'FP32', size: '1.77 GB', sizeBytes: 1.77, tokenMatch: 100.0, bleu: 100.0, latency: 76.1, speedup: 1.0 },
-      { format: 'FP16', size: '926.5 MB', sizeBytes: 0.90, tokenMatch: 99.64, bleu: 100.0, latency: 82.1, speedup: 0.93 },
-      { format: 'INT8', size: '487.4 MB', sizeBytes: 0.48, tokenMatch: 73.73, bleu: 91.56, latency: 45.6, speedup: 1.57 },
-      { format: 'Q4F16', size: '657.8 MB', sizeBytes: 0.64, tokenMatch: 55.45, bleu: 83.46, latency: 74.9, speedup: 1.01 }
+      { format: 'FP32', size: '1.06 GB', sizeBytes: 1.06, tokenMatch: 100.0, bleu: 100.0, latency: 18.3, speedup: 1.0 },
+      { format: 'FP16', size: '559.6 MB', sizeBytes: 0.55, tokenMatch: 99.64, bleu: 100.0, latency: 24.8, speedup: 0.74 },
+      { format: 'INT8', size: '302.7 MB', sizeBytes: 0.30, tokenMatch: 74.36, bleu: 90.44, latency: 13.2, speedup: 1.59 },
+      { format: 'Q4F16', size: '380.6 MB', sizeBytes: 0.37, tokenMatch: 55.18, bleu: 81.13, latency: 27.3, speedup: 0.71 }
     ],
     scale1b: [
-      { format: 'FP32', size: '6.68 GB', sizeBytes: 6.68, tokenMatch: 100.0, bleu: 100.0, latency: 244.4, speedup: 1.0 },
-      { format: 'FP16', size: '3.36 GB', sizeBytes: 3.36, tokenMatch: 99.73, bleu: 100.0, latency: 259.8, speedup: 0.94 },
-      { format: 'INT8', size: '1.71 GB', sizeBytes: 1.71, tokenMatch: 89.64, bleu: 95.69, latency: 112.6, speedup: 2.23 },
-      { format: 'Q4F16', size: '1.71 GB', sizeBytes: 1.71, tokenMatch: 82.27, bleu: 92.55, latency: 143.3, speedup: 1.67 }
+      { format: 'FP32', size: '4.19 GB', sizeBytes: 4.19, tokenMatch: 100.0, bleu: 100.0, latency: 69.5, speedup: 1.0 },
+      { format: 'FP16', size: '2.11 GB', sizeBytes: 2.11, tokenMatch: 99.73, bleu: 100.0, latency: 74.3, speedup: 0.94 },
+      { format: 'INT8', size: '1.08 GB', sizeBytes: 1.08, tokenMatch: 89.55, bleu: 96.27, latency: 31.4, speedup: 2.12 },
+      { format: 'Q4F16', size: '1.01 GB', sizeBytes: 1.01, tokenMatch: 82.45, bleu: 91.99, latency: 58.4, speedup: 1.19 }
     ]
   },
   {
     name: 'Indic to English (indic-en)',
     scale200: [
-      { format: 'FP32', size: '1.26 GB', sizeBytes: 1.26, tokenMatch: 100.0, bleu: 100.0, latency: 41.4, speedup: 1.0 },
-      { format: 'FP16', size: '661.6 MB', sizeBytes: 0.65, tokenMatch: 99.91, bleu: 99.98, latency: 47.6, speedup: 0.87 },
-      { format: 'INT8', size: '354.0 MB', sizeBytes: 0.35, tokenMatch: 86.0, bleu: 93.87, latency: 38.9, speedup: 1.11 },
-      { format: 'Q4F16', size: '392.9 MB', sizeBytes: 0.38, tokenMatch: 74.45, bleu: 89.15, latency: 47.8, speedup: 0.87 }
+      { format: 'FP32', size: '907.2 MB', sizeBytes: 0.89, tokenMatch: 100.0, bleu: 100.0, latency: 12.2, speedup: 1.0 },
+      { format: 'FP16', size: '471.4 MB', sizeBytes: 0.46, tokenMatch: 99.91, bleu: 99.96, latency: 14.3, speedup: 0.85 },
+      { format: 'INT8', size: '257.3 MB', sizeBytes: 0.25, tokenMatch: 85.64, bleu: 94.34, latency: 10.1, speedup: 1.17 },
+      { format: 'Q4F16', size: '292.4 MB', sizeBytes: 0.29, tokenMatch: 73.36, bleu: 88.31, latency: 15.8, speedup: 0.74 }
     ],
     scale1b: [
-      { format: 'FP32', size: '5.64 GB', sizeBytes: 5.64, tokenMatch: 100.0, bleu: 100.0, latency: 171.8, speedup: 1.0 },
-      { format: 'FP16', size: '2.84 GB', sizeBytes: 2.84, tokenMatch: 99.91, bleu: 99.98, latency: 180.5, speedup: 0.95 },
-      { format: 'INT8', size: '1.45 GB', sizeBytes: 1.45, tokenMatch: 94.18, bleu: 97.94, latency: 76.4, speedup: 2.20 },
-      { format: 'Q4F16', size: '1.19 GB', sizeBytes: 1.19, tokenMatch: 87.55, bleu: 95.17, latency: 85.5, speedup: 1.96 }
+      { format: 'FP32', size: '3.85 GB', sizeBytes: 3.85, tokenMatch: 100.0, bleu: 100.0, latency: 49.0, speedup: 1.0 },
+      { format: 'FP16', size: '1.94 GB', sizeBytes: 1.94, tokenMatch: 99.82, bleu: 99.96, latency: 49.7, speedup: 0.99 },
+      { format: 'INT8', size: '1020.1 MB', sizeBytes: 1.00, tokenMatch: 94.45, bleu: 98.00, latency: 25.2, speedup: 1.90 },
+      { format: 'Q4F16', size: '861.5 MB', sizeBytes: 0.84, tokenMatch: 88.55, bleu: 95.44, latency: 42.7, speedup: 1.08 }
     ]
   },
   {
     name: 'Indic to Indic (indic-indic)',
     scale200: [
-      { format: 'FP32', size: '1.92 GB', sizeBytes: 1.92, tokenMatch: 100.0, bleu: 100.0, latency: 98.2, speedup: 1.0 },
-      { format: 'FP16', size: '1.02 GB', sizeBytes: 1.02, tokenMatch: 99.85, bleu: 100.0, latency: 102.5, speedup: 0.96 },
-      { format: 'INT8', size: '535.8 MB', sizeBytes: 0.52, tokenMatch: 82.24, bleu: 94.81, latency: 54.1, speedup: 1.82 },
-      { format: 'Q4F16', size: '697.1 MB', sizeBytes: 0.68, tokenMatch: 70.36, bleu: 88.52, latency: 88.4, speedup: 1.11 }
+      { format: 'FP32', size: '1.25 GB', sizeBytes: 1.25, tokenMatch: 100.0, bleu: 100.0, latency: 23.0, speedup: 1.0 },
+      { format: 'FP16', size: '671.9 MB', sizeBytes: 0.66, tokenMatch: 99.82, bleu: 100.0, latency: 27.4, speedup: 0.84 },
+      { format: 'INT8', size: '370.9 MB', sizeBytes: 0.36, tokenMatch: 72.18, bleu: 87.13, latency: 16.5, speedup: 1.48 },
+      { format: 'Q4F16', size: '492.9 MB', sizeBytes: 0.48, tokenMatch: 45.91, bleu: 71.64, latency: 28.3, speedup: 0.83 }
     ],
     scale1b: [
-      { format: 'FP32', size: '7.85 GB', sizeBytes: 7.85, tokenMatch: 100.0, bleu: 100.0, latency: 312.4, speedup: 1.0 },
-      { format: 'FP16', size: '3.98 GB', sizeBytes: 3.98, tokenMatch: 99.82, bleu: 100.0, latency: 326.8, speedup: 0.96 },
-      { format: 'INT8', size: '2.04 GB', sizeBytes: 2.04, tokenMatch: 91.22, bleu: 96.88, latency: 142.1, speedup: 2.20 },
-      { format: 'Q4F16', size: '2.01 GB', sizeBytes: 2.01, tokenMatch: 85.46, bleu: 93.92, latency: 182.2, speedup: 1.71 }
+      { format: 'FP32', size: '4.56 GB', sizeBytes: 4.56, tokenMatch: 100.0, bleu: 100.0, latency: 94.7, speedup: 1.0 },
+      { format: 'FP16', size: '2.31 GB', sizeBytes: 2.31, tokenMatch: 99.82, bleu: 100.0, latency: 108.3, speedup: 0.87 },
+      { format: 'INT8', size: '1.19 GB', sizeBytes: 1.19, tokenMatch: 83.64, bleu: 94.22, latency: 43.7, speedup: 2.24 },
+      { format: 'Q4F16', size: '1.21 GB', sizeBytes: 1.21, tokenMatch: 73.18, bleu: 89.33, latency: 94.2, speedup: 1.09 }
     ]
   }
 ]
@@ -135,7 +135,7 @@ export function OverviewTab() {
           </div>
           <div className="space-y-1">
             <div className="text-3xl font-extrabold text-zinc-100">
-              {modelScale === '200M' ? '1.82x' : '2.23x'}
+              {modelScale === '200M' ? '1.59x' : '2.24x'}
             </div>
             <p className="text-xs text-zinc-400">Achieved on INT8 quantization formats.</p>
           </div>
@@ -162,8 +162,8 @@ export function OverviewTab() {
             </div>
           </div>
           <div className="space-y-1">
-            <div className="text-3xl font-extrabold text-zinc-100">Up to 74%</div>
-            <p className="text-xs text-zinc-400">File size reduced from 1.77 GB to 487.4 MB (INT8).</p>
+            <div className="text-3xl font-extrabold text-zinc-100">Up to 72%</div>
+            <p className="text-xs text-zinc-400">File size reduced from 1.06 GB to 302.7 MB (INT8, en→indic).</p>
           </div>
         </div>
       </div>
@@ -264,8 +264,8 @@ export function OverviewTab() {
               <p className="text-xs text-zinc-400">Highly optimized 200M distilled English-to-Indic translation bundle.</p>
             </div>
             <div className="flex items-center gap-2 text-[10px] text-zinc-500">
-              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~1.7 GB FP32</span>
-              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~650 MB quantized</span>
+              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~1.1 GB FP32</span>
+              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~303 MB INT8</span>
             </div>
           </a>
 
@@ -278,8 +278,8 @@ export function OverviewTab() {
               <p className="text-xs text-zinc-400">Exported locally to cache folder. Optimized cross-attention layer mapping.</p>
             </div>
             <div className="flex items-center gap-2 text-[10px] text-zinc-500">
-              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~1.2 GB FP32</span>
-              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~390 MB quantized</span>
+              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~0.9 GB FP32</span>
+              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~257 MB INT8</span>
             </div>
           </div>
 
@@ -292,8 +292,8 @@ export function OverviewTab() {
               <p className="text-xs text-zinc-400">Uses external data protobuf formats to handle decoder weight sizes &gt; 2 GB.</p>
             </div>
             <div className="flex items-center gap-2 text-[10px] text-zinc-500">
-              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~1.9 GB FP32</span>
-              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~697 MB quantized</span>
+              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~1.3 GB FP32</span>
+              <span className="bg-zinc-800 px-2 py-0.5 rounded border border-white/5">~371 MB INT8</span>
             </div>
           </div>
         </div>

@@ -22,14 +22,14 @@ export function BlogTab({ activeSection }: BlogTabProps) {
   const getPrecisionStats = (tier: number) => {
     switch (tier) {
       case 0:
-        return { name: 'FP32', size: '1.7 GB', parity: '100% (Baseline)', target: 'WASM / WebGPU (Precise)', pct: 100 }
+        return { name: 'FP32', size: '1.06 GB', parity: '100% (Baseline)', target: 'WASM / WebGPU (Precise)', pct: 100 }
       case 1:
-        return { name: 'FP16', size: '926.5 MB', parity: '99.64% (Accurate)', target: 'WebGPU (Optimized)', pct: 70 }
+        return { name: 'FP16', size: '559.6 MB', parity: '99.64% (Accurate)', target: 'WebGPU (Optimized)', pct: 70 }
       case 2:
-        return { name: 'INT8', size: '487.4 MB', parity: '80.00% (Drifted)', target: 'WASM CPU (Compact)', pct: 45 }
+        return { name: 'INT8', size: '302.7 MB', parity: '74.36% (Drifted)', target: 'WASM CPU (Compact)', pct: 45 }
       case 3:
       default:
-        return { name: 'Q4F16', size: '657.8 MB', parity: '75.00% (Grammatical)', target: 'WebGPU / WASM (Mobile)', pct: 22 }
+        return { name: 'Q4F16', size: '380.6 MB', parity: '55.18% (Lossy)', target: 'WebGPU / WASM (Mobile)', pct: 22 }
     }
   }
 
