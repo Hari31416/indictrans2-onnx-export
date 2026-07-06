@@ -28,7 +28,9 @@ from it2_onnx_wrappers import (
     IndicTransEncoderWrapper,
     past_input_names,
     present_output_names,
+    weights_are_tied,
 )
+from onnx_bundle_optimize import optimize_export_bundle
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -39,31 +41,7 @@ ENC_SEQ = 8
 DEC_SEQ = 1
 NUM_HEADS = 8
 HEAD_DIM = 64
-
-
-def _externalize_if_large(onnx_path: Path, size_threshold_mb: int = 512) -> None:
-    """Move weights to .onnx.data sidecar when the protobuf is large."""
-    import onnx
-    from onnx import save_model
-    from onnx.external_data_helper import convert_model_to_external_data
-
-    model = onnx.load(str(onnx_path), load_external_data=True)
-    proto_mb = onnx_path.stat().st_size / (1024 * 1024)
-    if proto_mb < size_threshold_mb:
-        return
-
-    data_path = onnx_path.with_suffix(onnx_path.suffix + ".data")
-    if data_path.exists():
-        data_path.unlink()
-
-    convert_model_to_external_data(
-        model,
-        all_tensors_to_one_file=True,
-        location=data_path.name,
-        size_threshold=1024,
-    )
-    save_model(model, str(onnx_path))
-    logger.info("Externalized weights → %s (proto was ~%.0f MB)", data_path.name, proto_mb)
+EXTERNALIZE_THRESHOLD_MB = 100
 
 
 def _export_encoder(encoder: torch.nn.Module, output_dir: Path, opset: int) -> None:
@@ -88,7 +66,6 @@ def _export_encoder(encoder: torch.nn.Module, output_dir: Path, opset: int) -> N
         do_constant_folding=True,
         dynamo=False,
     )
-    _externalize_if_large(path)
 
 
 def _export_decoder(
@@ -124,7 +101,6 @@ def _export_decoder(
         do_constant_folding=True,
         dynamo=False,
     )
-    _externalize_if_large(path)
 
 
 def _export_decoder_with_past(
@@ -195,7 +171,6 @@ def _export_decoder_with_past(
         do_constant_folding=True,
         dynamo=False,
     )
-    _externalize_if_large(path)
 
 
 def _copy_hf_artifacts(model_id: str, output_dir: Path) -> None:
@@ -227,11 +202,20 @@ def export_onnx(model_id: str, output_dir: Path, opset: int) -> None:
 
     num_layers = model.config.decoder_layers
     embed_dim = model.config.decoder_embed_dim
+    if weights_are_tied(model.model.decoder, model.lm_head):
+        logger.info("decoder.embed_tokens and lm_head are tied — post-export dedup will apply")
+    else:
+        logger.info(
+            "decoder.embed_tokens and lm_head are separate — skipping tied-weight dedup"
+        )
 
     _export_encoder(model.model.encoder, output_dir, opset)
     _export_decoder(model.model.decoder, model.lm_head, num_layers, embed_dim, output_dir, opset)
     _export_decoder_with_past(model.model.decoder, model.lm_head, num_layers, output_dir, opset)
     _copy_hf_artifacts(model_id, output_dir)
+
+    logger.info("Running post-export optimizations (tied-weight dedup, onnxsim, externalize, shared decoder weights)")
+    optimize_export_bundle(output_dir, externalize_threshold_mb=EXTERNALIZE_THRESHOLD_MB)
 
     expected = [
         "encoder_model.onnx",

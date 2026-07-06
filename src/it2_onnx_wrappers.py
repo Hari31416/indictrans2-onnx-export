@@ -6,6 +6,19 @@ import torch
 import torch.nn as nn
 
 
+def weights_are_tied(decoder: nn.Module, lm_head: nn.Module) -> bool:
+    """True when decoder.embed_tokens and lm_head share the same weight tensor."""
+    embed = decoder.embed_tokens.weight
+    lm = lm_head.weight
+    return embed.data_ptr() == lm.data_ptr()
+
+
+def tie_lm_head_to_embed_tokens(decoder: nn.Module, lm_head: nn.Module) -> None:
+    """Share one weight tensor in PyTorch. Only valid when weights_are_tied would be false
+    but you intentionally want to alias them — not used for indic-indic (untied) models."""
+    lm_head.weight = decoder.embed_tokens.weight
+
+
 def _flatten_past(past_key_values: tuple) -> tuple[torch.Tensor, ...]:
     """Flatten (dec_k, dec_v, enc_k, enc_v) per layer → present.* tensors."""
     flat: list[torch.Tensor] = []
@@ -96,8 +109,7 @@ class IndicTransDecoderWithPastWrapper(nn.Module):
         *past_flat: torch.Tensor,
     ) -> tuple[torch.Tensor, ...]:
         past_key_values = _unflatten_past(past_flat)
-        
-        # Construct dummy encoder hidden states with matching sequence length to bypass projection
+
         batch_size = input_ids.shape[0]
         encoder_seq_len = encoder_attention_mask.shape[1]
         embed_dim = getattr(self.decoder, "embed_dim", 512)
@@ -106,7 +118,7 @@ class IndicTransDecoderWithPastWrapper(nn.Module):
             encoder_seq_len,
             embed_dim,
             dtype=torch.float32,
-            device=input_ids.device
+            device=input_ids.device,
         )
 
         out = self.decoder(

@@ -12,6 +12,8 @@ import logging
 import shutil
 from pathlib import Path
 
+from onnx_bundle_optimize import finalize_bundle_layout
+
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -142,6 +144,9 @@ def quantize_q4f16(
         for src_file in input_dir.glob(pattern):
             shutil.copy2(src_file, output_dir / src_file.name)
             logger.info("Copied  %s", src_file.name)
+
+    logger.info("Finalizing bundle layout (externalize + shared decoder weights)")
+    finalize_bundle_layout(output_dir)
 
     total_mb = (
         sum(

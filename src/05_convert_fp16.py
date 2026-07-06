@@ -15,7 +15,7 @@ Produces:
   decoder_model.onnx
   decoder_with_past_model.onnx
 
-in the output directory, all in fp16.
+Produces fp16 graphs plus the same sidecar layout (`encoder_model.onnx.data`, `decoder_shared.onnx.data`).
 
 Usage:
   python src/05_convert_fp16.py --input scratch/en-indic-onnx \\
@@ -28,6 +28,8 @@ import argparse
 import logging
 import shutil
 from pathlib import Path
+
+from onnx_bundle_optimize import finalize_bundle_layout
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -64,36 +66,7 @@ def _convert_one(src: Path, dst: Path) -> None:
     onnx.save_model(
         model_fp16,
         str(dst),
-        save_as_external_data=False,  # embed weights; externalize below if large
-    )
-
-    # Re-externalize if the proto is large (>512 MB) to stay within protobuf limits
-    _externalize_if_large(dst)
-
-
-def _externalize_if_large(onnx_path: Path, threshold_mb: int = 512) -> None:
-    import onnx
-    from onnx import save_model as onnx_save
-    from onnx.external_data_helper import convert_model_to_external_data
-
-    size_mb = onnx_path.stat().st_size / 1e6
-    if size_mb < threshold_mb:
-        return
-
-    model = onnx.load(str(onnx_path), load_external_data=True)
-    data_path = onnx_path.with_suffix(onnx_path.suffix + ".data")
-    if data_path.exists():
-        data_path.unlink()
-
-    convert_model_to_external_data(
-        model,
-        all_tensors_to_one_file=True,
-        location=data_path.name,
-        size_threshold=1024,
-    )
-    onnx_save(model, str(onnx_path))
-    logger.info(
-        "Externalized weights → %s  (proto was ~%.0f MB)", data_path.name, size_mb
+        save_as_external_data=False,
     )
 
 
@@ -122,6 +95,9 @@ def convert_fp16(input_dir: Path, output_dir: Path) -> None:
         for src in input_dir.glob(pattern):
             shutil.copy2(src, output_dir / src.name)
             logger.info("Copied  %s", src.name)
+
+    logger.info("Finalizing bundle layout (externalize + shared decoder weights)")
+    finalize_bundle_layout(output_dir)
 
     total_mb = (
         sum(

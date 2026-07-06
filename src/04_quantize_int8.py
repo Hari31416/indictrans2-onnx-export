@@ -12,6 +12,8 @@ import logging
 import shutil
 from pathlib import Path
 
+from onnx_bundle_optimize import finalize_bundle_layout
+
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -50,6 +52,9 @@ def quantize_int8(input_dir: Path, output_dir: Path) -> None:
         for src in input_dir.glob(pattern):
             shutil.copy2(src, output_dir / src.name)
             logger.info("Copied %s", src.name)
+
+    logger.info("Finalizing bundle layout (externalize + shared decoder weights)")
+    finalize_bundle_layout(output_dir)
 
     logger.info("INT8 quantization complete → %s", output_dir)
 

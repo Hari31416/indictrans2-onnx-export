@@ -281,8 +281,7 @@ SentencePiece WASM runtime.
 ## Files
 
 - `encoder_model.onnx` (and optional `.onnx.data` weights sidecar)
-- `decoder_model.onnx` (and optional `.onnx.data` weights sidecar)
-- `decoder_with_past_model.onnx` (and optional `.onnx.data` weights sidecar)
+- `decoder_model.onnx` and `decoder_with_past_model.onnx` (share `decoder_shared.onnx.data` when present)
 - `translate.py` — self-contained Python inference helper (see Usage below)
 - Fast tokenizer config files (`tokenizer_src.json`, `tokenizer_tgt.json`, `tokenizer_meta.json`)
 - Model configuration configs (`config.json`, `generation_config.json`)

@@ -22,7 +22,9 @@ from it2_onnx_wrappers import (
     IndicTransEncoderWrapper,
     past_input_names,
     present_output_names,
+    weights_are_tied,
 )
+from onnx_bundle_optimize import optimize_export_bundle
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -31,6 +33,7 @@ logger = logging.getLogger(__name__)
 BATCH = 1
 ENC_SEQ = 8
 DEC_SEQ = 1
+EXTERNALIZE_THRESHOLD_MB = 100
 
 
 def _externalize_if_large(onnx_path: Path, size_threshold_mb: int = 512) -> None:
@@ -294,6 +297,12 @@ def export_onnx(model_id: str, output_dir: Path, opset: int) -> None:
     embed_dim = model.config.decoder_embed_dim
     num_heads = getattr(model.config, "decoder_attention_heads", 8)
     head_dim = embed_dim // num_heads
+    if weights_are_tied(model.model.decoder, model.lm_head):
+        logger.info("decoder.embed_tokens and lm_head are tied — post-export dedup will apply")
+    else:
+        logger.info(
+            "decoder.embed_tokens and lm_head are separate — skipping tied-weight dedup"
+        )
 
     logger.info(
         "Model Config Details: num_layers=%d, embed_dim=%d, num_heads=%d, head_dim=%d",
@@ -313,6 +322,9 @@ def export_onnx(model_id: str, output_dir: Path, opset: int) -> None:
         opset,
     )
     _copy_hf_artifacts(model_id, output_dir)
+
+    logger.info("Running post-export optimizations (tied-weight dedup, onnxsim, externalize, shared decoder weights)")
+    optimize_export_bundle(output_dir, externalize_threshold_mb=EXTERNALIZE_THRESHOLD_MB)
 
     expected = [
         "encoder_model.onnx",

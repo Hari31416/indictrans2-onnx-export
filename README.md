@@ -13,6 +13,7 @@ Consumer integration (IndicProcessor TS port, translation worker, model catalog)
 ```
 indictrans2-onnx-export/
 ├── src/                 # export scripts (run via Makefile)
+│   └── onnx_bundle_optimize.py  # post-export size optimizations
 ├── fixtures/            # golden sentences + parity reports (committed)
 ├── scratch/             # fp32 ONNX bundles (gitignored — upload to HF)
 ├── Makefile             # pipeline targets
@@ -87,6 +88,42 @@ make export-en-indic
 make export-indic-indic
 ```
 
+Each export produces three ONNX graphs plus tokenizer/config artifacts. After export, the pipeline runs size optimizations (tied-weight dedup, ORT graph fusion, weight externalization, shared decoder sidecar). A typical **200M en→indic fp32** bundle layout:
+
+| File | Role |
+| ---- | ---- |
+| `encoder_model.onnx` | Small graph proto |
+| `encoder_model.onnx.data` | Encoder weights (~294 MB fp32) |
+| `decoder_model.onnx` | First decode step (small proto) |
+| `decoder_with_past_model.onnx` | Autoregressive steps 2+ (small proto) |
+| `decoder_shared.onnx.data` | **Shared** decoder weights for both decoder graphs |
+| `tokenizer_*.json`, `config.json`, … | Tokenizer + HF config |
+
+> Both decoder graphs reference `decoder_shared.onnx.data` — upload and ship all `.onnx` + `.data` files together. FP16 / INT8 / Q4F16 conversion steps re-apply the same layout automatically.
+
+1B exports use `src/v2/01_export_encoder_decoder.py` (same artifact layout; larger sidecars).
+
+### ONNX bundle size optimizations
+
+Raw `torch.onnx.export` traces produce functionally correct bundles that are ~40% larger than necessary. After each export (and again after FP16 / INT8 / Q4F16 conversion), the pipeline runs automatic post-processing via `src/onnx_bundle_optimize.py`.
+
+| Optimization | What it does | fp32 impact |
+| ------------ | ------------ | ----------- |
+| Tied-weight dedup | IndicTrans2 ties `decoder.embed_tokens` and `lm_head` on **en→indic** and **indic→en**; export used to serialize both. Post-export, embedding `Gather` routes through `lm_head.weight` when weights are verified tied. **Skipped on indic→indic** (separate embed / lm_head matrices) | ~−500 MB (tied models only) |
+| ORT graph fusion | ONNX Runtime graph optimizer fuses redundant ops (e.g. 3,696 → 1,662 nodes on `decoder_model`) | Moderate proto size; faster load |
+| Weight externalization | Inline weights above 100 MB move to `.onnx.data` sidecars; graph protos stay small for HF browsing | Layout only for encoder |
+| Shared decoder sidecar | `decoder_model` and `decoder_with_past` share one `decoder_shared.onnx.data` via content-addressed offsets instead of two full copies | ~−550 MB |
+
+**Before vs after (200M en→indic fp32):** ~1.9 GB → ~1.05 GB on disk, with 100% greedy-decode parity preserved. Indic→indic (320M) keeps separate embed / lm_head weights and a larger fp32 bundle (~1.3 GB after shared-decoder and ORT fusion).
+
+The optimizations run in this order:
+
+1. Export three graphs with `src/it2_onnx_wrappers.py` (standard `input_ids` decode path — required for IndicTrans correctness)
+2. `optimize_export_bundle()` — dedup, ORT fusion, externalize, share decoder weights
+3. `finalize_bundle_layout()` — re-applied after `05_convert_fp16.py`, `04_quantize_int8.py`, and `06_quantize_q4f16.py` so quantized tiers keep the same sidecar layout
+
+For the full size analysis, comparison against the [naklitechie reference bundle](https://huggingface.co/naklitechie/indictrans2-en-indic-dist-200M-ONNX), and future optimization ideas, see [ONNX_SIZE_OPTIMIZATION.md](./ONNX_SIZE_OPTIMIZATION.md).
+
 ### 2. Build fast tokenizers
 
 ```bash
@@ -119,7 +156,7 @@ make upload-indic-en HF_ORG=your-hf-org COMMIT_MESSAGE="Initial release of indic
 make upload-indic-indic HF_ORG=your-hf-org COMMIT_MESSAGE="Initial release of indic-indic ONNX bundle"
 ```
 
-Local bundles: `scratch/en-indic-onnx/` (~1.7 GB), `scratch/indic-en-onnx/` (~1.2 GB), `scratch/indic-indic-onnx/` (~1.9 GB).
+Local bundles: `scratch/en-indic-onnx/` (~1.1 GB), `scratch/indic-en-onnx/` (~0.8 GB), `scratch/indic-indic-onnx/` (~1.1 GB).
 
 After upload, set bundle paths in [local-voice-chat `translation-models.ts`](https://github.com/Hari31416/local-voice-chat/blob/main/src/lib/translation-models.ts).
 
@@ -145,9 +182,9 @@ Input sentences are loaded from `fixtures/smoke-test/test_sentences_<lang>.json`
 
 | Direction | Fixtures | Token Pass Rate | Text Pass Rate | Model Size | Validation Time |
 | - | - | - | - | - | - |
-| en-indic | 264 | 100.0% | 100.0% | 1.74 GB | 48.03s |
-| indic-en | 264 | 100.0% | 100.0% | 1.22 GB | 37.85s |
-| indic-indic | 264 | 100.0% | 100.0% | 1.91 GB | 52.34s |
+| en-indic | 1100 | 100.0% | 100.0% | ~1.05 GB | 210s |
+| indic-en | 1100 | 100.0% | 100.0% | ~0.8 GB | — |
+| indic-indic | 1100 | 100.0% | 100.0% | ~1.1 GB | — |
 
 ### Quantization Benchmarks (200M/320M Models)
 
