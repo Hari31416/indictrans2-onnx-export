@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+import _src_path  # noqa: F401
+
 import argparse
 import logging
 import subprocess

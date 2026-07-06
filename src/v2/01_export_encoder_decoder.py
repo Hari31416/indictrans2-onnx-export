@@ -7,6 +7,8 @@ ONNX external weight data format when individual graphs exceed the 2GB Protobuf 
 
 from __future__ import annotations
 
+import _src_path  # noqa: F401
+
 import argparse
 import logging
 import shutil
