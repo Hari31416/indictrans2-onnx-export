@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IndicTrans2 ONNX Automated Benchmark</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.21.0/dist/ort.min.js"></script>
+</head>
+<body class="bg-zinc-955 text-zinc-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8 font-['Inter']">
+  <div class="max-w-3xl mx-auto space-y-8">
+    <div class="text-center space-y-2">
+      <h1 class="text-3xl font-extrabold tracking-tight text-teal-400">
+        IndicTrans2 ONNX Browser Benchmark
+      </h1>
+      <p class="text-zinc-400 text-sm">
+        Running automated execution speed benchmark across 24 model configurations (WASM & WebGPU).
+      </p>
+    </div>
+
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-6 shadow-xl">
+      <div class="flex justify-between items-center pb-4 border-b border-zinc-800">
+        <div>
+          <h2 id="current-target-id" class="text-lg font-bold text-zinc-200 font-mono text-teal-300">Initializing...</h2>
+          <p id="current-status" class="text-xs text-zinc-500 mt-1">Starting benchmarking suite</p>
+        </div>
+        <div id="progress-badge" class="px-3 py-1 text-xs font-semibold bg-teal-950 text-teal-400 border border-teal-900 rounded-full font-mono">
+          0 / 48
+        </div>
+      </div>
+
+      <!-- Logs panel -->
+      <div class="space-y-2">
+        <label class="text-xs font-medium text-zinc-400 uppercase tracking-wider">Console Logs</label>
+        <div id="console-logs" class="w-full h-80 bg-zinc-950 border border-zinc-800 rounded-lg p-4 font-mono text-xs overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-zinc-800">
+        </div>
+      </div>
+
+      <!-- Results view (hidden until complete) -->
+      <div id="completed-panel" class="hidden space-y-4 pt-4 border-t border-zinc-800">
+        <h3 class="text-sm font-semibold text-emerald-400 flex items-center gap-2">
+          ✓ Benchmarks Completed Successfully
+        </h3>
+        <p class="text-xs text-zinc-400">
+          The benchmark data has been sent and saved to the server. You can close this tab now.
+        </p>
+        <pre id="results-json" class="w-full max-h-60 bg-zinc-950 border border-zinc-800 rounded-lg p-4 font-mono text-[10px] overflow-y-auto text-zinc-300"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="benchmark.js"></script>
+</body>
+</html>

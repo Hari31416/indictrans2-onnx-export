@@ -38,8 +38,10 @@ Throughput is evaluated across 10 translation sentences and averaged. It represe
 
 ### Key Throughput Insights
 
-- **WASM INT8 Speed Supremacy**: On the Base model, **WASM INT8 achieved 39.5 tokens/sec**, outperforming **WebGPU Q4F16 (31.7 t/s)** and **WebGPU FP32 (36.8 t/s)**. Highly optimized CPU integer matrix multiplications (SIMD) perform exceptionally well when bypassing GPU transfer latency.
-- **1B WebGPU Acceleration**: For the 1B scale model, WebGPU `Q4F16` is highly accelerated at **28.2 tokens/sec**, whereas the CPU WASM fallback degrades to an unusable **1.8 tokens/sec** (a **15.6x speedup** for WebGPU). WebGPU is mandatory for running models containing >= 1B parameters in the browser.
+- **WASM CPU FP32 Supremacy on Base**: On the Base model (200M/320M), **WASM CPU FP32 achieved a blazing 102.5 tokens/sec**, outperforming all other options (including WebGPU FP32 at 15.2 t/s). At smaller scales, CPU execution via native WebAssembly 128-bit SIMD completely bypasses the GPU command submission and CPU-GPU transfer overhead that bottleneck WebGPU.
+- **WASM CPU FP16 Software Emulation Trap**: On the CPU, WASM FP16 drops to only **14.1 tokens/sec** (a 7.2x degradation compared to FP32). Browser CPUs lack native hardware support for half-precision math, forcing the runtime into slow software emulation.
+- **Optimized WASM CPU INT8 Execution**: WASM CPU INT8 runs at **62.8 tokens/sec** using native integer SIMD hardware instructions (Intel VNNI / ARM NEON dot-product).
+- **1B Scale WebGPU Mandatory Acceleration**: For the 1B scale model, WebGPU Q4F16 is accelerated to **16.3 tokens/sec**, whereas WASM CPU degrades to an unusable **2.4 tokens/sec** (a **6.8x speedup** for WebGPU). At 1B parameters, compute density far outweighs GPU bus latency, making GPU acceleration mandatory.
 
 ## Latency Profile: Prefill vs. Decode
 
@@ -49,28 +51,28 @@ Prefill Latency (Time to First Token - TTFT) represents prompt processing, while
 
 ### Key Latency Insights
 
-- **WASM TTFT Penalty**: Time to First Token on WASM CPU for the 1B model (`1b-q4f16`) is **1350ms**, compared to just **75ms on WebGPU**. A 1.3-second delay on every input is highly noticeable, whereas WebGPU feels instantaneous.
-- **Step Latency Comparison**: In the generation loop, WebGPU runs at **29-33ms per token** across all 1B formats, whereas WASM CPU takes **420-500ms per token** on `1b-q4f16`, resulting in visible character-by-character lagging.
+- **WASM CPU TTFT (Prefill) Penalty**: Time to First Token on WASM CPU for the 1B Q4F16 model is **1014 ms**, compared to only **224 ms** on WebGPU. Prompt processing latency on WASM CPU introduces a visible 1-second delay, while WebGPU remains highly responsive.
+- **Step Latency Comparison**: During autoregressive decoding, WebGPU runs at **77-100 ms per token** for the 1B model, whereas WASM CPU takes **461 ms per token** on 1B Q4F16, causing character-by-character lagging.
 
 ## Detailed Benchmark Results Table
 
 Below is the aggregated raw metric table across all tested configurations (averaged across directions).
 
-| Model Scale      | Precision | Execution Provider | Load Time (ms) | Avg TTFT (ms) | Avg Step (ms) | Speed (tokens/sec) | Status                                          |
-| :--------------- | :-------- | :----------------- | :------------- | :------------ | :------------ | :----------------- | :---------------------------------------------- |
-| Base (200M/320M) | FP32      | WebGPU             | 3622 ms        | 54 ms         | 26 ms         | 36.9 t/s           | 🟢 Completed                                     |
-| Base (200M/320M) | FP32      | WASM CPU           | —              | —             | —             | —                  | 🔴 Skipped: WASM Heap Fragmentation Safety       |
-| Base (200M/320M) | FP16      | WebGPU             | 2778 ms        | 45 ms         | 31 ms         | 29.3 t/s           | 🟢 Completed                                     |
-| Base (200M/320M) | FP16      | WASM CPU           | 3808 ms        | 207 ms        | 75 ms         | 11.5 t/s           | 🟢 Completed                                     |
-| Base (200M/320M) | INT8      | WebGPU             | —              | —             | —             | —                  | 🔴 Skipped: WebGPU Operator Limit (Shader Error) |
-| Base (200M/320M) | INT8      | WASM CPU           | 1945 ms        | 102 ms        | 17 ms         | 39.5 t/s           | 🟢 Completed                                     |
-| Base (200M/320M) | Q4F16     | WebGPU             | 2361 ms        | 44 ms         | 29 ms         | 31.7 t/s           | 🟢 Completed                                     |
-| Base (200M/320M) | Q4F16     | WASM CPU           | 3607 ms        | 248 ms        | 97 ms         | 9.5 t/s            | 🟢 Completed                                     |
-| 1B Large         | FP32      | WebGPU             | —              | —             | —             | —                  | 🔴 Skipped: WebGPU Buffer Binding Limit (2 GB)   |
-| 1B Large         | FP32      | WASM CPU           | —              | —             | —             | —                  | 🔴 Skipped: 32-Bit WASM 4 GB Address Ceiling     |
-| 1B Large         | FP16      | WebGPU             | 5954 ms        | 96 ms         | 45 ms         | 19.5 t/s           | 🟢 Completed                                     |
-| 1B Large         | FP16      | WASM CPU           | —              | —             | —             | —                  | 🔴 Skipped: 32-Bit WASM 4 GB Address Ceiling     |
-| 1B Large         | INT8      | WebGPU             | —              | —             | —             | —                  | 🔴 Skipped: WebGPU Operator Limit (Shader Error) |
-| 1B Large         | INT8      | WASM CPU           | 3099 ms        | 575 ms        | 71 ms         | 8.7 t/s            | 🟢 Completed                                     |
-| 1B Large         | Q4F16     | WebGPU             | 3581 ms        | 75 ms         | 31 ms         | 28.2 t/s           | 🟢 Completed                                     |
-| 1B Large         | Q4F16     | WASM CPU           | 4401 ms        | 1352 ms       | 476 ms        | 1.8 t/s            | 🟢 Completed                                     |
+| Model Scale      | Precision | Execution Provider | Load Time (ms) | Avg TTFT (ms) | Avg Step (ms) | Speed (tokens/sec) | Status                                      |
+| :--------------- | :-------- | :----------------- | :------------- | :------------ | :------------ | :----------------- | :------------------------------------------ |
+| Base (200M/320M) | FP32      | WebGPU             | 2428 ms        | 187 ms        | 88 ms         | 15.2 t/s           | 🟢 Completed                                 |
+| Base (200M/320M) | FP32      | WASM CPU           | 4110 ms        | 119 ms        | 12 ms         | 102.5 t/s          | 🟢 Completed                                 |
+| Base (200M/320M) | FP16      | WebGPU             | 2161 ms        | 160 ms        | 87 ms         | 14.8 t/s           | 🟢 Completed                                 |
+| Base (200M/320M) | FP16      | WASM CPU           | 7247 ms        | 247 ms        | 82 ms         | 14.1 t/s           | 🟢 Completed                                 |
+| Base (200M/320M) | INT8      | WebGPU             | 3096 ms        | 677 ms        | 201 ms        | 6.2 t/s            | 🟢 Completed                                 |
+| Base (200M/320M) | INT8      | WASM CPU           | 2864 ms        | 112 ms        | 17 ms         | 62.8 t/s           | 🟢 Completed                                 |
+| Base (200M/320M) | Q4F16     | WebGPU             | 2710 ms        | 214 ms        | 91 ms         | 12.8 t/s           | 🟢 Completed                                 |
+| Base (200M/320M) | Q4F16     | WASM CPU           | 2600 ms        | 230 ms        | 86 ms         | 12.7 t/s           | 🟢 Completed                                 |
+| 1B Large         | FP32      | WebGPU             | 12272 ms       | 287 ms        | 95 ms         | 12.6 t/s           | 🟢 Completed                                 |
+| 1B Large         | FP32      | WASM CPU           | —              | —             | —             | —                  | 🔴 Skipped: 32-Bit WASM 4 GB Address Ceiling |
+| 1B Large         | FP16      | WebGPU             | 4571 ms        | 265 ms        | 100 ms        | 12.3 t/s           | 🟢 Completed                                 |
+| 1B Large         | FP16      | WASM CPU           | —              | —             | —             | —                  | 🔴 Skipped: 32-Bit WASM 4 GB Address Ceiling |
+| 1B Large         | INT8      | WebGPU             | 3051 ms        | 931 ms        | 202 ms        | 5.8 t/s            | 🟢 Completed                                 |
+| 1B Large         | INT8      | WASM CPU           | 3820 ms        | 768 ms        | 76 ms         | 14.5 t/s           | 🟢 Completed                                 |
+| 1B Large         | Q4F16     | WebGPU             | 2566 ms        | 224 ms        | 77 ms         | 16.3 t/s           | 🟢 Completed                                 |
+| 1B Large         | Q4F16     | WASM CPU           | 3296 ms        | 1014 ms       | 461 ms        | 2.4 t/s            | 🟢 Completed                                 |

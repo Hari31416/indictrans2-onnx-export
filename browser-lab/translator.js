@@ -120,8 +120,12 @@ async function createSessionFromBuffer(modelBuffer, ortOptions, externalData) {
   return ort.InferenceSession.create(modelBuffer, options)
 }
 
-async function createSessionFromUrl(modelUrl, ortOptions) {
-  return ort.InferenceSession.create(modelUrl, ortOptions)
+async function createSessionFromUrl(modelUrl, ortOptions, externalData) {
+  const options = { ...ortOptions }
+  if (externalData && externalData.length > 0) {
+    options.externalData = externalData
+  }
+  return ort.InferenceSession.create(modelUrl, options)
 }
 
 async function probeExternalDataUrls(baseUrl) {
@@ -161,6 +165,19 @@ async function loadOnnxSessions({ fileMap, baseUrl, provider, onProgress }) {
     const sidecars = await probeExternalDataUrls(baseUrl)
     if (sidecars.length > 0) {
       ort.env.wasm.numThreads = 1
+      const root = baseUrl.replace(/\/$/, '')
+      for (const name of sidecars) {
+        onProgress('sidecar-fetch', `Downloading sidecar ${name}`, 50)
+        const res = await fetch(`${root}/${name}`)
+        if (!res.ok) {
+          throw new Error(`Failed to fetch external data file: ${name}`)
+        }
+        const bytes = new Uint8Array(await res.arrayBuffer())
+        externalData.push({ path: name, data: bytes })
+        if (!name.startsWith('./')) {
+          externalData.push({ path: `./${name}`, data: bytes })
+        }
+      }
     }
   }
 
@@ -182,8 +199,7 @@ async function loadOnnxSessions({ fileMap, baseUrl, provider, onProgress }) {
     } else {
       const url = `${baseUrl.replace(/\/$/, '')}/${graphName}`
       onProgress(progressId, label, 40)
-      // ORT resolves external .data sidecars relative to the model URL.
-      sessions[graphName] = await createSessionFromUrl(url, ortOptions)
+      sessions[graphName] = await createSessionFromUrl(url, ortOptions, externalData)
     }
 
     onProgress(progressId, label, 100)
@@ -192,11 +208,27 @@ async function loadOnnxSessions({ fileMap, baseUrl, provider, onProgress }) {
   const decSession = sessions['decoder_model.onnx']
   const numLayers = (decSession.outputNames.length - 1) / 4
 
+  // Inspect which execution provider ORT actually selected. With
+  // executionProviders: [provider, 'wasm'], ORT silently falls back to wasm
+  // if the requested EP fails to init — without this check a wasm fallback
+  // would be mislabeled as 'webgpu' by the benchmark.
+  let activeEps = []
+  try {
+    const eps = await sessions['encoder_model.onnx'].fetchexecutionProviders?.()
+    if (Array.isArray(eps)) {
+      activeEps = eps
+    }
+  } catch {
+    // Older ORT builds don't expose fetchexecutionProviders; leave empty so
+    // the benchmark can't falsely reject a load it cannot introspect.
+  }
+
   return {
     enc: sessions['encoder_model.onnx'],
     dec: decSession,
     decPast: sessions['decoder_with_past_model.onnx'],
     numLayers,
+    activeEps,
   }
 }
 
@@ -248,11 +280,13 @@ export async function loadModelFromFiles(fileMap, provider, onProgress) {
 
   await loadTokenizersAndConfig({ fileMap, onProgress })
   currentSessions = await loadOnnxSessions({ fileMap, provider, onProgress })
+  return currentSessions.activeEps
 }
 
 export async function loadModelFromUrl(baseUrl, provider, onProgress) {
   await loadTokenizersAndConfig({ baseUrl, onProgress })
   currentSessions = await loadOnnxSessions({ baseUrl, provider, onProgress })
+  return currentSessions.activeEps
 }
 
 export function unloadModel() {
