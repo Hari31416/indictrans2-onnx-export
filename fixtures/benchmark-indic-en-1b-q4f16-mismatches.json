@@ -155,6 +155,86 @@
     "text_match": false
   },
   {
+    "index": 82,
+    "fixture": {
+      "text": "সপ্তাহান্তে বন্ধুদের সঙ্গে ফুটবল খেলতে সে উপভোগ করে।",
+      "src_lang": "ben_Beng",
+      "tgt_lang": "eng_Latn",
+      "category": "generic"
+    },
+    "fp32_tokens": [
+      2,
+      52,
+      10326,
+      1031,
+      2270,
+      31,
+      61,
+      508,
+      25,
+      16939,
+      4,
+      2
+    ],
+    "q4f16_tokens": [
+      2,
+      52,
+      10326,
+      1031,
+      2270,
+      31,
+      61,
+      508,
+      25,
+      5,
+      16939,
+      4,
+      2
+    ],
+    "fp32_text": "He enjoys playing football with his friends on weekends.",
+    "q4f16_text": "He enjoys playing football with his friends on the weekends.",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
+    "index": 87,
+    "fixture": {
+      "text": "কাজের জন্য তিনি একটি নতুন ল্যাপটপ কিনেছিলেন।",
+      "src_lang": "ben_Beng",
+      "tgt_lang": "eng_Latn",
+      "category": "politics"
+    },
+    "fp32_tokens": [
+      2,
+      52,
+      3340,
+      13,
+      104,
+      6510,
+      16,
+      128,
+      4,
+      2
+    ],
+    "q4f16_tokens": [
+      2,
+      52,
+      3340,
+      13,
+      104,
+      6510,
+      16,
+      5,
+      581,
+      4,
+      2
+    ],
+    "fp32_text": "He bought a new laptop for work.",
+    "q4f16_text": "He bought a new laptop for the job.",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
     "index": 100,
     "fixture": {
       "text": "गोख्रै मुगा गाबनि लोमसाया आलसिया सैमानि सायावजों बारलाङो।",
@@ -272,91 +352,6 @@
     "text_match": false
   },
   {
-    "index": 116,
-    "fixture": {
-      "text": "मोजां अखानि जाहोनाव फसलनि दिहुनथाया जौगाबाय।",
-      "src_lang": "brx_Deva",
-      "tgt_lang": "eng_Latn",
-      "category": "generic"
-    },
-    "fp32_tokens": [
-      2,
-      15,
-      4504,
-      7448,
-      32,
-      3087,
-      395,
-      8,
-      114,
-      2328,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      295,
-      3886,
-      17501,
-      28,
-      3087,
-      395,
-      8,
-      114,
-      2328,
-      4,
-      2
-    ],
-    "fp32_text": "The crop yield has improved due to good rains.",
-    "q4f16_text": "Crop yields have improved due to good rains.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 127,
-    "fixture": {
-      "text": "बिजाबफोरखौ अल्फाबेटारि फारिआव सेलफआव साजायनाय जायो।",
-      "src_lang": "brx_Deva",
-      "tgt_lang": "eng_Latn",
-      "category": "lexicon"
-    },
-    "fp32_tokens": [
-      2,
-      6220,
-      21,
-      6109,
-      10,
-      18574,
-      1707,
-      436,
-      25,
-      5,
-      17854,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      15,
-      1042,
-      21,
-      6109,
-      10,
-      18574,
-      1707,
-      436,
-      25,
-      5,
-      17854,
-      4,
-      2
-    ],
-    "fp32_text": "Books are arranged in alphabetical order on the shelves.",
-    "q4f16_text": "The books are arranged in alphabetical order on the shelves.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
     "index": 133,
     "fixture": {
       "text": "अन्नानै फैगौ सोमबारसिम आबुं खालामजानाय थिस'नखौ जमा खालाम।",
@@ -467,6 +462,47 @@
     ],
     "fp32_text": "The house should be cleaned before the guests arrive.",
     "q4f16_text": "The house should be cleaned before the arrival of guests.",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
+    "index": 143,
+    "fixture": {
+      "text": "कम्पानिया मोनसे लोगोआरि आरो हेफाजाबारि खामानि मावनाय थासारि होयो।",
+      "src_lang": "brx_Deva",
+      "tgt_lang": "eng_Latn",
+      "category": "lexicon"
+    },
+    "fp32_tokens": [
+      2,
+      15,
+      318,
+      1543,
+      13,
+      2685,
+      9,
+      10924,
+      390,
+      1230,
+      4,
+      2
+    ],
+    "q4f16_tokens": [
+      2,
+      15,
+      318,
+      1688,
+      13,
+      2685,
+      9,
+      10924,
+      390,
+      1230,
+      4,
+      2
+    ],
+    "fp32_text": "The company provides a friendly and cooperative working environment.",
+    "q4f16_text": "The company offers a friendly and cooperative working environment.",
     "tokens_match": false,
     "text_match": false
   },
@@ -634,46 +670,6 @@
     "text_match": false
   },
   {
-    "index": 183,
-    "fixture": {
-      "text": "कृपा करियै अगले सोमवार तक्कर पूरा कम्म जमा करी देओ।",
-      "src_lang": "doi_Deva",
-      "tgt_lang": "eng_Latn",
-      "category": "politics"
-    },
-    "fp32_tokens": [
-      2,
-      1843,
-      3540,
-      5,
-      128,
-      10,
-      659,
-      39,
-      279,
-      2630,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      1843,
-      3540,
-      5,
-      803,
-      128,
-      39,
-      279,
-      2630,
-      4,
-      2
-    ],
-    "fp32_text": "Please submit the work in full by next Monday.",
-    "q4f16_text": "Please submit the entire work by next Monday.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
     "index": 200,
     "fixture": {
       "text": "ઝડપી ભુરો શિયાળ આળસુ કૂતરા પર કૂદી પડે છે.",
@@ -754,92 +750,6 @@
     ],
     "fp32_text": "The crop yield has improved due to good rains.",
     "q4f16_text": "The crop yield has improved due to good rainfall.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 218,
-    "fixture": {
-      "text": "તે એક ટેક્નોલોજી કંપનીમાં સોફ્ટવેર એન્જિનિયર તરીકે કામ કરે છે.",
-      "src_lang": "guj_Gujr",
-      "tgt_lang": "eng_Latn",
-      "category": "numerals"
-    },
-    "fp32_tokens": [
-      2,
-      52,
-      732,
-      37,
-      13,
-      1471,
-      6056,
-      16,
-      13,
-      839,
-      318,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      52,
-      732,
-      37,
-      13,
-      1471,
-      6056,
-      10,
-      13,
-      839,
-      318,
-      4,
-      2
-    ],
-    "fp32_text": "He works as a software engineer for a technology company.",
-    "q4f16_text": "He works as a software engineer in a technology company.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 227,
-    "fixture": {
-      "text": "પુસ્તકો મૂળાક્ષર ક્રમમાં છાજલી પર ગોઠવવામાં આવે છે.",
-      "src_lang": "guj_Gujr",
-      "tgt_lang": "eng_Latn",
-      "category": "lexicon"
-    },
-    "fp32_tokens": [
-      2,
-      6220,
-      21,
-      6109,
-      25,
-      5,
-      16736,
-      10,
-      18574,
-      1707,
-      436,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      6220,
-      21,
-      6109,
-      10,
-      18574,
-      1707,
-      436,
-      25,
-      5,
-      16736,
-      4,
-      2
-    ],
-    "fp32_text": "Books are arranged on the shelf in alphabetical order.",
-    "q4f16_text": "Books are arranged in alphabetical order on the shelf.",
     "tokens_match": false,
     "text_match": false
   },
@@ -994,45 +904,47 @@
     "text_match": false
   },
   {
-    "index": 268,
+    "index": 267,
     "fixture": {
-      "text": "वह एक प्रौद्योगिकी कंपनी में सॉफ्टवेयर इंजीनियर के रूप में काम करता है।",
+      "text": "हमें पर्यावरण की रक्षा करने और अधिक से अधिक पेड़ लगाने की आवश्यकता है।",
       "src_lang": "hin_Deva",
       "tgt_lang": "eng_Latn",
-      "category": "numerals"
+      "category": "politics"
     },
     "fp32_tokens": [
       2,
-      52,
-      732,
-      37,
-      13,
-      1471,
-      6056,
-      16,
-      13,
-      839,
-      318,
+      75,
+      113,
+      8,
+      1592,
+      5,
+      1230,
+      9,
+      1741,
+      76,
+      2583,
       4,
       2
     ],
     "q4f16_tokens": [
       2,
-      52,
-      732,
-      37,
-      13,
-      1471,
-      6056,
-      10,
-      13,
-      839,
-      318,
+      75,
+      113,
+      8,
+      1592,
+      5,
+      1230,
+      9,
+      1741,
+      76,
+      9,
+      76,
+      2583,
       4,
       2
     ],
-    "fp32_text": "He works as a software engineer for a technology company.",
-    "q4f16_text": "He works as a software engineer in a technology company.",
+    "fp32_text": "We need to protect the environment and plant more trees.",
+    "q4f16_text": "We need to protect the environment and plant more and more trees.",
     "tokens_match": false,
     "text_match": false
   },
@@ -1077,6 +989,46 @@
     "text_match": false
   },
   {
+    "index": 285,
+    "fixture": {
+      "text": "स्वस्थ भोजन बनाना एक महत्वपूर्ण जीवन कौशल है।",
+      "src_lang": "hin_Deva",
+      "tgt_lang": "eng_Latn",
+      "category": "lexicon"
+    },
+    "fp32_tokens": [
+      2,
+      2637,
+      127,
+      814,
+      4458,
+      12,
+      51,
+      175,
+      134,
+      4987,
+      4,
+      2
+    ],
+    "q4f16_tokens": [
+      2,
+      11824,
+      814,
+      363,
+      12,
+      51,
+      175,
+      134,
+      4987,
+      4,
+      2
+    ],
+    "fp32_text": "Cooking healthy meals is an important life skill.",
+    "q4f16_text": "Making healthy food is an important life skill.",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
     "index": 300,
     "fixture": {
       "text": "ತ್ವರಿತ ಕಂದು ನರಿ ಸೋಮಾರಿ ನಾಯಿಯ ಮೇಲೆ ಜಿಗಿಯುತ್ತದೆ.",
@@ -1116,47 +1068,6 @@
     ],
     "fp32_text": "A quick brown fox jumps on a lazy dog.",
     "q4f16_text": "A quick brown fox jumps over a lazy dog.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 335,
-    "fixture": {
-      "text": "ಆರೋಗ್ಯಕರ ಆಹಾರವನ್ನು ಬೇಯಿಸುವುದು ಒಂದು ಪ್ರಮುಖ ಜೀವನ ಕೌಶಲ್ಯವಾಗಿದೆ.",
-      "src_lang": "kan_Knda",
-      "tgt_lang": "eng_Latn",
-      "category": "lexicon"
-    },
-    "fp32_tokens": [
-      2,
-      2637,
-      127,
-      814,
-      363,
-      12,
-      51,
-      175,
-      134,
-      4987,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      2637,
-      127,
-      814,
-      4458,
-      12,
-      51,
-      175,
-      134,
-      4987,
-      4,
-      2
-    ],
-    "fp32_text": "Cooking healthy food is an important life skill.",
-    "q4f16_text": "Cooking healthy meals is an important life skill.",
     "tokens_match": false,
     "text_match": false
   },
@@ -1393,40 +1304,6 @@
     ],
     "fp32_text": "He is studying business administration at the college.",
     "q4f16_text": "He studies business administration at the college.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 386,
-    "fixture": {
-      "text": "شر چھ پارکہ منٛز گنٛدان۔",
-      "src_lang": "kas_Arab",
-      "tgt_lang": "eng_Latn",
-      "category": "generic"
-    },
-    "fp32_tokens": [
-      2,
-      1798,
-      479,
-      10,
-      5,
-      2784,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      15,
-      195,
-      479,
-      10,
-      5,
-      2784,
-      4,
-      2
-    ],
-    "fp32_text": "Children play in the park.",
-    "q4f16_text": "The children play in the park.",
     "tokens_match": false,
     "text_match": false
   },
@@ -1837,6 +1714,54 @@
     "text_match": false
   },
   {
+    "index": 500,
+    "fixture": {
+      "text": "തവിട്ടുനിറത്തിലുള്ള തവിട്ടുനിറമുള്ള കുറുക്കൻ അലസനായ നായയുടെ മുകളിലൂടെ ചാടുന്നു.",
+      "src_lang": "mal_Mlym",
+      "tgt_lang": "eng_Latn",
+      "category": "generic"
+    },
+    "fp32_tokens": [
+      2,
+      45,
+      3878,
+      20475,
+      31,
+      13,
+      3878,
+      693,
+      21468,
+      111,
+      13,
+      713,
+      16633,
+      2633,
+      4,
+      2
+    ],
+    "q4f16_tokens": [
+      2,
+      45,
+      3878,
+      34,
+      1317,
+      5434,
+      20475,
+      21468,
+      111,
+      13,
+      713,
+      16633,
+      2633,
+      4,
+      2
+    ],
+    "fp32_text": "A brown fox with a brown head jumps over a lazy dog.",
+    "q4f16_text": "A brown-haired fox jumps over a lazy dog.",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
     "index": 516,
     "fixture": {
       "text": "നല്ല മഴ ലഭിച്ചതിനാൽ വിളവ് മെച്ചപ്പെട്ടു.",
@@ -2158,42 +2083,6 @@
     "text_match": false
   },
   {
-    "index": 554,
-    "fixture": {
-      "text": "ट्रेन दोन तास उशिराने धावते.",
-      "src_lang": "mar_Deva",
-      "tgt_lang": "eng_Latn",
-      "category": "generic"
-    },
-    "fp32_tokens": [
-      2,
-      15,
-      1372,
-      12,
-      1762,
-      85,
-      765,
-      1306,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      15,
-      1372,
-      1081,
-      85,
-      765,
-      1306,
-      4,
-      2
-    ],
-    "fp32_text": "The train is running two hours late.",
-    "q4f16_text": "The train runs two hours late.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
     "index": 566,
     "fixture": {
       "text": "चांगला पाऊस पडल्याने पिकांचे उत्पादन सुधारले आहे.",
@@ -2233,44 +2122,6 @@
     "text_match": false
   },
   {
-    "index": 575,
-    "fixture": {
-      "text": "काल या संघाने अजिंक्यपद सामना जिंकला.",
-      "src_lang": "mar_Deva",
-      "tgt_lang": "eng_Latn",
-      "category": "politics"
-    },
-    "fp32_tokens": [
-      2,
-      12453,
-      6,
-      5,
-      293,
-      262,
-      5,
-      9659,
-      865,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      15,
-      293,
-      262,
-      5,
-      9659,
-      865,
-      4245,
-      4,
-      2
-    ],
-    "fp32_text": "Yesterday, the team won the championship match.",
-    "q4f16_text": "The team won the championship match yesterday.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
     "index": 583,
     "fixture": {
       "text": "कृपया पुढील सोमवारपर्यंत पूर्ण केलेले काम सादर करा.",
@@ -2298,13 +2149,14 @@
       1145,
       128,
       39,
-      279,
+      5,
+      411,
       2630,
       4,
       2
     ],
     "fp32_text": "Please submit work completed by next Monday.",
-    "q4f16_text": "Please submit the completed work by next Monday.",
+    "q4f16_text": "Please submit the completed work by the following Monday.",
     "tokens_match": false,
     "text_match": false
   },
@@ -2375,11 +2227,12 @@
       6,
       13,
       1338,
-      1172,
-      21111,
-      377,
-      314,
-      25,
+      12011,
+      1284,
+      2633,
+      3396,
+      11890,
+      111,
       5,
       713,
       16633,
@@ -2388,7 +2241,7 @@
       2
     ],
     "fp32_text": "Soon, a white hairpin falls on the lazy dog.",
-    "q4f16_text": "Soon, a white hairpin came down on the lazy dog.",
+    "q4f16_text": "Soon, a white furry dog leapt over the lazy dog.",
     "tokens_match": false,
     "text_match": false
   },
@@ -2827,6 +2680,48 @@
     "text_match": false
   },
   {
+    "index": 643,
+    "fixture": {
+      "text": "কম্পেনী অসিনা থবক থেংনবগী অমসুং শৌগৎনবগী অকোয়বগী ফিভমবু ঙাক্তুনা থম্মি।",
+      "src_lang": "mni_Beng",
+      "tgt_lang": "eng_Latn",
+      "category": "lexicon"
+    },
+    "fp32_tokens": [
+      2,
+      15,
+      318,
+      12210,
+      13,
+      1037,
+      9,
+      9887,
+      128,
+      1230,
+      4,
+      2
+    ],
+    "q4f16_tokens": [
+      2,
+      15,
+      318,
+      12210,
+      51,
+      1230,
+      7,
+      128,
+      1382,
+      9,
+      427,
+      4,
+      2
+    ],
+    "fp32_text": "The company maintains a positive and supportive work environment.",
+    "q4f16_text": "The company maintains an environment of work contact and support.",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
     "index": 648,
     "fixture": {
       "text": "সনাগী মমলদি অনৌবা ৱাংমদা য়ৌরক্লে।",
@@ -2944,48 +2839,6 @@
     ],
     "fp32_text": "The crop yield has improved due to good rains.",
     "q4f16_text": "The crop yield has improved due to good rainfall.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 673,
-    "fixture": {
-      "text": "हामीले समुद्रको रक्षा गर्न प्लास्टिकको फोहोर घटाउनु पर्छ।",
-      "src_lang": "npi_Deva",
-      "tgt_lang": "eng_Latn",
-      "category": "lexicon"
-    },
-    "fp32_tokens": [
-      2,
-      75,
-      113,
-      8,
-      1566,
-      2779,
-      2735,
-      8,
-      1592,
-      5,
-      14503,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      75,
-      205,
-      1566,
-      2779,
-      2735,
-      8,
-      1592,
-      5,
-      14503,
-      4,
-      2
-    ],
-    "fp32_text": "We need to reduce plastic waste to protect the oceans.",
-    "q4f16_text": "We must reduce plastic waste to protect the oceans.",
     "tokens_match": false,
     "text_match": false
   },
@@ -3231,6 +3084,51 @@
     "text_match": false
   },
   {
+    "index": 728,
+    "fixture": {
+      "text": "ଏକ ଗରମ କପ୍ ଚା'ଏକ ଥଣ୍ଡା ସକାଳ ପାଇଁ ଉପଯୁକ୍ତ |",
+      "src_lang": "ory_Orya",
+      "tgt_lang": "eng_Latn",
+      "category": "generic"
+    },
+    "fp32_tokens": [
+      2,
+      45,
+      1778,
+      2552,
+      7,
+      2439,
+      12,
+      1991,
+      16,
+      13,
+      1444,
+      971,
+      4,
+      2
+    ],
+    "q4f16_tokens": [
+      2,
+      45,
+      1778,
+      2552,
+      7,
+      2439,
+      12,
+      1991,
+      16,
+      13,
+      2055,
+      971,
+      4,
+      2
+    ],
+    "fp32_text": "A hot cup of tea is perfect for a cold morning.",
+    "q4f16_text": "A hot cup of tea is perfect for a cool morning.",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
     "index": 733,
     "fixture": {
       "text": "ଦଯ଼ାକରି ଆସନ୍ତା ସୋମବାର ସୁଦ୍ଧା ସମ୍ପୂର୍ଣ୍ଣ ହୋଇଥିବା କାର୍ଯ୍ଯ଼ ଦାଖଲ କରନ୍ତୁ।",
@@ -3268,42 +3166,6 @@
     "text_match": false
   },
   {
-    "index": 736,
-    "fixture": {
-      "text": "ପିଲାମାନେ ପାର୍କରେ ଖେଳୁଛନ୍ତି।",
-      "src_lang": "ory_Orya",
-      "tgt_lang": "eng_Latn",
-      "category": "generic"
-    },
-    "fp32_tokens": [
-      2,
-      15,
-      195,
-      21,
-      1031,
-      10,
-      5,
-      2784,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      15,
-      195,
-      479,
-      10,
-      5,
-      2784,
-      4,
-      2
-    ],
-    "fp32_text": "The children are playing in the park.",
-    "q4f16_text": "The children play in the park.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
     "index": 757,
     "fixture": {
       "text": "ਪਟਰੌਲ ਦੀਆਂ ਕੀਮਤਾਂ ਵਿੱਚ ਪੰਜ ਰੁਪਏ ਦਾ ਵਾਧਾ ਹੋਇਆ ਹੈ।",
@@ -3334,52 +3196,13 @@
       32,
       1005,
       39,
-      203,
-      71,
+      413,
+      3445,
+      4,
       2
     ],
     "fp32_text": "The price of petrol has been increased by Rs.",
-    "q4f16_text": "The price of petrol has increased by Rs.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 766,
-    "fixture": {
-      "text": "ਚੰਗੀ ਵਰਖਾ ਕਾਰਨ ਫਸਲਾਂ ਦੀ ਪੈਦਾਵਾਰ ਵਿੱਚ ਸੁਧਾਰ ਹੋਇਆ ਹੈ।",
-      "src_lang": "pan_Guru",
-      "tgt_lang": "eng_Latn",
-      "category": "generic"
-    },
-    "fp32_tokens": [
-      2,
-      15,
-      4504,
-      7448,
-      32,
-      3087,
-      395,
-      8,
-      114,
-      2754,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      2186,
-      2754,
-      32,
-      1196,
-      8,
-      3087,
-      4504,
-      17501,
-      4,
-      2
-    ],
-    "fp32_text": "The crop yield has improved due to good rainfall.",
-    "q4f16_text": "Good rainfall has led to improved crop yields.",
+    "q4f16_text": "The price of petrol has increased by five rupees.",
     "tokens_match": false,
     "text_match": false
   },
@@ -3412,13 +3235,14 @@
       32,
       6262,
       1264,
-      2754,
+      1120,
+      16,
       2788,
       4,
       2
     ],
     "fp32_text": "The Meteorological Department has predicted heavy rain tomorrow.",
-    "q4f16_text": "The weather department has predicted heavy rainfall tomorrow.",
+    "q4f16_text": "The weather department has predicted heavy rain for tomorrow.",
     "tokens_match": false,
     "text_match": false
   },
@@ -3461,83 +3285,6 @@
     ],
     "fp32_text": "To protect the ocean, we must reduce plastic waste.",
     "q4f16_text": "We must reduce plastic waste to protect the ocean.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 794,
-    "fixture": {
-      "text": "ਉਨ੍ਹਾਂ ਨੇ ਅਖੁੱਟ ਊਰ੍ਜਾ ਸਰੋਤਾਂ ਬਾਰੇ ਇੱਕ ਪੇਸ਼ਕਾਰੀ ਦਿੱਤੀ।",
-      "src_lang": "pan_Guru",
-      "tgt_lang": "eng_Latn",
-      "category": "generic"
-    },
-    "fp32_tokens": [
-      2,
-      52,
-      1142,
-      13,
-      7185,
-      25,
-      8715,
-      833,
-      1457,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      52,
-      155,
-      13,
-      7185,
-      25,
-      8715,
-      833,
-      1457,
-      4,
-      2
-    ],
-    "fp32_text": "He gave a presentation on renewable energy sources.",
-    "q4f16_text": "He made a presentation on renewable energy sources.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 811,
-    "fixture": {
-      "text": "स्थानीयसर्वकारः मार्गानां पुनर्निर्माणं करोति।",
-      "src_lang": "san_Deva",
-      "tgt_lang": "eng_Latn",
-      "category": "lexicon"
-    },
-    "fp32_tokens": [
-      2,
-      15,
-      667,
-      107,
-      12,
-      5902,
-      127,
-      5,
-      2002,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      15,
-      667,
-      107,
-      12,
-      22787,
-      5,
-      2002,
-      4,
-      2
-    ],
-    "fp32_text": "The local government is repairing the roads.",
-    "q4f16_text": "The local government is rebuilding the roads.",
     "tokens_match": false,
     "text_match": false
   },
@@ -3697,92 +3444,6 @@
     "text_match": false
   },
   {
-    "index": 828,
-    "fixture": {
-      "text": "शीतल-प्रातःकाले एकं उष्ण-पानपात्रं उत्तमं भवति।",
-      "src_lang": "san_Deva",
-      "tgt_lang": "eng_Latn",
-      "category": "generic"
-    },
-    "fp32_tokens": [
-      2,
-      45,
-      1778,
-      2552,
-      12,
-      114,
-      25,
-      13,
-      1444,
-      971,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      45,
-      1778,
-      2552,
-      7,
-      2487,
-      12,
-      114,
-      25,
-      13,
-      1444,
-      971,
-      4,
-      2
-    ],
-    "fp32_text": "A hot cup is good on a cold morning.",
-    "q4f16_text": "A hot cup of coffee is good on a cold morning.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 830,
-    "fixture": {
-      "text": "सा पर्यावरणविज्ञानस्य स्नातकोत्तरपदवीं प्राप्तवती।",
-      "src_lang": "san_Deva",
-      "tgt_lang": "eng_Latn",
-      "category": "numerals"
-    },
-    "fp32_tokens": [
-      2,
-      157,
-      3179,
-      13,
-      4481,
-      14,
-      17,
-      1576,
-      10,
-      10393,
-      2061,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      157,
-      3179,
-      13,
-      3538,
-      14,
-      17,
-      1576,
-      10,
-      3731,
-      1495,
-      4,
-      2
-    ],
-    "fp32_text": "She holds a Master's degree in Environmental Science.",
-    "q4f16_text": "She holds a master's degree in environmental science.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
     "index": 836,
     "fixture": {
       "text": "बालकाः उद्याने क्रीडन्ति।",
@@ -3853,6 +3514,50 @@
     ],
     "fp32_text": "She enjoys reading novels in her free time.",
     "q4f16_text": "She likes to read novels in her free time.",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
+    "index": 847,
+    "fixture": {
+      "text": "सः स्वकारयानम् आपृदयात् कार्यालयं प्रति अगच्छत्।",
+      "src_lang": "san_Deva",
+      "tgt_lang": "eng_Latn",
+      "category": "lexicon"
+    },
+    "fp32_tokens": [
+      2,
+      52,
+      278,
+      132,
+      61,
+      410,
+      9,
+      3016,
+      8,
+      5,
+      804,
+      4,
+      2
+    ],
+    "q4f16_tokens": [
+      2,
+      52,
+      278,
+      92,
+      7,
+      61,
+      410,
+      9,
+      3016,
+      8,
+      5,
+      804,
+      4,
+      2
+    ],
+    "fp32_text": "He got into his car and headed to the office.",
+    "q4f16_text": "He got out of his car and headed to the office.",
     "tokens_match": false,
     "text_match": false
   },
@@ -3993,7 +3698,7 @@
     "q4f16_tokens": [
       2,
       1958,
-      1094,
+      4887,
       6647,
       38,
       572,
@@ -4003,7 +3708,7 @@
       2
     ],
     "fp32_text": "Water normally boils at 100 ° C.",
-    "q4f16_text": "Water usually opens at 100 ° C.",
+    "q4f16_text": "Water normally opens at 100 ° C.",
     "tokens_match": false,
     "text_match": false
   },
@@ -4254,45 +3959,6 @@
     "text_match": false
   },
   {
-    "index": 875,
-    "fixture": {
-      "text": "ᱜᱟᱫᱮᱞ ᱫᱚ ଗତକାଲ ᱪᱟᱢᱯᱤᱭᱚᱱᱥᱤᱯ ᱢᱮᱪ ᱨᱮ ᱡᱤᱛᱠᱟᱹᱨ ᱞᱮᱱᱟ ᱾",
-      "src_lang": "sat_Olck",
-      "tgt_lang": "eng_Latn",
-      "category": "politics"
-    },
-    "fp32_tokens": [
-      2,
-      15,
-      293,
-      262,
-      5,
-      9659,
-      865,
-      214,
-      66,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      15,
-      293,
-      262,
-      5,
-      9659,
-      865,
-      214,
-      1023,
-      4,
-      2
-    ],
-    "fp32_text": "The team won the championship match last time.",
-    "q4f16_text": "The team won the championship match last season.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
     "index": 880,
     "fixture": {
       "text": "ᱩᱱᱤ ᱫᱚ ᱯᱚᱨᱤᱢᱟᱱ ᱵᱤᱪᱷᱚᱱᱟ ᱨᱮ ᱢᱤᱫᱴᱟᱝ ᱢᱮᱥᱴᱟᱨ ᱰᱮᱡᱨᱤ ᱦᱟᱢᱮᱴ ᱟᱠᱟᱫᱟ ᱾",
@@ -4333,46 +3999,6 @@
     ],
     "fp32_text": "He holds a master's degree in process analysis.",
     "q4f16_text": "He holds a master's degree in quantitative analysis.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 882,
-    "fixture": {
-      "text": "ᱩᱱᱤ ᱫᱚ ᱦᱟᱯᱛᱟ ᱢᱩᱪᱟᱹᱫ ᱨᱮ ᱜᱟᱛᱮ ᱠᱚ ᱥᱟᱶ ᱯᱷᱩᱴᱵᱚᱞ ᱠᱷᱮᱞ ᱠᱟᱛᱮ ᱠᱚ ᱠᱷᱮᱹᱞᱳᱰᱼᱟ ᱾",
-      "src_lang": "sat_Olck",
-      "tgt_lang": "eng_Latn",
-      "category": "generic"
-    },
-    "fp32_tokens": [
-      2,
-      52,
-      10326,
-      1031,
-      2270,
-      31,
-      508,
-      25,
-      5,
-      16939,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      52,
-      12951,
-      61,
-      16939,
-      1031,
-      2270,
-      31,
-      508,
-      4,
-      2
-    ],
-    "fp32_text": "He enjoys playing football with friends on the weekends.",
-    "q4f16_text": "He spends his weekends playing football with friends.",
     "tokens_match": false,
     "text_match": false
   },
@@ -4734,47 +4360,6 @@
     "text_match": false
   },
   {
-    "index": 922,
-    "fixture": {
-      "text": "ھن سنگیت سنگیت ۾ ہڪ خوبصورت گیت گایو۔",
-      "src_lang": "snd_Arab",
-      "tgt_lang": "eng_Latn",
-      "category": "numerals"
-    },
-    "fp32_tokens": [
-      2,
-      157,
-      12163,
-      13,
-      712,
-      1208,
-      10,
-      5,
-      6379,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      157,
-      12163,
-      13,
-      712,
-      1208,
-      10,
-      18934,
-      772,
-      18934,
-      772,
-      4,
-      2
-    ],
-    "fp32_text": "She sang a beautiful song in the musical.",
-    "q4f16_text": "She sang a beautiful song in Sangeet Sangeet.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
     "index": 924,
     "fixture": {
       "text": "ہو ڪالیج ۾ بزنس ایڊمنسٽریشن پڙھائی رھیو آھی۔",
@@ -5084,12 +4669,13 @@
       309,
       1786,
       38,
-      1574,
+      5,
+      1961,
       4,
       2
     ],
     "fp32_text": "He is studying business administration at the college.",
-    "q4f16_text": "He is studying business administration at college.",
+    "q4f16_text": "He is studying business administration at the university.",
     "tokens_match": false,
     "text_match": false
   },
@@ -5179,44 +4765,85 @@
     "text_match": false
   },
   {
-    "index": 989,
+    "index": 1000,
     "fixture": {
-      "text": "விருந்தினர்கள் வருவதற்கு முன்பு வீட்டை சுத்தம் செய்ய வேண்டும்.",
-      "src_lang": "tam_Taml",
+      "text": "వేగంగా గోధుమ రంగు నక్క సోమరితనం కుక్కపైకి దూకుతుంది.",
+      "src_lang": "tel_Telu",
       "tgt_lang": "eng_Latn",
-      "category": "lexicon"
+      "category": "generic"
     },
     "fp32_tokens": [
       2,
       15,
-      343,
-      100,
-      23,
-      7685,
-      212,
+      3878,
+      20475,
+      1397,
+      21468,
+      25,
       5,
-      3303,
-      4966,
+      713,
+      16633,
+      2633,
+      4,
+      2
+    ],
+    "q4f16_tokens": [
+      2,
+      45,
+      1181,
+      3878,
+      20475,
+      21468,
+      25,
+      13,
+      713,
+      16633,
+      2633,
+      4,
+      2
+    ],
+    "fp32_text": "The brown fox quickly jumps on the lazy dog.",
+    "q4f16_text": "A fast brown fox jumps on a lazy dog.",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
+    "index": 1029,
+    "fixture": {
+      "text": "ప్రతికూల వాతావరణ పరిస్థితుల కారణంగా విమానాన్ని రద్దు చేశారు.",
+      "src_lang": "tel_Telu",
+      "tgt_lang": "eng_Latn",
+      "category": "politics"
+    },
+    "fp32_tokens": [
+      2,
+      15,
+      2691,
+      24,
+      3597,
+      395,
+      8,
+      781,
+      1911,
       4,
       2
     ],
     "q4f16_tokens": [
       2,
       15,
-      343,
-      100,
-      23,
-      7685,
-      212,
-      5,
-      5894,
-      7,
-      3303,
+      2691,
+      24,
+      3597,
+      395,
+      8,
+      781,
+      1911,
+      1275,
       4,
       2
     ],
-    "fp32_text": "The house should be cleaned before the guests arrive.",
-    "q4f16_text": "The house should be cleaned before the arrival of guests.",
+    "fp32_text": "The flight was cancelled due to bad weather.",
+    "q4f16_text": "The flight was cancelled due to bad weather conditions.",
     "tokens_match": false,
     "text_match": false
   },
@@ -5334,43 +4961,6 @@
     ],
     "fp32_text": "She loves to read novels in her free time.",
     "q4f16_text": "She likes to read novels in her free time.",
-    "tokens_match": false,
-    "text_match": false
-  },
-  {
-    "index": 1047,
-    "fixture": {
-      "text": "అతను తన కారును ఆఫీసుకు తీసుకెళ్లాడు.",
-      "src_lang": "tel_Telu",
-      "tgt_lang": "eng_Latn",
-      "category": "lexicon"
-    },
-    "fp32_tokens": [
-      2,
-      52,
-      12180,
-      61,
-      410,
-      8,
-      5,
-      804,
-      4,
-      2
-    ],
-    "q4f16_tokens": [
-      2,
-      52,
-      307,
-      61,
-      410,
-      8,
-      5,
-      804,
-      4,
-      2
-    ],
-    "fp32_text": "He drove his car to the office.",
-    "q4f16_text": "He took his car to the office.",
     "tokens_match": false,
     "text_match": false
   },

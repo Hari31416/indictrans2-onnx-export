@@ -2,6 +2,7 @@
   "label": "fp16",
   "oracle": "scratch/en-indic-1b-onnx",
   "cmp_dir": "scratch/en-indic-1b-onnx-fp16",
+  "batch_size": 16,
   "total_fixtures": 1100,
   "token_exact_rate": 99.73,
   "text_exact_rate": 99.73,
@@ -9,11 +10,13 @@
   "text_exact_count": 1097,
   "sacrebleu_bleu": 100.0,
   "sacrebleu_chrf": 100.0,
-  "fp32_avg_latency_ms": 244.4,
-  "cmp_avg_latency_ms": 259.8,
-  "speedup_vs_fp32": 0.941,
-  "fp32_tokens_per_sec": 58.2,
-  "cmp_tokens_per_sec": 54.8,
+  "fp32_avg_latency_ms": 69.5,
+  "cmp_avg_latency_ms": 74.3,
+  "speedup_vs_fp32": 0.935,
+  "fp32_tokens_per_sec": 204.6,
+  "cmp_tokens_per_sec": 191.3,
+  "fp32_sentences_per_sec": 14.38,
+  "cmp_sentences_per_sec": 13.45,
   "sacrebleu_bleu_mixed": 99.81,
   "sacrebleu_chrf_mixed": 99.9,
   "metrics_by_language": {
@@ -25,11 +28,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 325.1,
-      "cmp_avg_latency_ms": 356.6,
-      "speedup_vs_fp32": 0.912,
-      "fp32_tokens_per_sec": 59.4,
-      "cmp_tokens_per_sec": 54.1
+      "fp32_avg_latency_ms": 99.3,
+      "cmp_avg_latency_ms": 109.7,
+      "speedup_vs_fp32": 0.905,
+      "fp32_tokens_per_sec": 194.4,
+      "cmp_tokens_per_sec": 176.0,
+      "fp32_sentences_per_sec": 10.07,
+      "cmp_sentences_per_sec": 9.12
     },
     "ben_Beng": {
       "total_fixtures": 50,
@@ -39,11 +44,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 202.2,
-      "cmp_avg_latency_ms": 212.9,
-      "speedup_vs_fp32": 0.95,
-      "fp32_tokens_per_sec": 59.6,
-      "cmp_tokens_per_sec": 56.6
+      "fp32_avg_latency_ms": 52.7,
+      "cmp_avg_latency_ms": 52.8,
+      "speedup_vs_fp32": 0.999,
+      "fp32_tokens_per_sec": 228.6,
+      "cmp_tokens_per_sec": 228.2,
+      "fp32_sentences_per_sec": 18.98,
+      "cmp_sentences_per_sec": 18.96
     },
     "brx_Deva": {
       "total_fixtures": 50,
@@ -53,11 +60,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 228.1,
-      "cmp_avg_latency_ms": 247.8,
-      "speedup_vs_fp32": 0.921,
-      "fp32_tokens_per_sec": 58.6,
-      "cmp_tokens_per_sec": 53.9
+      "fp32_avg_latency_ms": 63.7,
+      "cmp_avg_latency_ms": 60.0,
+      "speedup_vs_fp32": 1.06,
+      "fp32_tokens_per_sec": 209.9,
+      "cmp_tokens_per_sec": 222.6,
+      "fp32_sentences_per_sec": 15.71,
+      "cmp_sentences_per_sec": 16.66
     },
     "doi_Deva": {
       "total_fixtures": 50,
@@ -67,11 +76,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 253.0,
-      "cmp_avg_latency_ms": 263.6,
-      "speedup_vs_fp32": 0.96,
-      "fp32_tokens_per_sec": 58.1,
-      "cmp_tokens_per_sec": 55.8
+      "fp32_avg_latency_ms": 68.3,
+      "cmp_avg_latency_ms": 74.6,
+      "speedup_vs_fp32": 0.915,
+      "fp32_tokens_per_sec": 215.4,
+      "cmp_tokens_per_sec": 197.1,
+      "fp32_sentences_per_sec": 14.65,
+      "cmp_sentences_per_sec": 13.41
     },
     "gom_Deva": {
       "total_fixtures": 50,
@@ -81,11 +92,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 236.4,
-      "cmp_avg_latency_ms": 253.2,
-      "speedup_vs_fp32": 0.933,
-      "fp32_tokens_per_sec": 59.1,
-      "cmp_tokens_per_sec": 55.2
+      "fp32_avg_latency_ms": 66.1,
+      "cmp_avg_latency_ms": 63.3,
+      "speedup_vs_fp32": 1.043,
+      "fp32_tokens_per_sec": 211.6,
+      "cmp_tokens_per_sec": 220.7,
+      "fp32_sentences_per_sec": 15.14,
+      "cmp_sentences_per_sec": 15.79
     },
     "guj_Gujr": {
       "total_fixtures": 50,
@@ -95,11 +108,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 230.4,
-      "cmp_avg_latency_ms": 241.8,
-      "speedup_vs_fp32": 0.953,
-      "fp32_tokens_per_sec": 58.3,
-      "cmp_tokens_per_sec": 55.5
+      "fp32_avg_latency_ms": 56.2,
+      "cmp_avg_latency_ms": 61.3,
+      "speedup_vs_fp32": 0.917,
+      "fp32_tokens_per_sec": 238.8,
+      "cmp_tokens_per_sec": 219.1,
+      "fp32_sentences_per_sec": 17.8,
+      "cmp_sentences_per_sec": 16.33
     },
     "hin_Deva": {
       "total_fixtures": 50,
@@ -109,11 +124,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 221.3,
-      "cmp_avg_latency_ms": 238.2,
-      "speedup_vs_fp32": 0.929,
-      "fp32_tokens_per_sec": 58.7,
-      "cmp_tokens_per_sec": 54.5
+      "fp32_avg_latency_ms": 54.8,
+      "cmp_avg_latency_ms": 68.6,
+      "speedup_vs_fp32": 0.799,
+      "fp32_tokens_per_sec": 237.0,
+      "cmp_tokens_per_sec": 189.3,
+      "fp32_sentences_per_sec": 18.26,
+      "cmp_sentences_per_sec": 14.59
     },
     "kan_Knda": {
       "total_fixtures": 50,
@@ -123,11 +140,13 @@
       "text_exact_count": 49,
       "sacrebleu_bleu": 98.28,
       "sacrebleu_chrf": 98.66,
-      "fp32_avg_latency_ms": 217.9,
-      "cmp_avg_latency_ms": 236.1,
-      "speedup_vs_fp32": 0.923,
-      "fp32_tokens_per_sec": 58.4,
-      "cmp_tokens_per_sec": 53.6
+      "fp32_avg_latency_ms": 59.8,
+      "cmp_avg_latency_ms": 58.9,
+      "speedup_vs_fp32": 1.016,
+      "fp32_tokens_per_sec": 212.7,
+      "cmp_tokens_per_sec": 215.0,
+      "fp32_sentences_per_sec": 16.72,
+      "cmp_sentences_per_sec": 16.98
     },
     "kas_Arab": {
       "total_fixtures": 50,
@@ -137,11 +156,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 256.8,
-      "cmp_avg_latency_ms": 278.6,
-      "speedup_vs_fp32": 0.922,
-      "fp32_tokens_per_sec": 59.0,
-      "cmp_tokens_per_sec": 54.4
+      "fp32_avg_latency_ms": 69.5,
+      "cmp_avg_latency_ms": 75.2,
+      "speedup_vs_fp32": 0.924,
+      "fp32_tokens_per_sec": 218.1,
+      "cmp_tokens_per_sec": 201.5,
+      "fp32_sentences_per_sec": 14.39,
+      "cmp_sentences_per_sec": 13.29
     },
     "mai_Deva": {
       "total_fixtures": 50,
@@ -151,11 +172,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 216.5,
-      "cmp_avg_latency_ms": 225.6,
-      "speedup_vs_fp32": 0.96,
-      "fp32_tokens_per_sec": 59.0,
-      "cmp_tokens_per_sec": 56.6
+      "fp32_avg_latency_ms": 55.0,
+      "cmp_avg_latency_ms": 57.5,
+      "speedup_vs_fp32": 0.957,
+      "fp32_tokens_per_sec": 232.2,
+      "cmp_tokens_per_sec": 222.3,
+      "fp32_sentences_per_sec": 18.17,
+      "cmp_sentences_per_sec": 17.39
     },
     "mal_Mlym": {
       "total_fixtures": 50,
@@ -165,11 +188,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 263.2,
-      "cmp_avg_latency_ms": 275.9,
-      "speedup_vs_fp32": 0.954,
-      "fp32_tokens_per_sec": 57.4,
-      "cmp_tokens_per_sec": 54.7
+      "fp32_avg_latency_ms": 73.4,
+      "cmp_avg_latency_ms": 68.1,
+      "speedup_vs_fp32": 1.077,
+      "fp32_tokens_per_sec": 205.8,
+      "cmp_tokens_per_sec": 221.6,
+      "fp32_sentences_per_sec": 13.63,
+      "cmp_sentences_per_sec": 14.68
     },
     "mar_Deva": {
       "total_fixtures": 50,
@@ -179,11 +204,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 207.1,
-      "cmp_avg_latency_ms": 243.2,
-      "speedup_vs_fp32": 0.851,
-      "fp32_tokens_per_sec": 58.6,
-      "cmp_tokens_per_sec": 49.9
+      "fp32_avg_latency_ms": 52.3,
+      "cmp_avg_latency_ms": 60.9,
+      "speedup_vs_fp32": 0.859,
+      "fp32_tokens_per_sec": 231.9,
+      "cmp_tokens_per_sec": 199.2,
+      "fp32_sentences_per_sec": 19.1,
+      "cmp_sentences_per_sec": 16.41
     },
     "mni_Beng": {
       "total_fixtures": 50,
@@ -193,11 +220,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 310.8,
-      "cmp_avg_latency_ms": 340.3,
-      "speedup_vs_fp32": 0.913,
-      "fp32_tokens_per_sec": 58.8,
-      "cmp_tokens_per_sec": 53.7
+      "fp32_avg_latency_ms": 175.2,
+      "cmp_avg_latency_ms": 198.0,
+      "speedup_vs_fp32": 0.885,
+      "fp32_tokens_per_sec": 104.3,
+      "cmp_tokens_per_sec": 92.2,
+      "fp32_sentences_per_sec": 5.71,
+      "cmp_sentences_per_sec": 5.05
     },
     "npi_Deva": {
       "total_fixtures": 50,
@@ -207,11 +236,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 207.7,
-      "cmp_avg_latency_ms": 222.6,
-      "speedup_vs_fp32": 0.933,
-      "fp32_tokens_per_sec": 57.7,
-      "cmp_tokens_per_sec": 53.8
+      "fp32_avg_latency_ms": 60.2,
+      "cmp_avg_latency_ms": 53.5,
+      "speedup_vs_fp32": 1.125,
+      "fp32_tokens_per_sec": 199.1,
+      "cmp_tokens_per_sec": 224.0,
+      "fp32_sentences_per_sec": 16.62,
+      "cmp_sentences_per_sec": 18.7
     },
     "ory_Orya": {
       "total_fixtures": 50,
@@ -221,11 +252,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 220.8,
-      "cmp_avg_latency_ms": 232.3,
-      "speedup_vs_fp32": 0.951,
-      "fp32_tokens_per_sec": 57.8,
-      "cmp_tokens_per_sec": 54.9
+      "fp32_avg_latency_ms": 61.4,
+      "cmp_avg_latency_ms": 65.6,
+      "speedup_vs_fp32": 0.936,
+      "fp32_tokens_per_sec": 208.0,
+      "cmp_tokens_per_sec": 194.6,
+      "fp32_sentences_per_sec": 16.3,
+      "cmp_sentences_per_sec": 15.25
     },
     "pan_Guru": {
       "total_fixtures": 50,
@@ -235,11 +268,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 305.5,
-      "cmp_avg_latency_ms": 316.9,
-      "speedup_vs_fp32": 0.964,
-      "fp32_tokens_per_sec": 57.9,
-      "cmp_tokens_per_sec": 55.9
+      "fp32_avg_latency_ms": 74.1,
+      "cmp_avg_latency_ms": 84.8,
+      "speedup_vs_fp32": 0.873,
+      "fp32_tokens_per_sec": 238.9,
+      "cmp_tokens_per_sec": 208.6,
+      "fp32_sentences_per_sec": 13.5,
+      "cmp_sentences_per_sec": 11.79
     },
     "san_Deva": {
       "total_fixtures": 50,
@@ -249,11 +284,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 260.3,
-      "cmp_avg_latency_ms": 274.9,
-      "speedup_vs_fp32": 0.947,
-      "fp32_tokens_per_sec": 57.6,
-      "cmp_tokens_per_sec": 54.6
+      "fp32_avg_latency_ms": 61.9,
+      "cmp_avg_latency_ms": 67.3,
+      "speedup_vs_fp32": 0.92,
+      "fp32_tokens_per_sec": 242.1,
+      "cmp_tokens_per_sec": 222.8,
+      "fp32_sentences_per_sec": 16.14,
+      "cmp_sentences_per_sec": 14.85
     },
     "sat_Olck": {
       "total_fixtures": 50,
@@ -263,11 +300,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 300.8,
-      "cmp_avg_latency_ms": 303.8,
-      "speedup_vs_fp32": 0.99,
-      "fp32_tokens_per_sec": 56.3,
-      "cmp_tokens_per_sec": 55.8
+      "fp32_avg_latency_ms": 83.6,
+      "cmp_avg_latency_ms": 85.6,
+      "speedup_vs_fp32": 0.977,
+      "fp32_tokens_per_sec": 202.5,
+      "cmp_tokens_per_sec": 197.9,
+      "fp32_sentences_per_sec": 11.95,
+      "cmp_sentences_per_sec": 11.69
     },
     "snd_Arab": {
       "total_fixtures": 50,
@@ -277,11 +316,13 @@
       "text_exact_count": 49,
       "sacrebleu_bleu": 98.83,
       "sacrebleu_chrf": 99.56,
-      "fp32_avg_latency_ms": 222.9,
-      "cmp_avg_latency_ms": 227.5,
-      "speedup_vs_fp32": 0.98,
-      "fp32_tokens_per_sec": 56.6,
-      "cmp_tokens_per_sec": 55.5
+      "fp32_avg_latency_ms": 56.1,
+      "cmp_avg_latency_ms": 63.1,
+      "speedup_vs_fp32": 0.889,
+      "fp32_tokens_per_sec": 225.0,
+      "cmp_tokens_per_sec": 200.0,
+      "fp32_sentences_per_sec": 17.83,
+      "cmp_sentences_per_sec": 15.85
     },
     "tam_Taml": {
       "total_fixtures": 50,
@@ -291,11 +332,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 227.4,
-      "cmp_avg_latency_ms": 238.7,
-      "speedup_vs_fp32": 0.953,
-      "fp32_tokens_per_sec": 58.0,
-      "cmp_tokens_per_sec": 55.3
+      "fp32_avg_latency_ms": 58.7,
+      "cmp_avg_latency_ms": 68.0,
+      "speedup_vs_fp32": 0.864,
+      "fp32_tokens_per_sec": 224.9,
+      "cmp_tokens_per_sec": 194.3,
+      "fp32_sentences_per_sec": 17.04,
+      "cmp_sentences_per_sec": 14.72
     },
     "tel_Telu": {
       "total_fixtures": 50,
@@ -305,11 +348,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 224.6,
-      "cmp_avg_latency_ms": 235.0,
-      "speedup_vs_fp32": 0.956,
-      "fp32_tokens_per_sec": 58.0,
-      "cmp_tokens_per_sec": 55.4
+      "fp32_avg_latency_ms": 60.2,
+      "cmp_avg_latency_ms": 63.5,
+      "speedup_vs_fp32": 0.947,
+      "fp32_tokens_per_sec": 216.5,
+      "cmp_tokens_per_sec": 205.0,
+      "fp32_sentences_per_sec": 16.62,
+      "cmp_sentences_per_sec": 15.74
     },
     "urd_Arab": {
       "total_fixtures": 50,
@@ -319,11 +364,13 @@
       "text_exact_count": 49,
       "sacrebleu_bleu": 98.92,
       "sacrebleu_chrf": 99.52,
-      "fp32_avg_latency_ms": 237.2,
-      "cmp_avg_latency_ms": 249.7,
-      "speedup_vs_fp32": 0.95,
-      "fp32_tokens_per_sec": 58.3,
-      "cmp_tokens_per_sec": 55.4
+      "fp32_avg_latency_ms": 67.4,
+      "cmp_avg_latency_ms": 75.3,
+      "speedup_vs_fp32": 0.894,
+      "fp32_tokens_per_sec": 205.3,
+      "cmp_tokens_per_sec": 183.7,
+      "fp32_sentences_per_sec": 14.84,
+      "cmp_sentences_per_sec": 13.27
     }
   },
   "metrics_by_category": {
@@ -335,11 +382,13 @@
       "text_exact_count": 285,
       "sacrebleu_bleu": 99.74,
       "sacrebleu_chrf": 99.73,
-      "fp32_avg_latency_ms": 247.0,
-      "cmp_avg_latency_ms": 262.5,
-      "speedup_vs_fp32": 0.941,
-      "fp32_tokens_per_sec": 58.1,
-      "cmp_tokens_per_sec": 54.6
+      "fp32_avg_latency_ms": 75.6,
+      "cmp_avg_latency_ms": 80.4,
+      "speedup_vs_fp32": 0.94,
+      "fp32_tokens_per_sec": 189.8,
+      "cmp_tokens_per_sec": 178.3,
+      "fp32_sentences_per_sec": 13.23,
+      "cmp_sentences_per_sec": 12.44
     },
     "lexicon": {
       "total_fixtures": 264,
@@ -349,11 +398,13 @@
       "text_exact_count": 263,
       "sacrebleu_bleu": 99.74,
       "sacrebleu_chrf": 99.94,
-      "fp32_avg_latency_ms": 249.0,
-      "cmp_avg_latency_ms": 264.3,
-      "speedup_vs_fp32": 0.942,
-      "fp32_tokens_per_sec": 58.3,
-      "cmp_tokens_per_sec": 54.9
+      "fp32_avg_latency_ms": 63.0,
+      "cmp_avg_latency_ms": 67.8,
+      "speedup_vs_fp32": 0.929,
+      "fp32_tokens_per_sec": 230.3,
+      "cmp_tokens_per_sec": 214.0,
+      "fp32_sentences_per_sec": 15.88,
+      "cmp_sentences_per_sec": 14.75
     },
     "numerals": {
       "total_fixtures": 264,
@@ -363,11 +414,13 @@
       "text_exact_count": 264,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 248.4,
-      "cmp_avg_latency_ms": 263.9,
-      "speedup_vs_fp32": 0.941,
-      "fp32_tokens_per_sec": 58.3,
-      "cmp_tokens_per_sec": 54.9
+      "fp32_avg_latency_ms": 63.0,
+      "cmp_avg_latency_ms": 67.8,
+      "speedup_vs_fp32": 0.929,
+      "fp32_tokens_per_sec": 230.0,
+      "cmp_tokens_per_sec": 213.6,
+      "fp32_sentences_per_sec": 15.88,
+      "cmp_sentences_per_sec": 14.75
     },
     "politics": {
       "total_fixtures": 286,
@@ -377,11 +430,13 @@
       "text_exact_count": 285,
       "sacrebleu_bleu": 99.74,
       "sacrebleu_chrf": 99.92,
-      "fp32_avg_latency_ms": 233.8,
-      "cmp_avg_latency_ms": 249.0,
-      "speedup_vs_fp32": 0.939,
-      "fp32_tokens_per_sec": 58.3,
-      "cmp_tokens_per_sec": 54.7
+      "fp32_avg_latency_ms": 75.6,
+      "cmp_avg_latency_ms": 80.4,
+      "speedup_vs_fp32": 0.94,
+      "fp32_tokens_per_sec": 180.2,
+      "cmp_tokens_per_sec": 169.4,
+      "fp32_sentences_per_sec": 13.23,
+      "cmp_sentences_per_sec": 12.44
     }
   },
   "mismatches": [
