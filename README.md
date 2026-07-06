@@ -12,6 +12,7 @@ Consumer integration (IndicProcessor TS port, translation worker, model catalog)
 
 ```
 indictrans2-onnx-export/
+├── browser-lab/         # local ONNX bundle tester (load scratch/ in browser)
 ├── src/                 # export scripts (run via Makefile)
 │   └── onnx_bundle_optimize.py  # post-export size optimizations
 ├── fixtures/            # golden sentences + parity reports (committed)
@@ -26,8 +27,15 @@ indictrans2-onnx-export/
 >- **Hugging Face Space**: [indictrans2-onnx-browser-demo](https://huggingface.co/spaces/hari31416/indictrans2-onnx-browser-demo)
 >- **GitHub Pages**: [indictrans2-onnx-browser-demo](https://hari31416.github.io/indictrans2-onnx-browser-demo/)
 >
->The code is available in [scratch/browser-demo](https://github.com/Hari31416/indictrans2-onnx-browser-demo). The application loads ONNX models on-demand and runs execution client-side via WebGPU or WebAssembly.
+>The code is available in [indictrans2-onnx-browser-demo](https://github.com/Hari31416/indictrans2-onnx-browser-demo). The application loads ONNX models on-demand and runs execution client-side via WebGPU or WebAssembly.
 
+To test **local exports** from `scratch/` before publishing, use the browser lab:
+
+```bash
+make browser-lab   # http://127.0.0.1:8010 — pick your scratch/ bundle folder
+```
+
+See [browser-lab/README.md](./browser-lab/README.md).
 
 ## Prerequisites
 
@@ -178,48 +186,50 @@ Input sentences are loaded from `fixtures/smoke-test/test_sentences_<lang>.json`
 
 ## Parity and Benchmark Reports
 
+Parity validation (`03_validate_parity.py`) and quantization benchmarks (`07_benchmark_precision.py`) run **batched greedy decode** via `src/it2_inference.py`. Fixtures are grouped by `(src_lang, tgt_lang)` and processed in batches (default batch size **16**). Override with `--batch-size N` or `make validate-en-indic EVAL_BATCH_SIZE=32`.
+
 ### FP32 Parity Summary
 
 | Direction | Fixtures | Token Pass Rate | Text Pass Rate | Model Size | Validation Time |
 | - | - | - | - | - | - |
-| en-indic | 1100 | 100.0% | 100.0% | ~1.05 GB | 210s |
-| indic-en | 1100 | 100.0% | 100.0% | ~0.8 GB | — |
-| indic-indic | 1100 | 100.0% | 100.0% | ~1.1 GB | — |
+| en-indic | 1100 | 100.0% | 100.0% | ~1.06 GB | 210s |
+| indic-en | 1100 | 100.0% | 100.0% | ~0.89 GB | — |
+| indic-indic | 1100 | 100.0% | 100.0% | ~1.25 GB | — |
 
 ### Quantization Benchmarks (200M/320M Models)
 
-Compared against the FP32 ONNX oracle on the same 264 golden fixtures.
+Compared against the FP32 ONNX oracle on the same 1100 golden fixtures.
 
 | Direction | Format | Token Match | Text Match | Model Size | FP32 Latency | Quant Latency | Speedup |
 | - | - | - | - | - | - | - | - |
-| en-indic | FP16 | 100.0% | 100.0% | 892.0 MB | 61.5ms | 66.6ms | 0.923x |
-| en-indic | INT8 | 79.55% | 79.92% | 452.9 MB | 63.1ms | 37.7ms | 1.674x |
-| en-indic | Q4F16 | 63.64% | 64.39% | 623.3 MB | 62.7ms | 59.4ms | 1.055x |
-| indic-en | FP16 | 99.62% | 99.62% | 627.2 MB | 37.6ms | 44.1ms | 0.853x |
-| indic-en | INT8 | 81.44% | 81.44% | 319.7 MB | 39.2ms | 33.0ms | 1.187x |
-| indic-en | Q4F16 | 65.91% | 65.91% | 358.6 MB | 39.7ms | 43.1ms | 0.922x |
-| indic-indic | FP16 | 100.0% | 100.0% | 980.2 MB | 64.7ms | 70.5ms | 0.918x |
-| indic-indic | INT8 | 78.41% | 79.17% | 497.1 MB | 65.0ms | 40.3ms | 1.612x |
-| indic-indic | Q4F16 | 56.06% | 57.58% | 711.6 MB | 64.1ms | 65.3ms | 0.983x |
+| en-indic | FP16 | 99.64% | 99.64% | 559.6 MB | 18.3ms | 24.8ms | 0.736x |
+| en-indic | INT8 | 74.36% | 74.36% | 302.7 MB | 21.0ms | 13.2ms | 1.594x |
+| en-indic | Q4F16 | 55.18% | 55.64% | 380.6 MB | 19.2ms | 27.3ms | 0.705x |
+| indic-en | FP16 | 99.91% | 99.91% | 471.4 MB | 12.2ms | 14.3ms | 0.849x |
+| indic-en | INT8 | 85.64% | 85.64% | 257.3 MB | 11.8ms | 10.1ms | 1.171x |
+| indic-en | Q4F16 | 73.36% | 73.36% | 292.4 MB | 11.7ms | 15.8ms | 0.742x |
+| indic-indic | FP16 | 99.82% | 99.82% | 671.9 MB | 23.0ms | 27.4ms | 0.840x |
+| indic-indic | INT8 | 72.18% | 72.36% | 370.9 MB | 24.3ms | 16.5ms | 1.475x |
+| indic-indic | Q4F16 | 45.91% | 46.36% | 492.9 MB | 23.5ms | 28.3ms | 0.829x |
 
 ### Quantization Benchmarks (1B Models)
 
-Compared against the FP32 ONNX oracle on the same 264 golden fixtures.
+Compared against the FP32 ONNX oracle on the same 1100 golden fixtures.
 
 | Direction | Format | Token Match | Text Match | Model Size | FP32 Latency | Quant Latency | Speedup |
 | - | - | - | - | - | - | - | - |
-| en-indic | FP16 | 99.73% | 99.73% | 3.36 GB | 244.4ms | 259.8ms | 0.941x |
-| en-indic | INT8 | 89.64% | 89.73% | 1.71 GB | 244.4ms | 112.6ms | 2.228x |
-| en-indic | Q4F16 | 82.27% | 82.36% | 1.71 GB | 244.4ms | 143.3ms | 1.673x |
-| indic-en | FP16 | 99.91% | 99.91% | 2.84 GB | 171.8ms | 180.5ms | 0.952x |
-| indic-en | INT8 | 94.18% | 94.18% | 1.45 GB | 171.8ms | 76.4ms | 2.196x |
-| indic-en | Q4F16 | 87.55% | 87.55% | 1.19 GB | 171.8ms | 85.5ms | 1.962x |
-| indic-indic | FP16 | 99.82% | 99.82% | 3.55 GB | 251.7ms | 270.4ms | 0.931x |
-| indic-indic | INT8 | 84.36% | 84.36% | 1.82 GB | 251.7ms | 109.5ms | 2.292x |
-| indic-indic | Q4F16 | 73.73% | 73.73% | 1.90 GB | 251.7ms | 151.0ms | 1.666x |
+| en-indic | FP16 | 99.73% | 99.73% | 2.11 GB | 69.5ms | 74.3ms | 0.935x |
+| en-indic | INT8 | 89.55% | 89.55% | 1.08 GB | 66.7ms | 31.4ms | 2.125x |
+| en-indic | Q4F16 | 82.45% | 82.55% | 1.01 GB | 69.3ms | 58.4ms | 1.186x |
+| indic-en | FP16 | 99.82% | 99.82% | 1.94 GB | 49.0ms | 49.7ms | 0.987x |
+| indic-en | INT8 | 94.45% | 94.45% | 1020.1 MB | 47.9ms | 25.2ms | 1.900x |
+| indic-en | Q4F16 | 88.55% | 88.55% | 861.5 MB | 46.2ms | 42.7ms | 1.080x |
+| indic-indic | FP16 | 99.82% | 99.82% | 2.31 GB | 94.7ms | 108.3ms | 0.874x |
+| indic-indic | INT8 | 83.64% | 83.73% | 1.19 GB | 97.8ms | 43.7ms | 2.240x |
+| indic-indic | Q4F16 | 73.18% | 73.18% | 1.21 GB | 102.3ms | 94.2ms | 1.087x |
 
 > [!NOTE]
-> **Quantization Performance of 1B vs 200M Models**: Larger models possess greater representation capacity and are significantly more robust to quantization. While the 200M/320M model formats experience notable accuracy drops under INT8 and Q4F16 (e.g., indic-indic exact token match drops to 73.0% and 44.9%), the 1B configurations maintain exceptionally high parity (exact token match of 84.4% for INT8 and 73.7% for Q4F16 on indic-indic, and up to 94.2% for INT8 on indic-en).
+> **Quantization performance of 1B vs 200M models**: Larger models are more robust to quantization. On 200M/320M bundles, INT8 and Q4F16 can drop sharply (e.g. en→indic Q4F16 at 55% token match, indic→indic INT8 at 72%). The 1B variants hold up much better (e.g. indic→en INT8 at 94%, en→indic Q4F16 at 82%). FP16 remains lossless (≥99%) across all directions and sizes.
 
 ### Detailed Benchmarks & Visualizations
 
