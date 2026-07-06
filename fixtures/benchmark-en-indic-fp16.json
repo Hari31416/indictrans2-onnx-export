@@ -2,6 +2,7 @@
   "label": "fp16",
   "oracle": "scratch/en-indic-onnx",
   "cmp_dir": "scratch/en-indic-onnx-fp16",
+  "batch_size": 16,
   "total_fixtures": 1100,
   "token_exact_rate": 99.64,
   "text_exact_rate": 99.64,
@@ -9,12 +10,14 @@
   "text_exact_count": 1096,
   "sacrebleu_bleu": 100.0,
   "sacrebleu_chrf": 100.0,
-  "fp32_avg_latency_ms": 76.1,
-  "cmp_avg_latency_ms": 82.1,
-  "speedup_vs_fp32": 0.927,
-  "fp32_tokens_per_sec": 184.5,
-  "cmp_tokens_per_sec": 171.0,
-  "sacrebleu_bleu_mixed": 99.81,
+  "fp32_avg_latency_ms": 18.3,
+  "cmp_avg_latency_ms": 24.8,
+  "speedup_vs_fp32": 0.736,
+  "fp32_tokens_per_sec": 768.4,
+  "cmp_tokens_per_sec": 565.4,
+  "fp32_sentences_per_sec": 54.72,
+  "cmp_sentences_per_sec": 40.26,
+  "sacrebleu_bleu_mixed": 99.79,
   "sacrebleu_chrf_mixed": 99.9,
   "metrics_by_language": {
     "asm_Beng": {
@@ -25,11 +28,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 100.8,
-      "cmp_avg_latency_ms": 103.2,
-      "speedup_vs_fp32": 0.977,
-      "fp32_tokens_per_sec": 189.0,
-      "cmp_tokens_per_sec": 184.7
+      "fp32_avg_latency_ms": 28.2,
+      "cmp_avg_latency_ms": 36.3,
+      "speedup_vs_fp32": 0.776,
+      "fp32_tokens_per_sec": 676.7,
+      "cmp_tokens_per_sec": 525.0,
+      "fp32_sentences_per_sec": 35.5,
+      "cmp_sentences_per_sec": 27.54
     },
     "ben_Beng": {
       "total_fixtures": 50,
@@ -39,25 +44,29 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 66.2,
-      "cmp_avg_latency_ms": 69.1,
-      "speedup_vs_fp32": 0.957,
-      "fp32_tokens_per_sec": 183.4,
-      "cmp_tokens_per_sec": 175.6
+      "fp32_avg_latency_ms": 14.6,
+      "cmp_avg_latency_ms": 19.0,
+      "speedup_vs_fp32": 0.77,
+      "fp32_tokens_per_sec": 831.4,
+      "cmp_tokens_per_sec": 640.0,
+      "fp32_sentences_per_sec": 68.48,
+      "cmp_sentences_per_sec": 52.71
     },
     "brx_Deva": {
       "total_fixtures": 50,
-      "token_exact_rate": 98.0,
-      "text_exact_rate": 98.0,
-      "token_exact_count": 49,
-      "text_exact_count": 49,
-      "sacrebleu_bleu": 98.94,
-      "sacrebleu_chrf": 99.58,
-      "fp32_avg_latency_ms": 75.8,
-      "cmp_avg_latency_ms": 80.6,
-      "speedup_vs_fp32": 0.94,
-      "fp32_tokens_per_sec": 182.6,
-      "cmp_tokens_per_sec": 172.0
+      "token_exact_rate": 100.0,
+      "text_exact_rate": 100.0,
+      "token_exact_count": 50,
+      "text_exact_count": 50,
+      "sacrebleu_bleu": 100.0,
+      "sacrebleu_chrf": 100.0,
+      "fp32_avg_latency_ms": 17.1,
+      "cmp_avg_latency_ms": 22.8,
+      "speedup_vs_fp32": 0.751,
+      "fp32_tokens_per_sec": 809.4,
+      "cmp_tokens_per_sec": 607.6,
+      "fp32_sentences_per_sec": 58.48,
+      "cmp_sentences_per_sec": 43.9
     },
     "doi_Deva": {
       "total_fixtures": 50,
@@ -67,11 +76,13 @@
       "text_exact_count": 49,
       "sacrebleu_bleu": 99.36,
       "sacrebleu_chrf": 99.78,
-      "fp32_avg_latency_ms": 77.8,
-      "cmp_avg_latency_ms": 82.1,
-      "speedup_vs_fp32": 0.948,
-      "fp32_tokens_per_sec": 183.2,
-      "cmp_tokens_per_sec": 173.5
+      "fp32_avg_latency_ms": 19.2,
+      "cmp_avg_latency_ms": 25.2,
+      "speedup_vs_fp32": 0.761,
+      "fp32_tokens_per_sec": 744.2,
+      "cmp_tokens_per_sec": 565.9,
+      "fp32_sentences_per_sec": 52.19,
+      "cmp_sentences_per_sec": 39.74
     },
     "gom_Deva": {
       "total_fixtures": 50,
@@ -81,11 +92,13 @@
       "text_exact_count": 49,
       "sacrebleu_bleu": 98.75,
       "sacrebleu_chrf": 99.14,
-      "fp32_avg_latency_ms": 77.3,
-      "cmp_avg_latency_ms": 78.5,
-      "speedup_vs_fp32": 0.984,
-      "fp32_tokens_per_sec": 176.5,
-      "cmp_tokens_per_sec": 173.3
+      "fp32_avg_latency_ms": 16.6,
+      "cmp_avg_latency_ms": 24.6,
+      "speedup_vs_fp32": 0.674,
+      "fp32_tokens_per_sec": 824.0,
+      "cmp_tokens_per_sec": 553.4,
+      "fp32_sentences_per_sec": 60.41,
+      "cmp_sentences_per_sec": 40.69
     },
     "guj_Gujr": {
       "total_fixtures": 50,
@@ -95,11 +108,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 72.3,
-      "cmp_avg_latency_ms": 76.7,
-      "speedup_vs_fp32": 0.942,
-      "fp32_tokens_per_sec": 183.1,
-      "cmp_tokens_per_sec": 172.5
+      "fp32_avg_latency_ms": 16.5,
+      "cmp_avg_latency_ms": 21.4,
+      "speedup_vs_fp32": 0.774,
+      "fp32_tokens_per_sec": 800.1,
+      "cmp_tokens_per_sec": 619.3,
+      "fp32_sentences_per_sec": 60.43,
+      "cmp_sentences_per_sec": 46.78
     },
     "hin_Deva": {
       "total_fixtures": 50,
@@ -109,11 +124,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 69.2,
-      "cmp_avg_latency_ms": 73.8,
-      "speedup_vs_fp32": 0.938,
-      "fp32_tokens_per_sec": 183.3,
-      "cmp_tokens_per_sec": 171.9
+      "fp32_avg_latency_ms": 15.0,
+      "cmp_avg_latency_ms": 22.1,
+      "speedup_vs_fp32": 0.679,
+      "fp32_tokens_per_sec": 846.7,
+      "cmp_tokens_per_sec": 574.6,
+      "fp32_sentences_per_sec": 66.78,
+      "cmp_sentences_per_sec": 45.32
     },
     "kan_Knda": {
       "total_fixtures": 50,
@@ -123,11 +140,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 67.7,
-      "cmp_avg_latency_ms": 74.1,
-      "speedup_vs_fp32": 0.913,
-      "fp32_tokens_per_sec": 188.6,
-      "cmp_tokens_per_sec": 172.1
+      "fp32_avg_latency_ms": 15.4,
+      "cmp_avg_latency_ms": 20.0,
+      "speedup_vs_fp32": 0.768,
+      "fp32_tokens_per_sec": 830.5,
+      "cmp_tokens_per_sec": 637.5,
+      "fp32_sentences_per_sec": 65.09,
+      "cmp_sentences_per_sec": 49.96
     },
     "kas_Arab": {
       "total_fixtures": 50,
@@ -137,11 +156,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 80.6,
-      "cmp_avg_latency_ms": 87.2,
-      "speedup_vs_fp32": 0.925,
-      "fp32_tokens_per_sec": 188.3,
-      "cmp_tokens_per_sec": 174.2
+      "fp32_avg_latency_ms": 21.2,
+      "cmp_avg_latency_ms": 27.2,
+      "speedup_vs_fp32": 0.78,
+      "fp32_tokens_per_sec": 716.1,
+      "cmp_tokens_per_sec": 558.5,
+      "fp32_sentences_per_sec": 47.17,
+      "cmp_sentences_per_sec": 36.79
     },
     "mai_Deva": {
       "total_fixtures": 50,
@@ -151,11 +172,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 73.5,
-      "cmp_avg_latency_ms": 74.8,
-      "speedup_vs_fp32": 0.982,
-      "fp32_tokens_per_sec": 175.9,
-      "cmp_tokens_per_sec": 172.7
+      "fp32_avg_latency_ms": 17.0,
+      "cmp_avg_latency_ms": 26.5,
+      "speedup_vs_fp32": 0.642,
+      "fp32_tokens_per_sec": 759.9,
+      "cmp_tokens_per_sec": 487.9,
+      "fp32_sentences_per_sec": 58.82,
+      "cmp_sentences_per_sec": 37.76
     },
     "mal_Mlym": {
       "total_fixtures": 50,
@@ -165,11 +188,13 @@
       "text_exact_count": 49,
       "sacrebleu_bleu": 98.35,
       "sacrebleu_chrf": 99.41,
-      "fp32_avg_latency_ms": 83.0,
-      "cmp_avg_latency_ms": 85.0,
-      "speedup_vs_fp32": 0.976,
-      "fp32_tokens_per_sec": 177.5,
-      "cmp_tokens_per_sec": 173.8
+      "fp32_avg_latency_ms": 19.4,
+      "cmp_avg_latency_ms": 25.7,
+      "speedup_vs_fp32": 0.755,
+      "fp32_tokens_per_sec": 758.4,
+      "cmp_tokens_per_sec": 574.3,
+      "fp32_sentences_per_sec": 51.45,
+      "cmp_sentences_per_sec": 38.85
     },
     "mar_Deva": {
       "total_fixtures": 50,
@@ -179,11 +204,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 70.4,
-      "cmp_avg_latency_ms": 71.2,
-      "speedup_vs_fp32": 0.99,
-      "fp32_tokens_per_sec": 172.4,
-      "cmp_tokens_per_sec": 170.6
+      "fp32_avg_latency_ms": 14.8,
+      "cmp_avg_latency_ms": 20.2,
+      "speedup_vs_fp32": 0.732,
+      "fp32_tokens_per_sec": 819.6,
+      "cmp_tokens_per_sec": 599.6,
+      "fp32_sentences_per_sec": 67.51,
+      "cmp_sentences_per_sec": 49.39
     },
     "mni_Beng": {
       "total_fixtures": 50,
@@ -193,11 +220,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 92.2,
-      "cmp_avg_latency_ms": 92.1,
-      "speedup_vs_fp32": 1.001,
-      "fp32_tokens_per_sec": 172.6,
-      "cmp_tokens_per_sec": 172.8
+      "fp32_avg_latency_ms": 19.5,
+      "cmp_avg_latency_ms": 27.4,
+      "speedup_vs_fp32": 0.713,
+      "fp32_tokens_per_sec": 814.7,
+      "cmp_tokens_per_sec": 581.2,
+      "fp32_sentences_per_sec": 51.17,
+      "cmp_sentences_per_sec": 36.51
     },
     "npi_Deva": {
       "total_fixtures": 50,
@@ -207,11 +236,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 66.3,
-      "cmp_avg_latency_ms": 70.4,
-      "speedup_vs_fp32": 0.942,
-      "fp32_tokens_per_sec": 178.8,
-      "cmp_tokens_per_sec": 168.5
+      "fp32_avg_latency_ms": 15.6,
+      "cmp_avg_latency_ms": 18.8,
+      "speedup_vs_fp32": 0.832,
+      "fp32_tokens_per_sec": 758.3,
+      "cmp_tokens_per_sec": 631.3,
+      "fp32_sentences_per_sec": 63.94,
+      "cmp_sentences_per_sec": 53.23
     },
     "ory_Orya": {
       "total_fixtures": 50,
@@ -221,11 +252,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 68.3,
-      "cmp_avg_latency_ms": 85.3,
-      "speedup_vs_fp32": 0.8,
-      "fp32_tokens_per_sec": 189.3,
-      "cmp_tokens_per_sec": 151.4
+      "fp32_avg_latency_ms": 16.1,
+      "cmp_avg_latency_ms": 22.5,
+      "speedup_vs_fp32": 0.715,
+      "fp32_tokens_per_sec": 802.1,
+      "cmp_tokens_per_sec": 573.2,
+      "fp32_sentences_per_sec": 62.08,
+      "cmp_sentences_per_sec": 44.36
     },
     "pan_Guru": {
       "total_fixtures": 50,
@@ -235,11 +268,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 93.9,
-      "cmp_avg_latency_ms": 106.4,
-      "speedup_vs_fp32": 0.882,
-      "fp32_tokens_per_sec": 191.8,
-      "cmp_tokens_per_sec": 169.1
+      "fp32_avg_latency_ms": 25.5,
+      "cmp_avg_latency_ms": 37.1,
+      "speedup_vs_fp32": 0.688,
+      "fp32_tokens_per_sec": 705.7,
+      "cmp_tokens_per_sec": 485.4,
+      "fp32_sentences_per_sec": 39.21,
+      "cmp_sentences_per_sec": 26.97
     },
     "san_Deva": {
       "total_fixtures": 50,
@@ -249,25 +284,29 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 79.3,
-      "cmp_avg_latency_ms": 90.0,
-      "speedup_vs_fp32": 0.88,
-      "fp32_tokens_per_sec": 191.2,
-      "cmp_tokens_per_sec": 168.4
+      "fp32_avg_latency_ms": 19.8,
+      "cmp_avg_latency_ms": 25.5,
+      "speedup_vs_fp32": 0.779,
+      "fp32_tokens_per_sec": 764.0,
+      "cmp_tokens_per_sec": 595.3,
+      "fp32_sentences_per_sec": 50.39,
+      "cmp_sentences_per_sec": 39.27
     },
     "sat_Olck": {
       "total_fixtures": 50,
-      "token_exact_rate": 100.0,
-      "text_exact_rate": 100.0,
-      "token_exact_count": 50,
-      "text_exact_count": 50,
-      "sacrebleu_bleu": 100.0,
-      "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 83.6,
-      "cmp_avg_latency_ms": 94.4,
-      "speedup_vs_fp32": 0.886,
-      "fp32_tokens_per_sec": 192.3,
-      "cmp_tokens_per_sec": 170.3
+      "token_exact_rate": 98.0,
+      "text_exact_rate": 98.0,
+      "token_exact_count": 49,
+      "text_exact_count": 49,
+      "sacrebleu_bleu": 98.93,
+      "sacrebleu_chrf": 99.42,
+      "fp32_avg_latency_ms": 22.0,
+      "cmp_avg_latency_ms": 28.4,
+      "speedup_vs_fp32": 0.772,
+      "fp32_tokens_per_sec": 732.3,
+      "cmp_tokens_per_sec": 565.2,
+      "fp32_sentences_per_sec": 45.54,
+      "cmp_sentences_per_sec": 35.15
     },
     "snd_Arab": {
       "total_fixtures": 50,
@@ -277,11 +316,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 66.1,
-      "cmp_avg_latency_ms": 74.4,
-      "speedup_vs_fp32": 0.889,
-      "fp32_tokens_per_sec": 189.3,
-      "cmp_tokens_per_sec": 168.3
+      "fp32_avg_latency_ms": 16.5,
+      "cmp_avg_latency_ms": 25.6,
+      "speedup_vs_fp32": 0.646,
+      "fp32_tokens_per_sec": 757.8,
+      "cmp_tokens_per_sec": 489.5,
+      "fp32_sentences_per_sec": 60.52,
+      "cmp_sentences_per_sec": 39.1
     },
     "tam_Taml": {
       "total_fixtures": 50,
@@ -291,11 +332,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 69.4,
-      "cmp_avg_latency_ms": 78.3,
-      "speedup_vs_fp32": 0.887,
-      "fp32_tokens_per_sec": 189.8,
-      "cmp_tokens_per_sec": 168.4
+      "fp32_avg_latency_ms": 17.7,
+      "cmp_avg_latency_ms": 24.0,
+      "speedup_vs_fp32": 0.735,
+      "fp32_tokens_per_sec": 746.4,
+      "cmp_tokens_per_sec": 548.4,
+      "fp32_sentences_per_sec": 56.63,
+      "cmp_sentences_per_sec": 41.61
     },
     "tel_Telu": {
       "total_fixtures": 50,
@@ -305,11 +348,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 67.7,
-      "cmp_avg_latency_ms": 76.5,
-      "speedup_vs_fp32": 0.886,
-      "fp32_tokens_per_sec": 189.6,
-      "cmp_tokens_per_sec": 167.9
+      "fp32_avg_latency_ms": 16.0,
+      "cmp_avg_latency_ms": 21.1,
+      "speedup_vs_fp32": 0.756,
+      "fp32_tokens_per_sec": 803.6,
+      "cmp_tokens_per_sec": 607.8,
+      "fp32_sentences_per_sec": 62.59,
+      "cmp_sentences_per_sec": 47.34
     },
     "urd_Arab": {
       "total_fixtures": 50,
@@ -319,11 +364,13 @@
       "text_exact_count": 50,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 72.7,
-      "cmp_avg_latency_ms": 82.0,
-      "speedup_vs_fp32": 0.886,
-      "fp32_tokens_per_sec": 190.8,
-      "cmp_tokens_per_sec": 169.1
+      "fp32_avg_latency_ms": 18.4,
+      "cmp_avg_latency_ms": 25.1,
+      "speedup_vs_fp32": 0.733,
+      "fp32_tokens_per_sec": 754.9,
+      "cmp_tokens_per_sec": 553.0,
+      "fp32_sentences_per_sec": 54.46,
+      "cmp_sentences_per_sec": 39.9
     }
   },
   "metrics_by_category": {
@@ -333,13 +380,15 @@
       "text_exact_rate": 98.95,
       "token_exact_count": 283,
       "text_exact_count": 283,
-      "sacrebleu_bleu": 99.47,
-      "sacrebleu_chrf": 99.73,
-      "fp32_avg_latency_ms": 75.3,
-      "cmp_avg_latency_ms": 80.9,
-      "speedup_vs_fp32": 0.931,
-      "fp32_tokens_per_sec": 184.1,
-      "cmp_tokens_per_sec": 171.3
+      "sacrebleu_bleu": 99.4,
+      "sacrebleu_chrf": 99.7,
+      "fp32_avg_latency_ms": 19.8,
+      "cmp_avg_latency_ms": 26.3,
+      "speedup_vs_fp32": 0.751,
+      "fp32_tokens_per_sec": 700.9,
+      "cmp_tokens_per_sec": 525.6,
+      "fp32_sentences_per_sec": 50.57,
+      "cmp_sentences_per_sec": 37.95
     },
     "lexicon": {
       "total_fixtures": 264,
@@ -349,11 +398,13 @@
       "text_exact_count": 263,
       "sacrebleu_bleu": 99.77,
       "sacrebleu_chrf": 99.87,
-      "fp32_avg_latency_ms": 78.3,
-      "cmp_avg_latency_ms": 84.3,
-      "speedup_vs_fp32": 0.928,
-      "fp32_tokens_per_sec": 184.5,
-      "cmp_tokens_per_sec": 171.4
+      "fp32_avg_latency_ms": 16.6,
+      "cmp_avg_latency_ms": 23.2,
+      "speedup_vs_fp32": 0.718,
+      "fp32_tokens_per_sec": 867.1,
+      "cmp_tokens_per_sec": 622.6,
+      "fp32_sentences_per_sec": 60.07,
+      "cmp_sentences_per_sec": 43.1
     },
     "numerals": {
       "total_fixtures": 264,
@@ -363,11 +414,13 @@
       "text_exact_count": 264,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 77.5,
-      "cmp_avg_latency_ms": 84.5,
-      "speedup_vs_fp32": 0.917,
-      "fp32_tokens_per_sec": 185.8,
-      "cmp_tokens_per_sec": 170.4
+      "fp32_avg_latency_ms": 16.6,
+      "cmp_avg_latency_ms": 23.2,
+      "speedup_vs_fp32": 0.718,
+      "fp32_tokens_per_sec": 864.9,
+      "cmp_tokens_per_sec": 620.6,
+      "fp32_sentences_per_sec": 60.07,
+      "cmp_sentences_per_sec": 43.1
     },
     "politics": {
       "total_fixtures": 286,
@@ -377,64 +430,16 @@
       "text_exact_count": 286,
       "sacrebleu_bleu": 100.0,
       "sacrebleu_chrf": 100.0,
-      "fp32_avg_latency_ms": 73.6,
-      "cmp_avg_latency_ms": 79.1,
-      "speedup_vs_fp32": 0.931,
-      "fp32_tokens_per_sec": 183.8,
-      "cmp_tokens_per_sec": 171.2
+      "fp32_avg_latency_ms": 19.8,
+      "cmp_avg_latency_ms": 26.3,
+      "speedup_vs_fp32": 0.751,
+      "fp32_tokens_per_sec": 684.4,
+      "cmp_tokens_per_sec": 513.7,
+      "fp32_sentences_per_sec": 50.57,
+      "cmp_sentences_per_sec": 37.95
     }
   },
   "mismatches": [
-    {
-      "index": 100,
-      "fixture": {
-        "text": "The quick brown fox jumps over the lazy dog.",
-        "src_lang": "eng_Latn",
-        "tgt_lang": "brx_Deva",
-        "category": "generic"
-      },
-      "fp32_tokens": [
-        2,
-        79491,
-        74094,
-        83051,
-        58917,
-        81097,
-        1751,
-        41457,
-        1753,
-        16602,
-        58390,
-        6833,
-        454,
-        79828,
-        6,
-        2
-      ],
-      "fp16_tokens": [
-        2,
-        79491,
-        74094,
-        83051,
-        813,
-        674,
-        1109,
-        1751,
-        41457,
-        1753,
-        16602,
-        58390,
-        6833,
-        454,
-        79828,
-        6,
-        2
-      ],
-      "fp32_text": "गोख्रै मुगा गाबनि लोमसाया आलसिया सैमानि सायावजों बारलाङो।",
-      "fp16_text": "गोख्रै मुगा गाबनि फक्सआ आलसिया सैमानि सायावजों बारलाङो।",
-      "tokens_match": false,
-      "text_match": false
-    },
     {
       "index": 198,
       "fixture": {
@@ -576,6 +581,51 @@
       ],
       "fp32_text": "സാധാരണ സാഹചര്യങ്ങളിൽ വെള്ളം 100 ഡിഗ്രി സെൽഷ്യസിൽ തിളയ്ക്കുന്നു.",
       "fp16_text": "സാധാരണ സാഹചര്യങ്ങളിൽ 100 ഡിഗ്രി സെൽഷ്യസിൽ വെള്ളം തിളച്ചുമറിയുന്നു.",
+      "tokens_match": false,
+      "text_match": false
+    },
+    {
+      "index": 866,
+      "fixture": {
+        "text": "The crop yield has improved due to good rainfall.",
+        "src_lang": "eng_Latn",
+        "tgt_lang": "sat_Olck",
+        "category": "generic"
+      },
+      "fp32_tokens": [
+        2,
+        93706,
+        88706,
+        79698,
+        94915,
+        90363,
+        65095,
+        101144,
+        48806,
+        98707,
+        93831,
+        73125,
+        31428,
+        2
+      ],
+      "fp16_tokens": [
+        2,
+        93706,
+        88706,
+        88706,
+        48806,
+        89466,
+        66424,
+        101144,
+        48806,
+        98707,
+        93831,
+        73125,
+        31428,
+        2
+      ],
+      "fp32_text": "ᱱᱟᱯᱟᱭ ᱫᱟᱜᱡᱳᱜ ᱠᱷᱟᱹᱛᱤᱨ ᱛᱮ ᱪᱟᱥ ᱨᱮᱭᱟᱜ ᱟᱨᱡᱟᱣ ᱵᱟᱹᱲᱛᱤ ᱟᱠᱟᱱᱟ ᱾",
+      "fp16_text": "ᱱᱟᱯᱟᱭ ᱫᱟᱜ ᱫᱟᱜ ᱨᱮᱭᱟᱜ ᱚᱡᱮᱛᱮ ᱪᱟᱥ ᱨᱮᱭᱟᱜ ᱟᱨᱡᱟᱣ ᱵᱟᱹᱲᱛᱤ ᱟᱠᱟᱱᱟ ᱾",
       "tokens_match": false,
       "text_match": false
     }

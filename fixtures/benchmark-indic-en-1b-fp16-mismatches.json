@@ -1,5 +1,44 @@
 [
   {
+    "index": 46,
+    "fixture": {
+      "text": "চিকিৎসালয়খনে 24 ঘণ্টা জৰুৰীকালীন চিকিৎসা সেৱা প্ৰদান কৰে।",
+      "src_lang": "asm_Beng",
+      "tgt_lang": "eng_Latn",
+      "category": "numerals"
+    },
+    "fp32_tokens": [
+      2,
+      15,
+      290,
+      1543,
+      12416,
+      8538,
+      2556,
+      706,
+      604,
+      4,
+      2
+    ],
+    "fp16_tokens": [
+      2,
+      15,
+      290,
+      1543,
+      12416,
+      8538,
+      2556,
+      706,
+      510,
+      4,
+      2
+    ],
+    "fp32_text": "The hospital provides 24-hour emergency medical care.",
+    "fp16_text": "The hospital provides 24-hour emergency medical services.",
+    "tokens_match": false,
+    "text_match": false
+  },
+  {
     "index": 197,
     "fixture": {
       "text": "ओह् अपनी गाड़ी लेई दफतर तक्कर गेआ।",
