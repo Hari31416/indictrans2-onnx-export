@@ -4,7 +4,7 @@ import { BenchmarkTab } from '@/components/BenchmarkTab'
 import { MismatchTab } from '@/components/MismatchTab'
 import { BlogTab } from '@/components/BlogTab'
 import { LiveBenchmarkTab } from '@/components/LiveBenchmarkTab'
-import { LayoutDashboard, Activity, AlertTriangle, BookOpen, Volume2, Cpu, ShieldAlert, Wrench } from 'lucide-react'
+import { LayoutDashboard, Activity, AlertTriangle, BookOpen, Volume2, Cpu, ShieldAlert, Wrench, Zap } from 'lucide-react'
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -29,6 +29,7 @@ type TabType =
   | 'doc-architecture'
   | 'doc-export'
   | 'doc-quantization'
+  | 'doc-optimization'
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('overview')
@@ -44,7 +45,8 @@ export default function App() {
     { id: 'doc-overview', label: 'Project Overview', icon: BookOpen },
     { id: 'doc-architecture', label: 'ONNX Graph Model', icon: Cpu },
     { id: 'doc-export', label: 'Export Journey', icon: Wrench },
-    { id: 'doc-quantization', label: 'Quantization Logs', icon: ShieldAlert }
+    { id: 'doc-quantization', label: 'Quantization Logs', icon: ShieldAlert },
+    { id: 'doc-optimization', label: 'Size & Optimization', icon: Zap }
   ] as const
 
   return (

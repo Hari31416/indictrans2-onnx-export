@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { ChevronDown, ChevronRight, Database } from 'lucide-react'
 import { OnnxComponentsBlog } from './OnnxComponentsBlog'
+import { OnnxOptimizationBlog } from './OnnxOptimizationBlog'
 
-type SubSection = 'doc-overview' | 'doc-architecture' | 'doc-export' | 'doc-quantization'
+type SubSection = 'doc-overview' | 'doc-architecture' | 'doc-export' | 'doc-quantization' | 'doc-optimization'
 
 interface BlogTabProps {
   activeSection: SubSection
@@ -295,6 +296,10 @@ export function BlogTab({ activeSection }: BlogTabProps) {
             </div>
           </div>
         </div>
+      )}
+
+      {activeSection === 'doc-optimization' && (
+        <OnnxOptimizationBlog />
       )}
 
     </div>
